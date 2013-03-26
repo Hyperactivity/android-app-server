@@ -25,30 +25,22 @@ import java.util.List;
  * Date: 2013-03-13
  * Time: 11:57
  */
-public class ServerRequestHandler extends SharedHandler implements RequestHandler {
-    // Reports the method names of the handled requests
-
-    private EntityManagerFactory entityManagerFactory;
-    private EntityManager em;
+public class ServerRequestHandler extends SharedHandler {
 
     public ServerRequestHandler() {
-        PersistenceProvider persistenceProvider = new HibernatePersistence();
-        entityManagerFactory = persistenceProvider.createEntityManagerFactory(Constants.Settings.PERSISTENCE_NAME, new HashMap());
-
+        super();
     }
 
     @Override
     public String[] handledRequests() {
-
         return new String[]{
-                };
+                Constants.Method.LOGIN,
+                Constants.Method.REGISTER
+        };
     }
 
-    // Processes the requests
     @Override
-    public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
-
-
+    public JSONRPC2Response process(JSONRPC2Request jsonrpc2Request) {
         return null;
     }
 }

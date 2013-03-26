@@ -15,6 +15,11 @@ public abstract class Constants {
         public static final int PORT = 12345;
     }
 
+    public class Method{
+        public static final String LOGIN = "login";
+        public static final String REGISTER = "register";
+    }
+
     public class Json {
 
     }
@@ -25,5 +30,6 @@ public abstract class Constants {
 
     public class Errors {
         public static final String BAD_HEADERS = "Bad headers";
+        public static final String BAD_ID = "ID could not be converted to int";
     }
 }

@@ -178,24 +178,5 @@ public class Engine{
 
 
 
-    /** Read the object from Base64 string. */
-    private static Object fromString( String s ) throws IOException ,
-            ClassNotFoundException {
-        BASE64Decoder base64Decoder = new BASE64Decoder();
-        byte [] data = base64Decoder.decodeBuffer(s);
-        ObjectInputStream ois = new ObjectInputStream(
-                new ByteArrayInputStream( data ) );
-        Object o = ois.readObject();
-        ois.close();
-        return o;
-    }
-    /** Write the object to a Base64 string. */
-    private static String toString( Serializable o ) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream( baos );
-        oos.writeObject( o );
-        oos.close();
-        BASE64Encoder base64Encoder =  new BASE64Encoder();
-        return new String( base64Encoder.encode(baos.toByteArray()) );
-    }
+
 }

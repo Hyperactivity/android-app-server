@@ -166,6 +166,7 @@ public abstract class SharedHandler implements RequestHandler{
         em.getTransaction().begin();
         for(Object o: objects){
             em.persist(o);
+            em.refresh(o);
         }
         em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
     }

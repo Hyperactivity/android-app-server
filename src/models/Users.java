@@ -1,9 +1,6 @@
 package models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -19,6 +16,7 @@ public class Users implements Serializable {
 
     @Column(name = "userId")
     @Id
+    @GeneratedValue
     public int getUserId() {
         return userId;
     }

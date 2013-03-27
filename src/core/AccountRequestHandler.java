@@ -3,12 +3,10 @@ package core;
 import assistant.Constants;
 import assistant.SharedHandler;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import javafx.util.Pair;
 import models.Users;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import java.util.Map;
 
 /**

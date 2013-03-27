@@ -13,8 +13,6 @@ import com.sun.net.httpserver.HttpServer;
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
 import models.Categories;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -44,8 +42,8 @@ public class Engine{
         categories.setCategoryName("test");
         categories.setParentCategoryId(2);
         String testString;
-        testString =  toString(categories);
-        Categories test = (Categories) fromString(testString);
+//        testString =  toString(categories);
+//        Categories test = (Categories) fromString(testString);
     }
 
     /**
@@ -54,7 +52,7 @@ public class Engine{
      */
     private void initiateDispatchers() {
         dispatcher = new Dispatcher();
-        dispatcher.register(new ServerRequestHandler());
+        dispatcher.register(new AccountRequestHandler());
     }
 
     /**

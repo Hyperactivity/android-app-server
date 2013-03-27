@@ -1,6 +1,5 @@
 package assistant;
 
-import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
@@ -39,7 +38,7 @@ public abstract class SharedHandler implements RequestHandler{
      */
     public SharedHandler(){
         PersistenceProvider persistenceProvider = new HibernatePersistence();
-        entityManagerFactory = persistenceProvider.createEntityManagerFactory(Constants.Settings.PERSISTENCE_NAME, new HashMap());
+        entityManagerFactory = persistenceProvider.createEntityManagerFactory(Constants.General.PERSISTENCE_NAME, new HashMap());
     }
 
     /**

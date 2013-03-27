@@ -12,7 +12,6 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
-import models.Categories;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -29,7 +28,7 @@ public class Engine{
         try {
             new Engine();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();  //To change body of catch statement use File | General | File Templates.
         }
     }
 
@@ -52,7 +51,7 @@ public class Engine{
      */
     private void initiateServer() {
         try {
-            InetSocketAddress isa = new InetSocketAddress(InetAddress.getLocalHost(), Constants.Settings.PORT);
+            InetSocketAddress isa = new InetSocketAddress(InetAddress.getLocalHost(), Constants.Http.PORT);
             System.out.println(isa);
             httpServer = HttpServer.create(isa, 0); //TODO check what the zero does exactly
             httpServer.createContext("/", new HTTPRequestHandler());
@@ -78,7 +77,7 @@ public class Engine{
                         if (examineHeaders(requestHeaders)) {
                             // Headers seems ok. Continue
 
-                            int bodyLength = Integer.parseInt(requestHeaders.getFirst(Constants.Settings.CONTENT_LENGTH));
+                            int bodyLength = Integer.parseInt(requestHeaders.getFirst(Constants.Http.CONTENT_LENGTH));
                             byte[] jsonBytes = new byte[bodyLength];
                             // Start reading the body
                             InputStream requestBody = exchange.getRequestBody();
@@ -122,7 +121,7 @@ public class Engine{
         }
         System.out.println("Header || " + headersString);
         try {
-            Integer.parseInt(requestHeaders.getFirst(Constants.Settings.CONTENT_LENGTH));
+            Integer.parseInt(requestHeaders.getFirst(Constants.Http.CONTENT_LENGTH));
         } catch (NumberFormatException e) {
             return false;
         }

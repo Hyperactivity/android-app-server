@@ -11,7 +11,6 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +63,7 @@ public class ClientDebugger {
         URL serverURL = null;
 
         try {
-            serverURL = new URL("http://" + InetAddress.getLocalHost().getHostAddress() + ":" + Constants.Settings.PORT + "/");
+            serverURL = new URL("http://" + InetAddress.getLocalHost().getHostAddress() + ":" + Constants.Http.PORT + "/");
         } catch (Exception e) {
             e.printStackTrace();
         }

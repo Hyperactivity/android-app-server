@@ -8,11 +8,11 @@ package assistant;
  */
 public abstract class Constants {
 
-    public class Settings {
-        public static final String CONTENT_LENGTH = "Content-length";
+    public class General {
+
         public static final String PERSISTENCE_NAME ="hyperactivity_persistence";
 
-        public static final int PORT = 12345;
+
     }
 
     public class Method{
@@ -36,6 +36,8 @@ public abstract class Constants {
     }
 
     public class Http {
+        public static final int PORT = 12345;
+        public static final String CONTENT_LENGTH = "Content-length";
 
     }
     public class Query {

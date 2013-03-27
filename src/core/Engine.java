@@ -34,16 +34,8 @@ public class Engine{
     }
 
     private Engine() throws IOException, ClassNotFoundException {
-//        initiateDispatchers();
-//        initiateServer();
-        Categories categories = new Categories();
-        categories.setCategoryColorCode(1);
-        categories.setCategoryId(1);
-        categories.setCategoryName("test");
-        categories.setParentCategoryId(2);
-        String testString;
-//        testString =  toString(categories);
-//        Categories test = (Categories) fromString(testString);
+        initiateDispatchers();
+        initiateServer();
     }
 
     /**
@@ -141,7 +133,7 @@ public class Engine{
 
     /**
      *
-     * @param jsonString The json string recieved from a client
+     * @param jsonString The json string received from a client
      * @return The response generated
      */
     private JSONRPC2Response parseReceivedString(String jsonString) {

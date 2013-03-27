@@ -42,8 +42,10 @@ public class AccountRequestHandler extends SharedHandler {
         }
         else if(method.equals(Constants.Method.UPDATE_PROFILE)){
             updateProfile(jsonrpc2Params);
-    }
+        }
+        else{
         throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
+        }
     }
 
     private void updateProfile(Map<String, Object> jsonrpc2Params) {

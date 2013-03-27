@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
-    <persistence-unit name="hyperactivity_persistence">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>models.Categories</class>
-        <class>models.CustomCategoryColors</class>
-        <class>models.LinkedThreads</class>
-        <class>models.Notes</class>
-        <class>models.PrivateCategories</class>
-        <class>models.PrivateMessages</class>
-        <class>models.Replies</class>
-        <class>models.Thread</class>
-        <class>models.ThumbsUp</class>
-        <class>models.Users</class>
-        <properties>
-            <property name="hibernate.connection.url" value="jdbc:mysql://89.253.85.33/Hyperactivity"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="123654789"/>
-            <property name="hibernate.archive.autodetection" value="class"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hbm2ddl.auto" value="update"/>
-        </properties>
-    </persistence-unit>
+<persistence-unit name="hyperactivity_persistence">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>models.Categories</class>
+    <class>models.CustomCategoryColors</class>
+    <class>models.LinkedThreads</class>
+    <class>models.Notes</class>
+    <class>models.PrivateCategories</class>
+    <class>models.PrivateMessages</class>
+    <class>models.Replies</class>
+    <class>models.Thread</class>
+    <class>models.ThumbsUp</class>
+    <class>models.Users</class>
+    <properties>
+        <property name="hibernate.connection.url" value="jdbc:mysql://89.253.85.33/Hyperactivity"/>
+        <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+        <property name="hibernate.connection.username" value="root"/>
+        <property name="hibernate.connection.password" value="123654789"/>
+        <property name="hibernate.archive.autodetection" value="class"/>
+        <property name="hibernate.show_sql" value="true"/>
+        <property name="hibernate.format_sql" value="true"/>
+        <property name="hbm2ddl.auto" value="update"/>
+    </properties>
+</persistence-unit>
 </persistence>

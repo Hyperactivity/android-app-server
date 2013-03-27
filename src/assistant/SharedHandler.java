@@ -92,7 +92,7 @@ public abstract class SharedHandler implements RequestHandler{
         }catch (JSONRPC2Error e){
             return new JSONRPC2Response(e, userId);
         }catch (Exception e){
-            return null;
+            return null; //TODO:
         }
 
     }

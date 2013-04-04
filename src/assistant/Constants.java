@@ -29,6 +29,9 @@ public abstract class Constants {
         public static final String VALUE = "value";
         public static final String ACCOUNT = "account";
         public static final String FIRST_LOGIN = "first_login";
+        public static final String ACCOUNT_ID = "account_id";
+        public static final String PROFILE = "profile";
+        public static final String PROFILE_NOT_FOUND = "profile_not_found";
     }
 
     public class Json {

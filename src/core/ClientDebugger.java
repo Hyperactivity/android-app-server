@@ -22,15 +22,20 @@ import java.util.Map;
  * Time: 10:44
  */
 public class ClientDebugger {
+    /**
+     * Remember to change the boolean depending on if you are testing in development or live
+     */
+    private static final boolean isDevelopment = false;
     public static void main(String[] args) throws IOException {
         new ClientDebugger();
+
     }
 
     /**
      * Write what you want to test here
      */
     public ClientDebugger() {
-        testStandardJson(12345, "login", new Pair("token", "abcd"));
+        testStandardJson(Constants.Http.PORT, "login", new Pair("token", "abcd"));
     }
 
 
@@ -63,10 +68,18 @@ public class ClientDebugger {
         URL serverURL = null;
 
         try {
-            serverURL = new URL("http://" + InetAddress.getLocalHost().getHostAddress() + ":" + Constants.Http.PORT + "/");
+            if(isDevelopment){
+                serverURL = new URL("http://" + InetAddress.getLocalHost().getHostAddress() + ":" + Constants.Http.PORT + "/");
+                System.out.println("Client is running in development");
+            }else{
+                serverURL = new URL("http://" + Constants.General.EXTERNAL_SERVER_IP + ":" + Constants.Http.PORT + "/");
+                System.out.println("Client is running in live");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("ServerURL: " + serverURL.toString());
         JSONRPC2Session mySession = new JSONRPC2Session(serverURL);
         JSONRPC2SessionOptions options = new JSONRPC2SessionOptions();
         options.setConnectTimeout(10000);

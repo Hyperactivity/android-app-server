@@ -7,6 +7,7 @@ import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import javafx.util.Pair;
 import net.minidev.json.JSONObject;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.ejb.HibernatePersistence;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -38,7 +39,16 @@ public abstract class SharedHandler implements RequestHandler{
      */
     public SharedHandler(){
         PersistenceProvider persistenceProvider = new HibernatePersistence();
-        entityManagerFactory = persistenceProvider.createEntityManagerFactory(Constants.General.PERSISTENCE_NAME, new HashMap());
+        HashMap<String, String> persistenceProperties = new HashMap<String, String>();
+        if(Constants.General.IS_DEVELOPMENT_SERVER){
+            persistenceProperties.put(Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_NAME, Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE);
+            System.out.println("Using database: " + Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE);
+        }else{
+            persistenceProperties.put(Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_NAME, Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_VALUE);
+            System.out.println("Using database: " + Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_VALUE);
+        }
+        entityManagerFactory = persistenceProvider.createEntityManagerFactory(Constants.General.PERSISTENCE_NAME, persistenceProperties);
+
     }
 
     /**

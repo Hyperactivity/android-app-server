@@ -14,7 +14,12 @@
     <class>models.ThumbsUp</class>
     <class>models.Users</class>
     <properties>
+
+        <!--
+        This is now manually set depending on if we are running in development mode or not
         <property name="hibernate.connection.url" value="jdbc:mysql://89.253.85.33/Hyperactivity"/>
+        -->
+
         <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
         <property name="hibernate.connection.username" value="root"/>
         <property name="hibernate.connection.password" value="123654789"/>

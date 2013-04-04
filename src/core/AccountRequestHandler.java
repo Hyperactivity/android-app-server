@@ -46,13 +46,25 @@ public class AccountRequestHandler extends SharedHandler {
         }
     }
 
-    private void updateProfile(Map<String, Object> jsonrpc2Params) {
+    private void updateProfile(Map<String, Object> jsonrpc2Params) throws Exception {
+//        Map<String, Object> updateProfileParams = getParams(jsonrpc2Params, Pair<Constants.Param.DESCRIPTION,, Constants.Param.SHOW_BIRTH_DATE, Constants.Param.AVATAR);
+
+
+//        Request
+//        method	update_profile
+//        id	Account.id
+//        params-name	description	show_birthdate	avatar
+//        params-value	String	boolean	Image
+//        Response
+//        value	success
+//        result-name	profile
+//        result-value	Profile
     }
 
     private void getProfile(Map<String, Object> jsonrpc2Params) throws Exception{
-        Map<String, Object> profileParams = getParams(jsonrpc2Params, Constants.Param.ACCOUNT_ID);
+        Map<String, Object> getProfileParams = getParams(jsonrpc2Params, Constants.Param.ACCOUNT_ID);
 
-        int profileId = (Integer) profileParams.get(Constants.Param.ACCOUNT_ID);
+        int profileId = (Integer) getProfileParams.get(Constants.Param.ACCOUNT_ID);
         Users profile = em.find(Users.class, profileId);
         if(profile != null){
             // Profile exist, send it back to the client

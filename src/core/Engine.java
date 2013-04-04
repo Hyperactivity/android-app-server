@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 
 public class Engine{
+//TODO: Try to remove jfxrt.jar (javaFX) since it is 15 mb big. For some reason it was not loaded automatically with openJDK or Oracle
 
     private HttpServer httpServer;
     private Dispatcher dispatcher;
@@ -51,13 +52,26 @@ public class Engine{
      */
     private void initiateServer() {
         try {
-            InetSocketAddress isa = new InetSocketAddress(InetAddress.getLocalHost(), Constants.Http.PORT);
+            System.out.println();
+            System.out.println("Running OS: " + System.getProperty(Constants.General.OS_PROPERTY));
+            InetAddress inetAddress;
+            if(Constants.General.IS_DEVELOPMENT_SERVER){
+                System.out.println("RUNNING IN DEVELOPMENT!");
+                inetAddress = InetAddress.getLocalHost();
+            } else {
+                inetAddress = InetAddress.getByName(Constants.General.LOCAL_SERVER_IP);
+            }
+            System.out.println();
+
+            InetSocketAddress isa = new InetSocketAddress(inetAddress.getHostAddress(), Constants.Http.PORT);
             System.out.println(isa);
             httpServer = HttpServer.create(isa, 0); //TODO check what the zero does exactly
             httpServer.createContext("/", new HTTPRequestHandler());
         } catch (IOException e) {
             e.printStackTrace();  //TODO Better handling of this exception
         }
+
+
         httpServer.start();
         System.out.println("Server is listening");
         System.out.println();

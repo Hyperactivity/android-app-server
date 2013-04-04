@@ -1,5 +1,7 @@
 package assistant;
 
+import sun.swing.plaf.synth.DefaultSynthStyle;
+
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
@@ -8,21 +10,27 @@ package assistant;
  */
 public abstract class Constants {
 
-    public class General {
+    public abstract static class General {
 
         public static final String PERSISTENCE_NAME ="hyperactivity_persistence";
-
-
+        public static final String SERVER_OS = "Linux";
+        public static final String OS_PROPERTY = "os.name";
+        public static final boolean IS_DEVELOPMENT_SERVER = (System.getProperty(OS_PROPERTY).equals(SERVER_OS)) ? false : true;
+        public static final String LOCAL_SERVER_IP = "192.168.1.101";
+        public static final String EXTERNAL_SERVER_IP = "89.253.85.33";
+        public static final String HIBERNATE_PERSISTENCE_CONNECTION_NAME = "hibernate.connection.url";
+        public static final String HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE = "jdbc:mysql://89.253.85.33/Hyperactivity";
+        public static final String HIBERNATE_PERSISTENCE_CONNECTION_VALUE = "jdbc:mysql://127.0.0.1/Hyperactivity";
     }
 
-    public class Method{
+    public abstract class Method{
         public static final String LOGIN = "login";
         public static final String REGISTER = "register";
         public static final String GET_PROFILE = "get_profile";
         public static final String UPDATE_PROFILE = "update_profile";
     }
 
-    public class Param{
+    public abstract class Param{
 
         public static final String TOKEN = "token";
         public static final String SUCCESS = "success";
@@ -32,13 +40,16 @@ public abstract class Constants {
         public static final String ACCOUNT_ID = "account_id";
         public static final String PROFILE = "profile";
         public static final String PROFILE_NOT_FOUND = "profile_not_found";
+        public static final String DESCRIPTION = "description";
+        public static final String SHOW_BIRTH_DATE = "show_birth_date";
+        public static final String AVATAR = "avatar";
     }
 
-    public class Json {
+    public abstract class Json {
 
     }
 
-    public class Http {
+    public abstract class Http {
         public static final int PORT = 12345;
         public static final String CONTENT_LENGTH = "Content-length";
 

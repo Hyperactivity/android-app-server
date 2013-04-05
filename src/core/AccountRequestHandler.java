@@ -7,7 +7,6 @@ import javafx.util.Pair;
 import models.Users;
 
 import javax.persistence.NoResultException;
-import java.awt.*;
 import java.util.Map;
 
 /**
@@ -49,12 +48,12 @@ public class AccountRequestHandler extends SharedHandler {
 
     private void updateProfile(Map<String, Object> jsonrpc2Params) throws Exception {
         Map<String, Object> updateProfileParams = getParams(jsonrpc2Params,
-                new Pair(Constants.Param.DESCRIPTION, true),
-                new Pair(Constants.Param.SHOW_BIRTH_DATE, true),
-                new Pair(Constants.Param.AVATAR, true));
+                new Pair(Constants.Param.Name.DESCRIPTION, true),
+                new Pair(Constants.Param.Name.SHOW_BIRTH_DATE, true),
+                new Pair(Constants.Param.Name.AVATAR, true));
 
-        String description = (String) updateProfileParams.get(Constants.Param.DESCRIPTION);
-        Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.SHOW_BIRTH_DATE);
+        String description = (String) updateProfileParams.get(Constants.Param.Name.DESCRIPTION);
+        Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.Name.SHOW_BIRTH_DATE);
         //TODO: handle Avatar
 
         Users profile = em.find(Users.class, userId);
@@ -65,22 +64,22 @@ public class AccountRequestHandler extends SharedHandler {
             profile.setShowBirthDate(showBirthDate);
         }
 
-        responseParams.put(Constants.Param.VALUE, Constants.Param.SUCCESS);
-        responseParams.put(Constants.Param.PROFILE, profile);
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.PROFILE, profile);
     }
 
     private void getProfile(Map<String, Object> jsonrpc2Params) throws Exception{
-        Map<String, Object> getProfileParams = getParams(jsonrpc2Params, Constants.Param.ACCOUNT_ID);
+        Map<String, Object> getProfileParams = getParams(jsonrpc2Params, Constants.Param.Name.ACCOUNT_ID);
 
-        int profileId = (Integer) getProfileParams.get(Constants.Param.ACCOUNT_ID);
+        int profileId = (Integer) getProfileParams.get(Constants.Param.Name.ACCOUNT_ID);
         Users profile = em.find(Users.class, profileId);
         if(profile != null){
             // Profile exist, send it back to the client
-            responseParams.put(Constants.Param.VALUE, Constants.Param.SUCCESS);
-            responseParams.put(Constants.Param.PROFILE, profile);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+            responseParams.put(Constants.Param.Name.PROFILE, profile);
         }else{
             // Profile does not exist, send back "Profile not found"
-            responseParams.put(Constants.Param.VALUE, Constants.Param.PROFILE_NOT_FOUND);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.PROFILE_NOT_FOUND);
         }
     }
 
@@ -88,7 +87,7 @@ public class AccountRequestHandler extends SharedHandler {
      * Only accepts login via facebook for now.
      */
     private void login(Map<String, Object> jsonrpc2Params) throws Exception {
-        Map<String, Object> loginParams = getParams(jsonrpc2Params, new Pair(Constants.Param.TOKEN, true));
+        Map<String, Object> loginParams = getParams(jsonrpc2Params, new Pair(Constants.Param.Name.TOKEN, true));
         //TODO: Should not accept token to be null. Also should use token to check the users credentials
 
         int facebookId = userId;
@@ -97,13 +96,13 @@ public class AccountRequestHandler extends SharedHandler {
         try{
             user = em.createQuery( query, Users.class).setParameter(Constants.Query.FACEBOOK_ID, facebookId).getSingleResult();
             // User found by facebook Id
-            responseParams.put(Constants.Param.VALUE, Constants.Param.SUCCESS);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         }catch(NoResultException e){
             // User not found by facebook Id. Create user.
             user = new Users(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, true, true);
             persistObjects(user);
-            responseParams.put(Constants.Param.VALUE, Constants.Param.FIRST_LOGIN);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.FIRST_LOGIN);
         }
-        responseParams.put(Constants.Param.ACCOUNT, serialize(user));
+        responseParams.put(Constants.Param.Name.ACCOUNT, serialize(user));
     }
 }

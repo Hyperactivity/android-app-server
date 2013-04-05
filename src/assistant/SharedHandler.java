@@ -50,7 +50,7 @@ public abstract class SharedHandler implements RequestHandler{
      * @throws ClassNotFoundException
      */
     //TODO Check if classType is not needed to be used in some way
-    protected static <T>  T deSerialize(java.lang.Class<T> classType, String serializedObject) throws IOException,
+    protected static final <T>  T deSerialize(java.lang.Class<T> classType, String serializedObject) throws IOException,
             ClassNotFoundException {
         BASE64Decoder base64Decoder = new BASE64Decoder();
         byte [] data = base64Decoder.decodeBuffer(serializedObject);
@@ -68,7 +68,7 @@ public abstract class SharedHandler implements RequestHandler{
      * @return
      * @throws IOException
      */
-    protected static String serialize(Serializable object) throws IOException {
+    protected static final String serialize(Serializable object) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream( baos );
         oos.writeObject( object );

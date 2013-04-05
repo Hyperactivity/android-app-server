@@ -35,18 +35,30 @@ public abstract class Constants {
     }
 
     public abstract class Param{
+        public abstract class Name{
+            public static final String TOKEN = "token";
+            public static final String ACCOUNT = "account";
+            public static final String ACCOUNT_ID = "account_id";
+            public static final String PROFILE = "profile";
+            public static final String DESCRIPTION = "description";
+            public static final String SHOW_BIRTH_DATE = "show_birth_date";
+            public static final String AVATAR = "avatar";
+            public static final String TYPE = "type";
 
-        public static final String TOKEN = "token";
-        public static final String SUCCESS = "success";
-        public static final String VALUE = "value";
-        public static final String ACCOUNT = "account";
-        public static final String FIRST_LOGIN = "first_login";
-        public static final String ACCOUNT_ID = "account_id";
-        public static final String PROFILE = "profile";
-        public static final String PROFILE_NOT_FOUND = "profile_not_found";
-        public static final String DESCRIPTION = "description";
-        public static final String SHOW_BIRTH_DATE = "show_birth_date";
-        public static final String AVATAR = "avatar";
+            public static final String CATEGORIES = "categories";
+        }
+        public abstract class Status{
+            public static final String STATUS = "status";
+            public static final String FIRST_LOGIN = "first_login";
+            public static final String PROFILE_NOT_FOUND = "profile_not_found";
+            public static final String SUCCESS = "success";
+
+        }
+
+        public abstract class Value {
+            public static final String PUBLIC = "public";
+            public static final String PRIVATE = "private";
+        }
     }
 
     public abstract class Json {
@@ -61,6 +73,7 @@ public abstract class Constants {
     public class Query {
 
         public static final String FACEBOOK_ID = "facebook_id";
+        public static final String PARENT_CATEGORY_ID = "parent_category_id";
     }
 
     public class Database{
@@ -73,5 +86,6 @@ public abstract class Constants {
         public static final String METHOD_NOT_FOUND = "Method not found";
         public static final String PARAM_NOT_FOUND = "A needed param is not found";
         public static final String PARAM_NOT_ALLOWED = "Some given params are not allowed";
+        public static final String PARAM_VALUE_NOT_ALLOWED = "The given param value is not allowed";
     }
 }

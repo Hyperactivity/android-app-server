@@ -25,9 +25,13 @@ public abstract class Constants {
 
     public abstract class Method{
         public static final String LOGIN = "login";
-        public static final String REGISTER = "register";
         public static final String GET_PROFILE = "get_profile";
         public static final String UPDATE_PROFILE = "update_profile";
+        public static final String GET_FORUM = "get_forum";
+        public static final String GET_CATEGORY_CONTENT = "get_category_content";
+        public static final String GET_THREAD = "get_thread";
+        public static final String CREATE_THREAD = "create_thread";
+        public static final String CREATE_REPLY = "create_reply";
     }
 
     public abstract class Param{
@@ -67,6 +71,7 @@ public abstract class Constants {
         public static final String BAD_HEADERS = "Bad headers";
         public static final String BAD_ID = "ID could not be converted to int";
         public static final String METHOD_NOT_FOUND = "Method not found";
-        public static final String PARAM_NOT_FOUND = "Param not found";
+        public static final String PARAM_NOT_FOUND = "A needed param is not found";
+        public static final String PARAM_NOT_ALLOWED = "Some given params are not allowed";
     }
 }

@@ -125,6 +125,12 @@ public abstract class SharedHandler implements RequestHandler{
 
     protected abstract void process(Map<String, Object> jsonrpc2Params) throws Exception;
 
+    /**
+     * Throws and JSONRPC2Error with messages to append
+     * @param e             The error to throw
+     * @param msgToAppend   The messages to append to the error
+     * @throws Exception
+     */
     public void throwJSONRPC2Error(JSONRPC2Error e, String... msgToAppend) throws Exception {
         for(String msg: msgToAppend){
             e.appendMessage( " || " + msg);
@@ -133,11 +139,11 @@ public abstract class SharedHandler implements RequestHandler{
     }
 
     /**
-     * Makes sure that certain parameters are present in the request
+     * Makes sure that certain parameters are present in the request, no other parameters are allowed.
      * @param jsonrpc2Params    The params in the request
      * @param keys              The keys that must be present
      * @return                  c
-     * @throws Exception        If the map does not contain a key or the key is null
+     * @throws Exception        If the map does not contain a key or the key is null. Also if there are more params then the allowed
      */
     public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, String... keys) throws Exception {
         Pair<String, Boolean>[] np = new Pair[keys.length];
@@ -150,22 +156,33 @@ public abstract class SharedHandler implements RequestHandler{
 
 
     /**
-     * Allows certain params to be null while retrieving them
+     * Same as getParams(Map<>, String...) but allows certain params to be null or not present.
      * @param jsonrpc2Params    The params in the request
      * @param keypairs          Contains the key and a boolean stating if the key can be null or not
      * @return                  The params in the request
-     * @throws Exception        If the map does not contain a key or the key is null. If the key can´t be null that is
+     * @throws Exception        If the map does not contain a key or the key is null, If the key can´t be null that is. Also if there are more params then the allowed
      */
     public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, Pair<String, Boolean>... keypairs) throws Exception {
         Map<String, Object> returnParams= new HashMap<String, Object>();
         Object value;
+        String key;
+        boolean allowedToBeNull;
         for(Pair<String, Boolean> pair: keypairs){
-            value = jsonrpc2Params.get(pair.getKey());
-
-            if(value == null && !pair.getValue()){
+            key = pair.getKey();
+            value = jsonrpc2Params.get(key);
+            allowedToBeNull = pair.getValue();
+            if(value == null && !allowedToBeNull){
                 throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_NOT_FOUND, pair.getKey());
             }
             returnParams.put(pair.getKey(), value);
+            jsonrpc2Params.remove(key);
+        }
+        if(!jsonrpc2Params.isEmpty()){
+            String debugInfo = "Bad params >> ";
+            for(Map.Entry entry: jsonrpc2Params.entrySet()){
+                debugInfo += "Key: " + entry.getKey() + "  Value: " + entry.getValue() + " | ";
+            }
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_NOT_ALLOWED, debugInfo);
         }
         return returnParams;
     }

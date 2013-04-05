@@ -47,8 +47,15 @@ public class AccountRequestHandler extends SharedHandler {
     }
 
     private void updateProfile(Map<String, Object> jsonrpc2Params) throws Exception {
-//        Map<String, Object> updateProfileParams = getParams(jsonrpc2Params, Pair<Constants.Param.DESCRIPTION,, Constants.Param.SHOW_BIRTH_DATE, Constants.Param.AVATAR);
+        Map<String, Object> updateProfileParams = getParams(jsonrpc2Params,
+                new Pair(Constants.Param.DESCRIPTION, true),
+                new Pair(Constants.Param.SHOW_BIRTH_DATE, true),
+                new Pair(Constants.Param.AVATAR, true));
 
+        Users profile = em.find(Users.class, userId);
+
+        String description = (String) updateProfileParams.get(Constants.Param.DESCRIPTION);
+//        boolean
 
 //        Request
 //        method	update_profile

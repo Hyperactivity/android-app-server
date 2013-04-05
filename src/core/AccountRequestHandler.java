@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import models.Users;
 
 import javax.persistence.NoResultException;
+import java.awt.*;
 import java.util.Map;
 
 /**
@@ -52,20 +53,20 @@ public class AccountRequestHandler extends SharedHandler {
                 new Pair(Constants.Param.SHOW_BIRTH_DATE, true),
                 new Pair(Constants.Param.AVATAR, true));
 
-        Users profile = em.find(Users.class, userId);
-
         String description = (String) updateProfileParams.get(Constants.Param.DESCRIPTION);
-//        boolean
+        Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.SHOW_BIRTH_DATE);
+        //TODO: handle Avatar
 
-//        Request
-//        method	update_profile
-//        id	Account.id
-//        params-name	description	show_birthdate	avatar
-//        params-value	String	boolean	Image
-//        Response
-//        value	success
-//        result-name	profile
-//        result-value	Profile
+        Users profile = em.find(Users.class, userId);
+        if(description != null){
+            profile.setProfileDescription(description);
+        }
+        if(showBirthDate != null){
+            profile.setShowBirthDate(showBirthDate);
+        }
+
+        responseParams.put(Constants.Param.VALUE, Constants.Param.SUCCESS);
+        responseParams.put(Constants.Param.PROFILE, profile);
     }
 
     private void getProfile(Map<String, Object> jsonrpc2Params) throws Exception{
@@ -99,7 +100,7 @@ public class AccountRequestHandler extends SharedHandler {
             responseParams.put(Constants.Param.VALUE, Constants.Param.SUCCESS);
         }catch(NoResultException e){
             // User not found by facebook Id. Create user.
-            user = new Users(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, true);
+            user = new Users(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, true, true);
             persistObjects(user);
             responseParams.put(Constants.Param.VALUE, Constants.Param.FIRST_LOGIN);
         }

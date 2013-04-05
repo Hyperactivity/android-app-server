@@ -25,14 +25,15 @@ public class Users implements Serializable {
         this.userId = userId;
     }
 
-    //TODO Check if it is ok to use this constructor instead of the empty one that is meant to be used as a JPA constructor
-    public Users(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors) {
+    //Check if
+    public Users(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
         this.username = username;
         this.facebookId = facebookId;
         this.profileDescription = profileDescription;
         this.birthDate = birthDate;
         this.limitPerDay = limitPerDay;
         this.useDefaultColors = useDefaultColors;
+        this.showBirthDate = showBirthDate;
     }
 
     public Users() {
@@ -111,6 +112,18 @@ public class Users implements Serializable {
         this.username = username;
     }
 
+    private boolean showBirthDate;
+
+    @Column(name = "showBirthDate")
+    @Basic
+    public boolean isShowBirthDate() {
+        return showBirthDate;
+    }
+
+    public void setShowBirthDate(boolean showBirthDate) {
+        this.showBirthDate = showBirthDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,6 +133,7 @@ public class Users implements Serializable {
 
         if (facebookId != users.facebookId) return false;
         if (limitPerDay != users.limitPerDay) return false;
+        if (showBirthDate != users.showBirthDate) return false;
         if (useDefaultColors != users.useDefaultColors) return false;
         if (userId != users.userId) return false;
         if (birthDate != null ? !birthDate.equals(users.birthDate) : users.birthDate != null) return false;
@@ -139,6 +153,7 @@ public class Users implements Serializable {
         result = 31 * result + (useDefaultColors ? 1 : 0);
         result = 31 * result + facebookId;
         result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (showBirthDate ? 1 : 0);
         return result;
     }
 }

@@ -27,6 +27,7 @@
         <property name="hibernate.show_sql" value="true"/>
         <property name="hibernate.format_sql" value="true"/>
         <property name="hbm2ddl.auto" value="update"/>
+        <property name="hibernate.connection.url" value="jdbc:mysql://89.253.85.33/Hyperactivity"/>
     </properties>
 </persistence-unit>
 </persistence>

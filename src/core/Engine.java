@@ -12,10 +12,14 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
+import org.hibernate.ejb.HibernatePersistence;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.spi.PersistenceProvider;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Engine{
@@ -23,9 +27,11 @@ public class Engine{
 
     private HttpServer httpServer;
     private Dispatcher dispatcher;
+    public static final EntityManagerFactory entityManagerFactory = initiateEntityManager();
 
 
     public static void main(String[] args) throws IOException {
+
         try {
             new Engine();
         } catch (ClassNotFoundException e) {
@@ -45,9 +51,27 @@ public class Engine{
     private void initiateDispatchers() {
         dispatcher = new Dispatcher();
         dispatcher.register(new AccountRequestHandler());
+        dispatcher.register(new ForumRequestHandler());
     }
 
     /**
+     *
+     * @return
+     */
+    private static EntityManagerFactory initiateEntityManager(){
+     PersistenceProvider persistenceProvider = new HibernatePersistence();
+     HashMap<String, String> persistenceProperties = new HashMap<String, String>();
+     if(Constants.General.IS_DEVELOPMENT_SERVER){
+         persistenceProperties.put(Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_NAME, Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE);
+         System.out.println("Using database: " + Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE);
+     }else{
+         persistenceProperties.put(Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_NAME, Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_VALUE);
+         System.out.println("Using database: " + Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_VALUE);
+     }
+     return persistenceProvider.createEntityManagerFactory(Constants.General.PERSISTENCE_NAME, persistenceProperties);
+    }
+
+     /**
      * Create the server and start listening for http requests.
      */
     private void initiateServer() {

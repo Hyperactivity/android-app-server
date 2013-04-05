@@ -5,6 +5,7 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
+import core.Engine;
 import javafx.util.Pair;
 import net.minidev.json.JSONObject;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -26,7 +27,6 @@ import java.util.Map;
  * Time: 14:26
  */
 public abstract class SharedHandler implements RequestHandler{
-    private EntityManagerFactory entityManagerFactory; //TODO should maybe be created only once. Like in Engine.
     public EntityManager em;
 
     public int userId;
@@ -38,16 +38,7 @@ public abstract class SharedHandler implements RequestHandler{
      * Creates the entity factory that produces the entity managers
      */
     public SharedHandler(){
-        PersistenceProvider persistenceProvider = new HibernatePersistence();
-        HashMap<String, String> persistenceProperties = new HashMap<String, String>();
-        if(Constants.General.IS_DEVELOPMENT_SERVER){
-            persistenceProperties.put(Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_NAME, Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE);
-            System.out.println("Using database: " + Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE);
-        }else{
-            persistenceProperties.put(Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_NAME, Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_VALUE);
-            System.out.println("Using database: " + Constants.General.HIBERNATE_PERSISTENCE_CONNECTION_VALUE);
-        }
-        entityManagerFactory = persistenceProvider.createEntityManagerFactory(Constants.General.PERSISTENCE_NAME, persistenceProperties);
+
 
     }
 
@@ -111,7 +102,7 @@ public abstract class SharedHandler implements RequestHandler{
     }
 
     private void initializeData(JSONRPC2Request jsonrpc2Request) throws Exception {
-        em = entityManagerFactory.createEntityManager();
+        em = Engine.entityManagerFactory.createEntityManager();
         responseParams = new JSONObject();
         method = jsonrpc2Request.getMethod();
 

@@ -12,7 +12,7 @@ import javax.persistence.Id;
  */
 @javax.persistence.IdClass(models.LinkedThreadsPK.class)
 @Entity
-public class LinkedThreads {
+public class LinkedThread {
     private int userId;
 
     @javax.persistence.Column(name = "userId")
@@ -66,7 +66,7 @@ public class LinkedThreads {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LinkedThreads that = (LinkedThreads) o;
+        LinkedThread that = (LinkedThread) o;
 
         if (linkedThreadId != that.linkedThreadId) return false;
         if (privateCategoryParentId != that.privateCategoryParentId) return false;

@@ -3,14 +3,10 @@ package core;
 import assistant.Constants;
 import assistant.SharedHandler;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import javafx.util.Pair;
-import models.Categories;
-import models.Users;
+import models.Category;
+import models.Reply;
 
-import javax.persistence.NoResultException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -62,14 +58,14 @@ public class ForumRequestHandler extends SharedHandler {
 
         String type = (String) getForumParams.get(Constants.Param.Name.TYPE);
         String query;
-        List<Categories> categories = null;
+        List<Category> categories = null;
         if(type.equals(Constants.Param.Value.PUBLIC)){
-            query = "SELECT f FROM Categories f WHERE f.parentCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
-            categories = em.createQuery( query, Categories.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
+            query = "SELECT f FROM Category f WHERE f.parentCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
+            categories = em.createQuery( query, Category.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
         }
         else if(type.equals(Constants.Param.Value.PRIVATE)){
-            query = "SELECT f FROM PrivateCategories f WHERE f.privateCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
-            categories = em.createQuery( query, Categories.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
+            query = "SELECT f FROM PrivateCategory f WHERE f.privateCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
+            categories = em.createQuery( query, Category.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
 
         }else{
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
@@ -78,7 +74,18 @@ public class ForumRequestHandler extends SharedHandler {
         responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) categories));
     }
 
-    private void createReply(Map<String, Object> jsonrpc2Params) {
+    private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID, Constants.Param.Name.TEXT);
+
+        int threadId = (Integer) createReplyParams.get(Constants.Param.Name.THREAD_ID);
+        String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
+
+        Thread thread = em.find(Thread.class, threadId);
+        Reply reply = new Reply();
+
+
+
+
 //        Create Reply
 //        Request
 //        method	create_reply

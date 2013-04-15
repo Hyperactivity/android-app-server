@@ -11,7 +11,7 @@ import javax.persistence.Id;
  * Time: 14:42
  */
 @Entity
-public class Replies {
+public class Reply {
     private int threadId;
 
     @javax.persistence.Column(name = "threadId")
@@ -89,14 +89,14 @@ public class Replies {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Replies replies = (Replies) o;
+        Reply reply = (Reply) o;
 
-        if (relevance != replies.relevance) return false;
-        if (replyId != replies.replyId) return false;
-        if (threadId != replies.threadId) return false;
-        if (time != replies.time) return false;
-        if (userId != replies.userId) return false;
-        if (threadText != null ? !threadText.equals(replies.threadText) : replies.threadText != null) return false;
+        if (relevance != reply.relevance) return false;
+        if (replyId != reply.replyId) return false;
+        if (threadId != reply.threadId) return false;
+        if (time != reply.time) return false;
+        if (userId != reply.userId) return false;
+        if (threadText != null ? !threadText.equals(reply.threadText) : reply.threadText != null) return false;
 
         return true;
     }

@@ -11,7 +11,7 @@ import java.sql.Date;
  * Time: 14:42
  */
 @Entity
-public class Users implements Serializable {
+public class Account implements Serializable {
     private int userId;
 
     @Column(name = "userId")
@@ -26,7 +26,7 @@ public class Users implements Serializable {
     }
 
     //Check if
-    public Users(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
+    public Account(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
         this.username = username;
         this.facebookId = facebookId;
         this.profileDescription = profileDescription;
@@ -36,7 +36,7 @@ public class Users implements Serializable {
         this.showBirthDate = showBirthDate;
     }
 
-    public Users() {
+    public Account() {
     }
 
 
@@ -129,17 +129,17 @@ public class Users implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Users users = (Users) o;
+        Account account = (Account) o;
 
-        if (facebookId != users.facebookId) return false;
-        if (limitPerDay != users.limitPerDay) return false;
-        if (showBirthDate != users.showBirthDate) return false;
-        if (useDefaultColors != users.useDefaultColors) return false;
-        if (userId != users.userId) return false;
-        if (birthDate != null ? !birthDate.equals(users.birthDate) : users.birthDate != null) return false;
-        if (profileDescription != null ? !profileDescription.equals(users.profileDescription) : users.profileDescription != null)
+        if (facebookId != account.facebookId) return false;
+        if (limitPerDay != account.limitPerDay) return false;
+        if (showBirthDate != account.showBirthDate) return false;
+        if (useDefaultColors != account.useDefaultColors) return false;
+        if (userId != account.userId) return false;
+        if (birthDate != null ? !birthDate.equals(account.birthDate) : account.birthDate != null) return false;
+        if (profileDescription != null ? !profileDescription.equals(account.profileDescription) : account.profileDescription != null)
             return false;
-        if (username != null ? !username.equals(users.username) : users.username != null) return false;
+        if (username != null ? !username.equals(account.username) : account.username != null) return false;
 
         return true;
     }

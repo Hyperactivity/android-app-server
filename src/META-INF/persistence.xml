@@ -3,16 +3,16 @@
 
 <persistence-unit name="hyperactivity_persistence">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>models.Categories</class>
-    <class>models.CustomCategoryColors</class>
-    <class>models.LinkedThreads</class>
-    <class>models.Notes</class>
-    <class>models.PrivateCategories</class>
-    <class>models.PrivateMessages</class>
-    <class>models.Replies</class>
+    <class>models.Category</class>
+    <class>models.CustomCategoryColor</class>
+    <class>models.LinkedThread</class>
+    <class>models.Note</class>
+    <class>models.PrivateCategory</class>
+    <class>models.PrivateMessage</class>
+    <class>models.Reply</class>
     <class>models.Thread</class>
     <class>models.ThumbsUp</class>
-    <class>models.Users</class>
+    <class>models.Account</class>
     <properties>
 
         <!--

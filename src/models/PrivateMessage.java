@@ -12,7 +12,7 @@ import javax.persistence.Id;
  */
 @javax.persistence.IdClass(models.PrivateMessagesPK.class)
 @Entity
-public class PrivateMessages {
+public class PrivateMessage {
     private int senderUserId;
 
     @javax.persistence.Column(name = "senderUserId")
@@ -54,7 +54,7 @@ public class PrivateMessages {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PrivateMessages that = (PrivateMessages) o;
+        PrivateMessage that = (PrivateMessage) o;
 
         if (recieverUserId != that.recieverUserId) return false;
         if (senderUserId != that.senderUserId) return false;

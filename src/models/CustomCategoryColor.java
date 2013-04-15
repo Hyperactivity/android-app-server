@@ -10,9 +10,9 @@ import javax.persistence.Id;
  * Date: 2013-03-25
  * Time: 14:42
  */
-@javax.persistence.IdClass(models.PrivateCategoriesPK.class)
+@javax.persistence.IdClass(models.CustomCategoryColorsPK.class)
 @Entity
-public class PrivateCategories {
+public class CustomCategoryColor {
     private int userId;
 
     @javax.persistence.Column(name = "userId")
@@ -25,28 +25,16 @@ public class PrivateCategories {
         this.userId = userId;
     }
 
-    private int privateCategoryParentId;
+    private int categoryId;
 
-    @javax.persistence.Column(name = "privateCategoryParentId")
-    @Basic
-    public int getPrivateCategoryParentId() {
-        return privateCategoryParentId;
-    }
-
-    public void setPrivateCategoryParentId(int privateCategoryParentId) {
-        this.privateCategoryParentId = privateCategoryParentId;
-    }
-
-    private int privateCategoryId;
-
-    @javax.persistence.Column(name = "privateCategoryId")
+    @javax.persistence.Column(name = "categoryId")
     @Id
-    public int getPrivateCategoryId() {
-        return privateCategoryId;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setPrivateCategoryId(int privateCategoryId) {
-        this.privateCategoryId = privateCategoryId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     private int categoryColorCode;
@@ -66,11 +54,10 @@ public class PrivateCategories {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PrivateCategories that = (PrivateCategories) o;
+        CustomCategoryColor that = (CustomCategoryColor) o;
 
         if (categoryColorCode != that.categoryColorCode) return false;
-        if (privateCategoryId != that.privateCategoryId) return false;
-        if (privateCategoryParentId != that.privateCategoryParentId) return false;
+        if (categoryId != that.categoryId) return false;
         if (userId != that.userId) return false;
 
         return true;
@@ -79,8 +66,7 @@ public class PrivateCategories {
     @Override
     public int hashCode() {
         int result = userId;
-        result = 31 * result + privateCategoryParentId;
-        result = 31 * result + privateCategoryId;
+        result = 31 * result + categoryId;
         result = 31 * result + categoryColorCode;
         return result;
     }

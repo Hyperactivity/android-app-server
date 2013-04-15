@@ -4,7 +4,7 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import javafx.util.Pair;
-import models.Users;
+import models.Account;
 
 import javax.persistence.NoResultException;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class AccountRequestHandler extends SharedHandler {
         Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.Name.SHOW_BIRTH_DATE);
         //TODO: handle Avatar
 
-        Users profile = em.find(Users.class, userId);
+        Account profile = em.find(Account.class, userId);
         if(description != null){
             profile.setProfileDescription(description);
         }
@@ -72,7 +72,7 @@ public class AccountRequestHandler extends SharedHandler {
         Map<String, Object> getProfileParams = getParams(jsonrpc2Params, Constants.Param.Name.ACCOUNT_ID);
 
         int profileId = (Integer) getProfileParams.get(Constants.Param.Name.ACCOUNT_ID);
-        Users profile = em.find(Users.class, profileId);
+        Account profile = em.find(Account.class, profileId);
         if(profile != null){
             // Profile exist, send it back to the client
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
@@ -91,15 +91,15 @@ public class AccountRequestHandler extends SharedHandler {
         //TODO: Should not accept token to be null. Also should use token to check the users credentials
 
         int facebookId = userId;
-        String query = "SELECT u FROM Users u WHERE u.facebookId = :" + Constants.Query.FACEBOOK_ID;
-        Users user;
+        String query = "SELECT u FROM Account u WHERE u.facebookId = :" + Constants.Query.FACEBOOK_ID;
+        Account user;
         try{
-            user = em.createQuery( query, Users.class).setParameter(Constants.Query.FACEBOOK_ID, facebookId).getSingleResult();
+            user = em.createQuery( query, Account.class).setParameter(Constants.Query.FACEBOOK_ID, facebookId).getSingleResult();
             // User found by facebook Id
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         }catch(NoResultException e){
             // User not found by facebook Id. Create user.
-            user = new Users(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, true, true);
+            user = new Account(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, true, true);
             persistObjects(user);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.FIRST_LOGIN);
         }

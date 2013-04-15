@@ -11,7 +11,7 @@ import javax.persistence.Id;
  * Time: 14:42
  */
 @Entity
-public class Notes {
+public class Note {
     private int noteId;
 
     @javax.persistence.Column(name = "noteId")
@@ -77,13 +77,13 @@ public class Notes {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Notes notes = (Notes) o;
+        Note note = (Note) o;
 
-        if (noteId != notes.noteId) return false;
-        if (privateCategoryParentId != notes.privateCategoryParentId) return false;
-        if (userId != notes.userId) return false;
-        if (noteName != null ? !noteName.equals(notes.noteName) : notes.noteName != null) return false;
-        if (replyText != null ? !replyText.equals(notes.replyText) : notes.replyText != null) return false;
+        if (noteId != note.noteId) return false;
+        if (privateCategoryParentId != note.privateCategoryParentId) return false;
+        if (userId != note.userId) return false;
+        if (noteName != null ? !noteName.equals(note.noteName) : note.noteName != null) return false;
+        if (replyText != null ? !replyText.equals(note.replyText) : note.replyText != null) return false;
 
         return true;
     }

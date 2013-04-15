@@ -1,12 +1,12 @@
 package assistant;
 
+import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import core.Engine;
-import javafx.util.Pair;
 import net.minidev.json.JSONObject;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.ejb.HibernatePersistence;
@@ -38,8 +38,6 @@ public abstract class SharedHandler implements RequestHandler{
      * Creates the entity factory that produces the entity managers
      */
     public SharedHandler(){
-
-
     }
 
     /**
@@ -132,15 +130,15 @@ public abstract class SharedHandler implements RequestHandler{
     /**
      * Makes sure that certain parameters are present in the request, no other parameters are allowed.
      * @param jsonrpc2Params    The params in the request
-     * @param keys              The keys that must be present
+     * @param params            The params that must be present
      * @return                  c
      * @throws Exception        If the map does not contain a key or the key is null. Also if there are more params then the allowed
      */
-    public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, String... keys) throws Exception {
-        Pair<String, Boolean>[] np = new Pair[keys.length];
-        for(int i = 0; i < keys.length; i ++){
-            String key = keys[i];
-            np[i] = new Pair<String, Boolean>(key, false);
+    public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, String... params) throws Exception {
+        NullableExtendedParam[] np = new NullableExtendedParam[params.length];
+        for(int i = 0; i < params.length; i ++){
+            String param = params[i];
+            np[i] = new NullableExtendedParam(param, false);
         }
         return getParams(jsonrpc2Params, np);
     }
@@ -149,24 +147,24 @@ public abstract class SharedHandler implements RequestHandler{
     /**
      * Same as getParams(Map<>, String...) but allows certain params to be null or not present.
      * @param jsonrpc2Params    The params in the request
-     * @param keypairs          Contains the key and a boolean stating if the key can be null or not
+     * @param params            Contains the param and a boolean stating if the param can be null or not
      * @return                  The params in the request
      * @throws Exception        If the map does not contain a key or the key is null, If the key can´t be null that is. Also if there are more params then the allowed
      */
-    public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, Pair<String, Boolean>... keypairs) throws Exception {
+    public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, NullableExtendedParam... params) throws Exception {
         Map<String, Object> returnParams= new HashMap<String, Object>();
         Object value;
-        String key;
+        String param;
         boolean allowedToBeNull;
-        for(Pair<String, Boolean> pair: keypairs){
-            key = pair.getKey();
-            value = jsonrpc2Params.get(key);
-            allowedToBeNull = pair.getValue();
+        for(NullableExtendedParam extendedParam: params){
+            param = extendedParam.getParam();
+            value = jsonrpc2Params.get(param);
+            allowedToBeNull = extendedParam.isNullable();
             if(value == null && !allowedToBeNull){
-                throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_NOT_FOUND, pair.getKey());
+                throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_NOT_FOUND, param);
             }
-            returnParams.put(pair.getKey(), value);
-            jsonrpc2Params.remove(key);
+            returnParams.put(param, value);
+            jsonrpc2Params.remove(param);
         }
         if(!jsonrpc2Params.isEmpty()){
             String debugInfo = "Bad params >> ";

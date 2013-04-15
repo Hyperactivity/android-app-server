@@ -1,9 +1,11 @@
 package models;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +17,7 @@ import java.io.Serializable;
 public class Reply implements Serializable {
     private int threadId;
 
-    @javax.persistence.Column(name = "threadId")
+    @Column(name = "threadId")
     @Id
     public int getThreadId() {
         return threadId;
@@ -27,7 +29,7 @@ public class Reply implements Serializable {
 
     private int replyId;
 
-    @javax.persistence.Column(name = "replyId")
+    @Column(name = "replyId")
     @Basic
     public int getReplyId() {
         return replyId;
@@ -39,7 +41,7 @@ public class Reply implements Serializable {
 
     private int userId;
 
-    @javax.persistence.Column(name = "userId")
+    @Column(name = "userId")
     @Basic
     public int getUserId() {
         return userId;
@@ -49,33 +51,21 @@ public class Reply implements Serializable {
         this.userId = userId;
     }
 
-    private int time;
+    private Timestamp time;
 
-    @javax.persistence.Column(name = "time")
+    @Column(name = "time")
     @Basic
-    public int getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(Timestamp time) {
         this.time = time;
-    }
-
-    private int relevance;
-
-    @javax.persistence.Column(name = "relevance")
-    @Basic
-    public int getRelevance() {
-        return relevance;
-    }
-
-    public void setRelevance(int relevance) {
-        this.relevance = relevance;
     }
 
     private String threadText;
 
-    @javax.persistence.Column(name = "threadText")
+    @Column(name = "threadText")
     @Basic
     public String getThreadText() {
         return threadText;
@@ -85,6 +75,7 @@ public class Reply implements Serializable {
         this.threadText = threadText;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,12 +83,11 @@ public class Reply implements Serializable {
 
         Reply reply = (Reply) o;
 
-        if (relevance != reply.relevance) return false;
         if (replyId != reply.replyId) return false;
         if (threadId != reply.threadId) return false;
-        if (time != reply.time) return false;
         if (userId != reply.userId) return false;
         if (threadText != null ? !threadText.equals(reply.threadText) : reply.threadText != null) return false;
+        if (time != null ? !time.equals(reply.time) : reply.time != null) return false;
 
         return true;
     }
@@ -107,8 +97,7 @@ public class Reply implements Serializable {
         int result = threadId;
         result = 31 * result + replyId;
         result = 31 * result + userId;
-        result = 31 * result + time;
-        result = 31 * result + relevance;
+        result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (threadText != null ? threadText.hashCode() : 0);
         return result;
     }

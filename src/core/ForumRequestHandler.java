@@ -2,7 +2,10 @@ package core;
 
 import assistant.Constants;
 import assistant.SharedHandler;
+import assistant.pair.NullableExtendedParam;
+import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
+import javafx.util.Pair;
 import models.Category;
 import models.Reply;
 
@@ -25,11 +28,11 @@ public class ForumRequestHandler extends SharedHandler {
     @Override
     public String[] handledRequests() {
         return new String[]{
-                Constants.Method.GET_FORUM,
-                Constants.Method.GET_CATEGORY_CONTENT,
-                Constants.Method.GET_THREAD,
-                Constants.Method.CREATE_THREAD,
-                Constants.Method.CREATE_REPLY,
+            Constants.Method.GET_FORUM,
+            Constants.Method.GET_CATEGORY_CONTENT,
+            Constants.Method.GET_THREAD,
+            Constants.Method.CREATE_THREAD,
+            Constants.Method.CREATE_REPLY,
         };
     }
 
@@ -75,13 +78,17 @@ public class ForumRequestHandler extends SharedHandler {
     }
 
     private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
-        Map<String, Object> createReplyParams = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID, Constants.Param.Name.TEXT);
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+                                                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false ),
+                                                new NullableExtendedParam(Constants.Param.Name.TEXT, false),
+                                                new NullableExtendedParam(Constants.Param.Name.RELEVANCE, true));
 
         int parentThreadId = (Integer) createReplyParams.get(Constants.Param.Name.THREAD_ID);
         String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
+        int relevance = (Integer) createReplyParams.get(Constants.Param.Name.RELEVANCE);
 
         Thread parentThread = em.find(Thread.class, parentThreadId);
-        Reply reply = new Reply(parentThread.getId(), userId, text,  );
+//        Reply reply = new Reply(parentThread.getId(), userId, text,  );
 
 
 

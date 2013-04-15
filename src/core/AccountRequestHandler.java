@@ -2,6 +2,7 @@ package core;
 
 import assistant.Constants;
 import assistant.SharedHandler;
+import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import javafx.util.Pair;
 import models.Account;
@@ -48,9 +49,9 @@ public class AccountRequestHandler extends SharedHandler {
 
     private void updateProfile(Map<String, Object> jsonrpc2Params) throws Exception {
         Map<String, Object> updateProfileParams = getParams(jsonrpc2Params,
-                new Pair(Constants.Param.Name.DESCRIPTION, true),
-                new Pair(Constants.Param.Name.SHOW_BIRTH_DATE, true),
-                new Pair(Constants.Param.Name.AVATAR, true));
+                new NullableExtendedParam(Constants.Param.Name.DESCRIPTION, true),
+                new NullableExtendedParam(Constants.Param.Name.SHOW_BIRTH_DATE, true),
+                new NullableExtendedParam(Constants.Param.Name.AVATAR, true));
 
         String description = (String) updateProfileParams.get(Constants.Param.Name.DESCRIPTION);
         Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.Name.SHOW_BIRTH_DATE);
@@ -87,7 +88,7 @@ public class AccountRequestHandler extends SharedHandler {
      * Only accepts login via facebook for now.
      */
     private void login(Map<String, Object> jsonrpc2Params) throws Exception {
-        Map<String, Object> loginParams = getParams(jsonrpc2Params, new Pair(Constants.Param.Name.TOKEN, true));
+        Map<String, Object> loginParams = getParams(jsonrpc2Params, new NullableExtendedParam(Constants.Param.Name.TOKEN, true));
         //TODO: Should not accept token to be null. Also should use token to check the users credentials
 
         int facebookId = userId;

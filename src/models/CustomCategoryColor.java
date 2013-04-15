@@ -3,6 +3,7 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import javax.persistence.Id;
  */
 @javax.persistence.IdClass(models.CustomCategoryColorsPK.class)
 @Entity
-public class CustomCategoryColor {
+public class CustomCategoryColor implements Serializable {
     private int userId;
 
     @javax.persistence.Column(name = "userId")

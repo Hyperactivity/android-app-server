@@ -77,11 +77,11 @@ public class ForumRequestHandler extends SharedHandler {
     private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID, Constants.Param.Name.TEXT);
 
-        int threadId = (Integer) createReplyParams.get(Constants.Param.Name.THREAD_ID);
+        int parentThreadId = (Integer) createReplyParams.get(Constants.Param.Name.THREAD_ID);
         String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
 
-        Thread thread = em.find(Thread.class, threadId);
-        Reply reply = new Reply();
+        Thread parentThread = em.find(Thread.class, parentThreadId);
+        Reply reply = new Reply(parentThread.getId(), userId, text,  );
 
 
 

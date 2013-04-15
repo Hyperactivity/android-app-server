@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,7 @@ import javax.persistence.Id;
  */
 @javax.persistence.IdClass(models.ThumbsUpPK.class)
 @Entity
-public class ThumbsUp {
+public class ThumbsUp implements Serializable {
     private int replyId;
 
     @javax.persistence.Column(name = "replyId")

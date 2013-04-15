@@ -3,6 +3,7 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,7 @@ import javax.persistence.Id;
  * Time: 14:42
  */
 @Entity
-public class Reply {
+public class Reply implements Serializable {
     private int threadId;
 
     @javax.persistence.Column(name = "threadId")

@@ -3,6 +3,7 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import javax.persistence.Id;
  */
 @javax.persistence.IdClass(models.PrivateMessagesPK.class)
 @Entity
-public class PrivateMessage {
+public class PrivateMessage implements Serializable {
     private int senderUserId;
 
     @javax.persistence.Column(name = "senderUserId")

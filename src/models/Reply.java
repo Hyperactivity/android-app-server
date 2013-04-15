@@ -1,10 +1,8 @@
 package models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.*;
 import java.sql.Timestamp;
 
 /**
@@ -17,26 +15,25 @@ import java.sql.Timestamp;
 public class Reply implements Serializable {
     private int threadId;
 
+    public Reply(int threadId, int userId, String text, Timestamp currentTime) {
+        setThreadId(threadId);
+        setUserId(userId);
+        setText(text);
+        setTime(currentTime);
+    }
+
+    @Deprecated
+    public Reply() {
+    }
+
+    @Basic
     @Column(name = "threadId")
-    @Id
     public int getThreadId() {
         return threadId;
     }
 
     public void setThreadId(int threadId) {
         this.threadId = threadId;
-    }
-
-    private int replyId;
-
-    @Column(name = "replyId")
-    @Basic
-    public int getReplyId() {
-        return replyId;
-    }
-
-    public void setReplyId(int replyId) {
-        this.replyId = replyId;
     }
 
     private int userId;
@@ -63,18 +60,41 @@ public class Reply implements Serializable {
         this.time = time;
     }
 
-    private String threadText;
+    private String text;
 
-    @Column(name = "threadText")
+    @Column(name = "text")
     @Basic
-    public String getThreadText() {
-        return threadText;
+    public String getText() {
+        return text;
     }
 
-    public void setThreadText(String threadText) {
-        this.threadText = threadText;
+    public void setText(String text) {
+        this.text = text;
     }
 
+    private Thread parentThread;
+
+    @ManyToOne
+    @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false)
+    public Thread getParentThread() {
+        return parentThread;
+    }
+
+    public void setParentThread(Thread parentThread) {
+        this.parentThread = parentThread;
+    }
+
+    private int id;
+
+    @Column(name = "id")
+    @Id
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -83,10 +103,10 @@ public class Reply implements Serializable {
 
         Reply reply = (Reply) o;
 
-        if (replyId != reply.replyId) return false;
+        if (id != reply.id) return false;
         if (threadId != reply.threadId) return false;
         if (userId != reply.userId) return false;
-        if (threadText != null ? !threadText.equals(reply.threadText) : reply.threadText != null) return false;
+        if (text != null ? !text.equals(reply.text) : reply.text != null) return false;
         if (time != null ? !time.equals(reply.time) : reply.time != null) return false;
 
         return true;
@@ -95,10 +115,10 @@ public class Reply implements Serializable {
     @Override
     public int hashCode() {
         int result = threadId;
-        result = 31 * result + replyId;
+        result = 31 * result + id;
         result = 31 * result + userId;
         result = 31 * result + (time != null ? time.hashCode() : 0);
-        result = 31 * result + (threadText != null ? threadText.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
     }
 }

@@ -3,13 +3,13 @@ package core;
 import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
-import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import javafx.util.Pair;
 import models.Category;
 import models.Reply;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -87,9 +87,11 @@ public class ForumRequestHandler extends SharedHandler {
         String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
         int relevance = (Integer) createReplyParams.get(Constants.Param.Name.RELEVANCE);
 
-        Thread parentThread = em.find(Thread.class, parentThreadId);
-//        Reply reply = new Reply(parentThread.getId(), userId, text,  );
-
+        models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
+        Date currentDate = new Date();
+        Reply reply = new Reply(parentThreadId, userId, text, new Timestamp(currentDate.getTime()));
+        persistObjects(reply);
+        
 
 
 

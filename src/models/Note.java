@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Note implements Serializable {
     private int noteId;
 
-    @javax.persistence.Column(name = "noteId")
+    @javax.persistence.Column(name = "id")
     @Id
     public int getNoteId() {
         return noteId;

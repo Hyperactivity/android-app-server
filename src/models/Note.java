@@ -27,7 +27,7 @@ public class Note implements Serializable {
 
     private int userId;
 
-    @javax.persistence.Column(name = "userId")
+    @javax.persistence.Column(name = "accountId")
     @Basic
     public int getUserId() {
         return userId;
@@ -39,7 +39,7 @@ public class Note implements Serializable {
 
     private int privateCategoryParentId;
 
-    @javax.persistence.Column(name = "privateCategoryParentId")
+    @javax.persistence.Column(name = "parentPrivateCategoryId")
     @Basic
     public int getPrivateCategoryParentId() {
         return privateCategoryParentId;
@@ -51,7 +51,7 @@ public class Note implements Serializable {
 
     private String noteName;
 
-    @javax.persistence.Column(name = "noteName")
+    @javax.persistence.Column(name = "headLine")
     @Basic
     public String getNoteName() {
         return noteName;
@@ -63,7 +63,7 @@ public class Note implements Serializable {
 
     private String replyText;
 
-    @javax.persistence.Column(name = "replyText")
+    @javax.persistence.Column(name = "text")
     @Basic
     public String getReplyText() {
         return replyText;

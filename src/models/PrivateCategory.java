@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class PrivateCategory implements Serializable {
     private int userId;
 
-    @javax.persistence.Column(name = "userId")
+    @javax.persistence.Column(name = "accountId")
     @Id
     public int getUserId() {
         return userId;
@@ -28,7 +28,7 @@ public class PrivateCategory implements Serializable {
 
     private int privateCategoryParentId;
 
-    @javax.persistence.Column(name = "privateCategoryParentId")
+    @javax.persistence.Column(name = "parentPrivateCategoryId")
     @Basic
     public int getPrivateCategoryParentId() {
         return privateCategoryParentId;
@@ -40,7 +40,7 @@ public class PrivateCategory implements Serializable {
 
     private int privateCategoryId;
 
-    @javax.persistence.Column(name = "privateCategoryId")
+    @javax.persistence.Column(name = "id")
     @Id
     public int getPrivateCategoryId() {
         return privateCategoryId;
@@ -52,7 +52,7 @@ public class PrivateCategory implements Serializable {
 
     private int categoryColorCode;
 
-    @javax.persistence.Column(name = "categoryColorCode")
+    @javax.persistence.Column(name = "colorCode")
     @Basic
     public int getCategoryColorCode() {
         return categoryColorCode;

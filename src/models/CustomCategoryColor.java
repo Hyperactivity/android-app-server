@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class CustomCategoryColor implements Serializable {
     private int userId;
 
-    @javax.persistence.Column(name = "userId")
+    @javax.persistence.Column(name = "accountId")
     @Id
     public int getUserId() {
         return userId;
@@ -40,7 +40,7 @@ public class CustomCategoryColor implements Serializable {
 
     private int categoryColorCode;
 
-    @javax.persistence.Column(name = "categoryColorCode")
+    @javax.persistence.Column(name = "colorCode")
     @Basic
     public int getCategoryColorCode() {
         return categoryColorCode;

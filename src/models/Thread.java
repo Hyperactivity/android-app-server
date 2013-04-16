@@ -12,6 +12,10 @@ import java.util.List;
  */
 @Entity
 public class Thread implements Serializable {
+
+
+
+
     private int parentCategoryId;
 
     @Column(name = "parentCategoryId")
@@ -26,7 +30,7 @@ public class Thread implements Serializable {
 
     private int userId;
 
-    @Column(name = "userId")
+    @Column(name = "accountId")
     @Basic
     public int getUserId() {
         return userId;
@@ -38,7 +42,7 @@ public class Thread implements Serializable {
 
     private String threadName;
 
-    @Column(name = "threadName")
+    @Column(name = "headLine")
     @Basic
     public String getThreadName() {
         return threadName;
@@ -73,7 +77,7 @@ public class Thread implements Serializable {
 
     private String threadText;
 
-    @Column(name = "threadText")
+    @Column(name = "text")
     @Basic
     public String getThreadText() {
         return threadText;

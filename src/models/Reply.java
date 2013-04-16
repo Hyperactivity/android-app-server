@@ -13,10 +13,11 @@ import java.sql.Timestamp;
  */
 @Entity
 public class Reply implements Serializable {
-    private int threadId;
 
-    public Reply(int threadId, int userId, String text, Timestamp currentTime) {
-        setThreadId(threadId);
+
+
+    public Reply(Thread parentThread, int userId, String text, Timestamp currentTime) {
+        setParentThread(parentThread);
         setUserId(userId);
         setText(text);
         setTime(currentTime);
@@ -26,19 +27,9 @@ public class Reply implements Serializable {
     public Reply() {
     }
 
-    @Basic
-    @Column(name = "threadId")
-    public int getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(int threadId) {
-        this.threadId = threadId;
-    }
-
     private int userId;
 
-    @Column(name = "userId")
+    @Column(name = "accountId")
     @Basic
     public int getUserId() {
         return userId;
@@ -96,6 +87,7 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,7 +96,6 @@ public class Reply implements Serializable {
         Reply reply = (Reply) o;
 
         if (id != reply.id) return false;
-        if (threadId != reply.threadId) return false;
         if (userId != reply.userId) return false;
         if (text != null ? !text.equals(reply.text) : reply.text != null) return false;
         if (time != null ? !time.equals(reply.time) : reply.time != null) return false;
@@ -114,8 +105,7 @@ public class Reply implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = threadId;
-        result = 31 * result + id;
+        int result = id;
         result = 31 * result + userId;
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);

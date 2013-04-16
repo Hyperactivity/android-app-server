@@ -14,7 +14,7 @@ import java.sql.Date;
 public class Account implements Serializable {
     private int userId;
 
-    @Column(name = "userId")
+    @Column(name = "accountId")
     @Id
     @GeneratedValue
     public int getUserId() {

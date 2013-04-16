@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class PrivateMessage implements Serializable {
     private int senderUserId;
 
-    @javax.persistence.Column(name = "senderUserId")
+    @javax.persistence.Column(name = "senderAccountId")
     @Id
     public int getSenderUserId() {
         return senderUserId;
@@ -28,7 +28,7 @@ public class PrivateMessage implements Serializable {
 
     private int recieverUserId;
 
-    @javax.persistence.Column(name = "recieverUserId")
+    @javax.persistence.Column(name = "recieverAccountId")
     @Id
     public int getRecieverUserId() {
         return recieverUserId;
@@ -40,7 +40,7 @@ public class PrivateMessage implements Serializable {
 
     private String messageText;
 
-    @javax.persistence.Column(name = "messageText")
+    @javax.persistence.Column(name = "text")
     @Basic
     public String getMessageText() {
         return messageText;

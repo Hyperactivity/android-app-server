@@ -7,16 +7,20 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import core.Engine;
+import models.Reply;
 import net.minidev.json.JSONObject;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.loader.custom.Return;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+import sun.misc.Compare;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 import java.io.*;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +94,7 @@ public abstract class SharedHandler implements RequestHandler{
         }catch (JSONRPC2Error e){
             return new JSONRPC2Response(e, userId);
         }catch (Exception e){
-            return null; //TODO:
+            return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR.appendMessage(" || Exception: " + e.toString()), userId);
         }
 
     }
@@ -151,6 +155,7 @@ public abstract class SharedHandler implements RequestHandler{
      * @return                  The params in the request
      * @throws Exception        If the map does not contain a key or the key is null, If the key can´t be null that is. Also if there are more params then the allowed
      */
+    //TODO: Send what class each object should so we do not need to cast the objects retrieved
     public Map<String, Object> getParams(Map<String, Object> jsonrpc2Params, NullableExtendedParam... params) throws Exception {
         Map<String, Object> returnParams= new HashMap<String, Object>();
         Object value;
@@ -162,6 +167,9 @@ public abstract class SharedHandler implements RequestHandler{
             allowedToBeNull = extendedParam.isNullable();
             if(value == null && !allowedToBeNull){
                 throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_NOT_FOUND, param);
+            }
+            if(Long.class.isInstance(value)){
+                value = (int)(long)(Long)value; //Needed to avoid using Long
             }
             returnParams.put(param, value);
             jsonrpc2Params.remove(param);
@@ -181,10 +189,90 @@ public abstract class SharedHandler implements RequestHandler{
         em.getTransaction().begin();
         for(Object o: objects){
             em.persist(o);
-            em.refresh(o);
         }
         em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
     }
+
+    protected void refreshObjects(Object... objects) {
+        em.getTransaction().begin();
+        for(Object o: objects){
+            em.refresh(o);
+        }
+
+        em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
+    }
+
+    enum ReplyComparator implements Comparator<Reply> {
+
+        TIME_SORT {
+            public int compare(Reply r1, Reply r2) {
+                return r1.getTime().compareTo(r2.getTime());
+            }},
+
+        VOTE_SORT {
+            public int compare(Reply r1, Reply r2) {
+                return r1().compareTo(r2.getFullName());
+            }};
+
+        public static Comparator<Reply> decending(final Comparator<Reply> other) {
+            return new Comparator<Reply>() {
+                public int compare(Reply r1, Reply r2) {
+                    return -1 * other.compare(r1, r2);
+                }
+            };
+        }
+
+        public static Comparator<Reply> getComparator(final ReplyComparator... multipleOptions) {
+            return new Comparator<Reply>() {
+                public int compare(Reply r1, Reply r2) {
+                    for (ReplyComparator option : multipleOptions) {
+                        int result = option.compare(r1, r2);
+                        if (result != 0) {
+                            return result;
+                        }
+                    }
+                    return 0;
+                }
+            };
+        }
+    }
+
+
+
+    protected class DescendingComparator implements Comparator<Reply> {
+
+        @Override
+        public int compare(Reply reply1, Reply reply2) {
+            String p1Name;
+            String p2Name;
+            if(reply1.getTeam() != 0){
+                p1Score = engine.getPlayerManager().getTeamScore(reply1.getTeam());
+                p1Name = Config.Colors.MAINCOLORSNAME[reply1.getTeam()-1];
+            } else{
+                p1Score = reply1.getScore();
+                p1Name = reply1.getName();
+            }
+            if(reply2.getTeam() != 0){
+                p2Score = engine.getPlayerManager().getTeamScore(reply2.getTeam());
+                p2Name = Config.Colors.MAINCOLORSNAME[reply2.getTeam()-1];
+            } else{
+                p2Score = reply2.getScore();
+                p2Name = reply2.getName();
+            }
+
+            if (p1Score < p2Score) {
+                return 1;
+            } else if (p1Score > p2Score){
+                return -1;
+            }
+            if(p1Name.compareTo(p2Name) < 0){
+                return -1;
+            }
+            return 1;
+        }
+
+    }
+
 }
 
 

@@ -48,7 +48,7 @@ public abstract class Constants {
             public static final String CATEGORIES = "categories";
             public static final String THREAD_ID = "thread_id";
             public static final String TEXT = "text";
-            public static final String RELEVANCE = "relevance";
+            public static final String SORT_TYPE = "sort_type";
         }
         public abstract class Status{
             public static final String STATUS = "status";

@@ -27,7 +27,7 @@ public class ThumbsUp implements Serializable {
 
     private int userId;
 
-    @javax.persistence.Column(name = "userId")
+    @javax.persistence.Column(name = "accountId")
     @Id
     public int getUserId() {
         return userId;

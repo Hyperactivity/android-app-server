@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class LinkedThread implements Serializable {
     private int userId;
 
-    @javax.persistence.Column(name = "userId")
+    @javax.persistence.Column(name = "accountId")
     @Id
     public int getUserId() {
         return userId;
@@ -28,7 +28,7 @@ public class LinkedThread implements Serializable {
 
     private int privateCategoryParentId;
 
-    @javax.persistence.Column(name = "privateCategoryParentId")
+    @javax.persistence.Column(name = "parentPrivateCategoryId")
     @Basic
     public int getPrivateCategoryParentId() {
         return privateCategoryParentId;
@@ -40,7 +40,7 @@ public class LinkedThread implements Serializable {
 
     private int linkedThreadId;
 
-    @javax.persistence.Column(name = "linkedThreadId")
+    @javax.persistence.Column(name = "id")
     @Id
     public int getLinkedThreadId() {
         return linkedThreadId;
@@ -52,7 +52,7 @@ public class LinkedThread implements Serializable {
 
     private String linkedThreadName;
 
-    @javax.persistence.Column(name = "linkedThreadName")
+    @javax.persistence.Column(name = "headLine")
     @Basic
     public String getLinkedThreadName() {
         return linkedThreadName;

@@ -35,7 +35,8 @@ public class ClientDebugger {
      * Write what you want to test here
      */
     public ClientDebugger() {
-        testStandardJson(Constants.Http.PORT, "login", new Pair("token", "abcd"));
+//        testStandardJson(123, "login", new Pair("token", "abcd"));
+        testStandardJson(123456, "create_reply", new Pair("thread_id", 123), new Pair("text", "testtest"));
     }
 
 

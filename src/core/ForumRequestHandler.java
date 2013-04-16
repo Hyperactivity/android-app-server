@@ -4,8 +4,7 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import models.Category;
-import models.Reply;
+import models.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -81,17 +80,36 @@ public class ForumRequestHandler extends SharedHandler {
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
                                                 new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false ),
                                                 new NullableExtendedParam(Constants.Param.Name.TEXT, false),
-                                                new NullableExtendedParam(Constants.Param.Name.RELEVANCE, true));
+                                                new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
 
-        int parentThreadId = (Integer) createReplyParams.get(Constants.Param.Name.THREAD_ID);
+        int parentThreadId = (Integer)createReplyParams.get(Constants.Param.Name.THREAD_ID);
         String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
-        int relevance = (Integer) createReplyParams.get(Constants.Param.Name.RELEVANCE);
+        Integer sortType = (Integer) createReplyParams.get(Constants.Param.Name.SORT_TYPE);
+
 
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
         Date currentDate = new Date();
-        Reply reply = new Reply(parentThreadId, userId, text, new Timestamp(currentDate.getTime()));
+
+        Reply reply = new Reply(parentThread, userId, text, new Timestamp(currentDate.getTime()));
+
         persistObjects(reply);
-        
+        refreshObjects(parentThread);
+
+        if(sortType == null || sortType == 0){
+
+            // Sort
+            parentThread.getReplies();
+
+        }else if(sortType == 1){
+            //Sort after date
+
+        }else if(sortType == 2){
+            //Sort after time
+
+        }else{
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, "sortType is not allowed!" + sortType);
+        }
+
 
 
 
@@ -106,6 +124,8 @@ public class ForumRequestHandler extends SharedHandler {
 //        result-name	parent_thread
 //        result-value	Thread
     }
+
+
 
     private void createThread(Map<String, Object> jsonrpc2Params) {
 

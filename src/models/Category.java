@@ -29,7 +29,7 @@ public class Category extends GeneralResponse implements Serializable {
 
     private int categoryId;
 
-    @javax.persistence.Column(name = "categoryId")
+    @javax.persistence.Column(name = "id")
     @Id
     public int getCategoryId() {
         return categoryId;
@@ -41,7 +41,7 @@ public class Category extends GeneralResponse implements Serializable {
 
     private String categoryName;
 
-    @javax.persistence.Column(name = "categoryName")
+    @javax.persistence.Column(name = "headLine")
     @Basic
     public String getCategoryName() {
         return categoryName;
@@ -53,7 +53,7 @@ public class Category extends GeneralResponse implements Serializable {
 
     private int categoryColorCode;
 
-    @javax.persistence.Column(name = "categoryColorCode")
+    @javax.persistence.Column(name = "colorCode")
     @Basic
     public int getCategoryColorCode() {
         return categoryColorCode;

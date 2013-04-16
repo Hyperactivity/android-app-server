@@ -4,8 +4,7 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import models.Category;
-import models.Reply;
+import models.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -107,7 +106,7 @@ public class ForumRequestHandler extends SharedHandler {
 //        result-value	Thread
     }
 
-    private void createThread(Map<String, Object> jsonrpc2Params) {
+    private void createThread(Map<String, Object> jsonrpc2Params) throws Exception {
 
 //        Create Thread
 //        Request
@@ -119,9 +118,32 @@ public class ForumRequestHandler extends SharedHandler {
 //        value	success
 //        result-name	parent_category
 //        result-value	Category
+
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false ),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false),
+                new NullableExtendedParam(Constants.Param.Name.TEXT, false));
+
+
+        models.Thread thread = new models.Thread(
+                (Integer)       createReplyParams.get(Constants.Param.Name.CATEGORY_ID),
+                (Integer)       userId,
+                (String)        createReplyParams.get(Constants.Param.Name.HEADLINE),
+                (String)        createReplyParams.get(Constants.Param.Name.TEXT)
+                );
+
+        try {
+            persistObjects(thread);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+            responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) thread.getParentCategoryId()));
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
-    private void getThread(Map<String, Object> jsonrpc2Params) {
+    private void getThread(Map<String, Object> jsonrpc2Params) throws Exception {
 //        Get Thread
 //        Request
 //        method	get_thread
@@ -132,6 +154,28 @@ public class ForumRequestHandler extends SharedHandler {
 //        value	success
 //        result-name	thread
 //        result-value	Thread
+
+
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false ),
+                new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
+
+
+
+        Map<String, Object> getForumParams = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID, Constants.Param.Name.SORT_TYPE);
+
+        String type = (String) getForumParams.get(Constants.Param.Name.TYPE);
+        String query;
+        List<Category> categories = null;
+        if(type.equals(Constants.Param.Value.PUBLIC)){
+            query = "SELECT f FROM Category f WHERE f.parentCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
+            categories = em.createQuery( query, Category.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
+        }
+       else{
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
+        }
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) categories));
     }
 
     private void getCategoryContent(Map<String, Object> jsonrpc2Params) {

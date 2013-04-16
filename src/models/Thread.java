@@ -14,6 +14,18 @@ import java.util.List;
 public class Thread implements Serializable {
     private int parentCategoryId;
 
+    public Thread(int parentCategoryId, int userId, String threadName, String threadText)
+    {
+        setParentCategoryId(parentCategoryId);
+        setUserId(userId);
+        setThreadName(threadName);
+        setThreadText(threadText);
+    }
+
+    @Deprecated
+    public Thread() {
+    }
+
     @Column(name = "parentCategoryId")
     @Basic
     public int getParentCategoryId() {

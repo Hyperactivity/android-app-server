@@ -3,74 +3,49 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
 @Entity
-public class Note implements Serializable {
-    private int noteId;
+public class Note {
+    private int id;
 
     @javax.persistence.Column(name = "id")
     @Id
-    public int getNoteId() {
-        return noteId;
+    public int getId() {
+        return id;
     }
 
-    public void setNoteId(int noteId) {
-        this.noteId = noteId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    private int userId;
-
-    @javax.persistence.Column(name = "accountId")
-    @Basic
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    private int privateCategoryParentId;
-
-    @javax.persistence.Column(name = "parentPrivateCategoryId")
-    @Basic
-    public int getPrivateCategoryParentId() {
-        return privateCategoryParentId;
-    }
-
-    public void setPrivateCategoryParentId(int privateCategoryParentId) {
-        this.privateCategoryParentId = privateCategoryParentId;
-    }
-
-    private String noteName;
+    private String headLine;
 
     @javax.persistence.Column(name = "headLine")
     @Basic
-    public String getNoteName() {
-        return noteName;
+    public String getHeadLine() {
+        return headLine;
     }
 
-    public void setNoteName(String noteName) {
-        this.noteName = noteName;
+    public void setHeadLine(String headLine) {
+        this.headLine = headLine;
     }
 
-    private String replyText;
+    private String text;
 
     @javax.persistence.Column(name = "text")
     @Basic
-    public String getReplyText() {
-        return replyText;
+    public String getText() {
+        return text;
     }
 
-    public void setReplyText(String replyText) {
-        this.replyText = replyText;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
@@ -80,22 +55,18 @@ public class Note implements Serializable {
 
         Note note = (Note) o;
 
-        if (noteId != note.noteId) return false;
-        if (privateCategoryParentId != note.privateCategoryParentId) return false;
-        if (userId != note.userId) return false;
-        if (noteName != null ? !noteName.equals(note.noteName) : note.noteName != null) return false;
-        if (replyText != null ? !replyText.equals(note.replyText) : note.replyText != null) return false;
+        if (id != note.id) return false;
+        if (headLine != null ? !headLine.equals(note.headLine) : note.headLine != null) return false;
+        if (text != null ? !text.equals(note.text) : note.text != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = noteId;
-        result = 31 * result + userId;
-        result = 31 * result + privateCategoryParentId;
-        result = 31 * result + (noteName != null ? noteName.hashCode() : 0);
-        result = 31 * result + (replyText != null ? replyText.hashCode() : 0);
+        int result = id;
+        result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
     }
 }

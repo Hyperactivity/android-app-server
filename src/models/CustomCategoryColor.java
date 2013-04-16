@@ -3,27 +3,26 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
-@javax.persistence.IdClass(models.CustomCategoryColorsPK.class)
+@javax.persistence.IdClass(models.CustomCategoryColorPK.class)
 @Entity
-public class CustomCategoryColor implements Serializable {
-    private int userId;
+public class CustomCategoryColor {
+    private int accountId;
 
     @javax.persistence.Column(name = "accountId")
     @Id
-    public int getUserId() {
-        return userId;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     private int categoryId;
@@ -38,16 +37,16 @@ public class CustomCategoryColor implements Serializable {
         this.categoryId = categoryId;
     }
 
-    private int categoryColorCode;
+    private int colorCode;
 
     @javax.persistence.Column(name = "colorCode")
     @Basic
-    public int getCategoryColorCode() {
-        return categoryColorCode;
+    public int getColorCode() {
+        return colorCode;
     }
 
-    public void setCategoryColorCode(int categoryColorCode) {
-        this.categoryColorCode = categoryColorCode;
+    public void setColorCode(int colorCode) {
+        this.colorCode = colorCode;
     }
 
     @Override
@@ -57,18 +56,18 @@ public class CustomCategoryColor implements Serializable {
 
         CustomCategoryColor that = (CustomCategoryColor) o;
 
-        if (categoryColorCode != that.categoryColorCode) return false;
+        if (accountId != that.accountId) return false;
         if (categoryId != that.categoryId) return false;
-        if (userId != that.userId) return false;
+        if (colorCode != that.colorCode) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userId;
+        int result = accountId;
         result = 31 * result + categoryId;
-        result = 31 * result + categoryColorCode;
+        result = 31 * result + colorCode;
         return result;
     }
 }

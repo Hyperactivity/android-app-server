@@ -7,18 +7,11 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import core.Engine;
-import models.Reply;
 import net.minidev.json.JSONObject;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.ejb.HibernatePersistence;
-import org.hibernate.loader.custom.Return;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-import sun.misc.Compare;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceProvider;
 import java.io.*;
 import java.util.Comparator;
 import java.util.HashMap;

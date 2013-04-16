@@ -2,17 +2,16 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
 @javax.persistence.IdClass(models.ThumbsUpPK.class)
 @Entity
-public class ThumbsUp implements Serializable {
+public class ThumbsUp {
     private int replyId;
 
     @javax.persistence.Column(name = "replyId")
@@ -25,16 +24,16 @@ public class ThumbsUp implements Serializable {
         this.replyId = replyId;
     }
 
-    private int userId;
+    private int accountId;
 
     @javax.persistence.Column(name = "accountId")
     @Id
-    public int getUserId() {
-        return userId;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     @Override
@@ -44,8 +43,8 @@ public class ThumbsUp implements Serializable {
 
         ThumbsUp thumbsUp = (ThumbsUp) o;
 
+        if (accountId != thumbsUp.accountId) return false;
         if (replyId != thumbsUp.replyId) return false;
-        if (userId != thumbsUp.userId) return false;
 
         return true;
     }
@@ -53,7 +52,7 @@ public class ThumbsUp implements Serializable {
     @Override
     public int hashCode() {
         int result = replyId;
-        result = 31 * result + userId;
+        result = 31 * result + accountId;
         return result;
     }
 }

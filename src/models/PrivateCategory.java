@@ -1,65 +1,49 @@
 package models;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.*;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
-@javax.persistence.IdClass(models.PrivateCategoriesPK.class)
 @Entity
-public class PrivateCategory implements Serializable {
-    private int userId;
-
-    @javax.persistence.Column(name = "accountId")
-    @Id
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    private int privateCategoryParentId;
-
-    @javax.persistence.Column(name = "parentPrivateCategoryId")
-    @Basic
-    public int getPrivateCategoryParentId() {
-        return privateCategoryParentId;
-    }
-
-    public void setPrivateCategoryParentId(int privateCategoryParentId) {
-        this.privateCategoryParentId = privateCategoryParentId;
-    }
-
-    private int privateCategoryId;
+public class PrivateCategory {
+    private int id;
 
     @javax.persistence.Column(name = "id")
     @Id
-    public int getPrivateCategoryId() {
-        return privateCategoryId;
+    public int getId() {
+        return id;
     }
 
-    public void setPrivateCategoryId(int privateCategoryId) {
-        this.privateCategoryId = privateCategoryId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    private int categoryColorCode;
+    private int colorCode;
 
     @javax.persistence.Column(name = "colorCode")
     @Basic
-    public int getCategoryColorCode() {
-        return categoryColorCode;
+    public int getColorCode() {
+        return colorCode;
     }
 
-    public void setCategoryColorCode(int categoryColorCode) {
-        this.categoryColorCode = categoryColorCode;
+    public void setColorCode(int colorCode) {
+        this.colorCode = colorCode;
+    }
+
+    private Category parentPrivateCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
+    public Category getParentPrivateCategory() {
+        return parentPrivateCategory;
+    }
+
+    public void setParentPrivateCategory(Category parentPrivateCategory) {
+        this.parentPrivateCategory = parentPrivateCategory;
     }
 
     @Override
@@ -69,20 +53,16 @@ public class PrivateCategory implements Serializable {
 
         PrivateCategory that = (PrivateCategory) o;
 
-        if (categoryColorCode != that.categoryColorCode) return false;
-        if (privateCategoryId != that.privateCategoryId) return false;
-        if (privateCategoryParentId != that.privateCategoryParentId) return false;
-        if (userId != that.userId) return false;
+        if (colorCode != that.colorCode) return false;
+        if (id != that.id) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userId;
-        result = 31 * result + privateCategoryParentId;
-        result = 31 * result + privateCategoryId;
-        result = 31 * result + categoryColorCode;
+        int result = id;
+        result = 31 * result + colorCode;
         return result;
     }
 }

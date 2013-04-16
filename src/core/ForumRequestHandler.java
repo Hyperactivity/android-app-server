@@ -62,11 +62,11 @@ public class ForumRequestHandler extends SharedHandler {
         String query;
         List<Category> categories = null;
         if(type.equals(Constants.Param.Value.PUBLIC)){
-            query = "SELECT f FROM Category f WHERE f.parentCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
+            query = "SELECT f FROM Category f WHERE f.parentCategory = :" + Constants.Query.PARENT_CATEGORY_ID;
             categories = em.createQuery( query, Category.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
         }
         else if(type.equals(Constants.Param.Value.PRIVATE)){
-            query = "SELECT f FROM PrivateCategory f WHERE f.privateCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
+            query = "SELECT f FROM PrivateCategory f WHERE f.parentPrivateCategory = :" + Constants.Query.PARENT_CATEGORY_ID;
             categories = em.createQuery( query, Category.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
 
         }else{
@@ -90,7 +90,7 @@ public class ForumRequestHandler extends SharedHandler {
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
         Date currentDate = new Date();
 
-        Reply reply = new Reply(parentThread, userId, text, new Timestamp(currentDate.getTime()));
+        Reply reply = new Reply(parentThread.getId(), userId, text, new Timestamp(currentDate.getTime()));
 
         persistObjects(reply);
         refreshObjects(parentThread);
@@ -98,7 +98,7 @@ public class ForumRequestHandler extends SharedHandler {
         if(sortType == null || sortType == 0){
 
             // Sort
-            parentThread.getReplies();
+//            parentThread.getReplies();
 
         }else if(sortType == 1){
             //Sort after date
@@ -189,7 +189,7 @@ public class ForumRequestHandler extends SharedHandler {
         String query;
         List<Category> categories = null;
         if(type.equals(Constants.Param.Value.PUBLIC)){
-            query = "SELECT f FROM Category f WHERE f.parentCategoryId = :" + Constants.Query.PARENT_CATEGORY_ID;
+            query = "SELECT f FROM Category f WHERE f.parentCategory = :" + Constants.Query.PARENT_CATEGORY_ID;
             categories = em.createQuery( query, Category.class).setParameter(Constants.Query.PARENT_CATEGORY_ID, null).getResultList();
         }
        else{

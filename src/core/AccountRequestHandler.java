@@ -4,7 +4,6 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import javafx.util.Pair;
 import models.Account;
 
 import javax.persistence.NoResultException;
@@ -93,17 +92,17 @@ public class AccountRequestHandler extends SharedHandler {
 
         int facebookId = userId;
         String query = "SELECT u FROM Account u WHERE u.facebookId = :" + Constants.Query.FACEBOOK_ID;
-        Account user;
+        Account account;
         try{
-            user = em.createQuery( query, Account.class).setParameter(Constants.Query.FACEBOOK_ID, facebookId).getSingleResult();
+            account = em.createQuery( query, Account.class).setParameter(Constants.Query.FACEBOOK_ID, facebookId).getSingleResult();
             // User found by facebook Id
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         }catch(NoResultException e){
             // User not found by facebook Id. Create user.
-            user = new Account(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, true, true);
-            persistObjects(user);
+            account = new Account(null, facebookId, null, null, Constants.Database.NO_LIMIT_PER_DAY, Constants.Database.DEFAULT_USE_DEFAULT_COLORS , Constants.Database.DEFAULT_SHOW_BIRTH_DATE);
+            persistObjects(account);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.FIRST_LOGIN);
         }
-        responseParams.put(Constants.Param.Name.ACCOUNT, serialize(user));
+        responseParams.put(Constants.Param.Name.ACCOUNT, serialize(account));
     }
 }

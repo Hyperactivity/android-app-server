@@ -84,6 +84,8 @@ public abstract class Constants {
 
     public class Database{
         public static final int NO_LIMIT_PER_DAY = 0;
+        public static final boolean DEFAULT_SHOW_BIRTH_DATE = false;
+        public static final boolean DEFAULT_USE_DEFAULT_COLORS = true;
     }
 
     public class Errors {

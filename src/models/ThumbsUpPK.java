@@ -7,8 +7,8 @@ import java.io.Serializable;
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
 public class ThumbsUpPK implements Serializable {
     private int replyId;
@@ -23,16 +23,16 @@ public class ThumbsUpPK implements Serializable {
         this.replyId = replyId;
     }
 
-    private int userId;
+    private int accountId;
 
     @Id
-    @Column(name = "userId")
-    public int getUserId() {
-        return userId;
+    @Column(name = "accountId")
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     @Override
@@ -42,8 +42,8 @@ public class ThumbsUpPK implements Serializable {
 
         ThumbsUpPK that = (ThumbsUpPK) o;
 
+        if (accountId != that.accountId) return false;
         if (replyId != that.replyId) return false;
-        if (userId != that.userId) return false;
 
         return true;
     }
@@ -51,7 +51,7 @@ public class ThumbsUpPK implements Serializable {
     @Override
     public int hashCode() {
         int result = replyId;
-        result = 31 * result + userId;
+        result = 31 * result + accountId;
         return result;
     }
 }

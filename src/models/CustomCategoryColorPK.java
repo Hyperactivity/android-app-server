@@ -7,20 +7,20 @@ import java.io.Serializable;
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
-public class CustomCategoryColorsPK implements Serializable {
-    private int userId;
+public class CustomCategoryColorPK implements Serializable {
+    private int accountId;
 
     @Id
-    @Column(name = "userId")
-    public int getUserId() {
-        return userId;
+    @Column(name = "accountId")
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     private int categoryId;
@@ -40,17 +40,17 @@ public class CustomCategoryColorsPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CustomCategoryColorsPK that = (CustomCategoryColorsPK) o;
+        CustomCategoryColorPK that = (CustomCategoryColorPK) o;
 
+        if (accountId != that.accountId) return false;
         if (categoryId != that.categoryId) return false;
-        if (userId != that.userId) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userId;
+        int result = accountId;
         result = 31 * result + categoryId;
         return result;
     }

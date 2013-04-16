@@ -1,31 +1,20 @@
 package models;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
 @Entity
 public class Account implements Serializable {
-    private int userId;
 
-    @Column(name = "accountId")
-    @Id
-    @GeneratedValue
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    //Check if
     public Account(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
         this.username = username;
         this.facebookId = facebookId;
@@ -36,13 +25,25 @@ public class Account implements Serializable {
         this.showBirthDate = showBirthDate;
     }
 
+    private int id;
+
+    @Deprecated
     public Account() {
     }
 
+    @javax.persistence.Column(name = "id")
+    @Id
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     private String profileDescription;
 
-    @Column(name = "profileDescription")
+    @javax.persistence.Column(name = "profileDescription")
     @Basic
     public String getProfileDescription() {
         return profileDescription;
@@ -54,7 +55,7 @@ public class Account implements Serializable {
 
     private Date birthDate;
 
-    @Column(name = "birthDate")
+    @javax.persistence.Column(name = "birthDate")
     @Basic
     public Date getBirthDate() {
         return birthDate;
@@ -66,7 +67,7 @@ public class Account implements Serializable {
 
     private int limitPerDay;
 
-    @Column(name = "limitPerDay")
+    @javax.persistence.Column(name = "limitPerDay")
     @Basic
     public int getLimitPerDay() {
         return limitPerDay;
@@ -78,7 +79,7 @@ public class Account implements Serializable {
 
     private boolean useDefaultColors;
 
-    @Column(name = "useDefaultColors")
+    @javax.persistence.Column(name = "useDefaultColors")
     @Basic
     public boolean isUseDefaultColors() {
         return useDefaultColors;
@@ -90,7 +91,7 @@ public class Account implements Serializable {
 
     private int facebookId;
 
-    @Column(name = "facebookId")
+    @javax.persistence.Column(name = "facebookId")
     @Basic
     public int getFacebookId() {
         return facebookId;
@@ -102,7 +103,7 @@ public class Account implements Serializable {
 
     private String username;
 
-    @Column(name = "username")
+    @javax.persistence.Column(name = "username")
     @Basic
     public String getUsername() {
         return username;
@@ -114,7 +115,7 @@ public class Account implements Serializable {
 
     private boolean showBirthDate;
 
-    @Column(name = "showBirthDate")
+    @javax.persistence.Column(name = "showBirthDate")
     @Basic
     public boolean isShowBirthDate() {
         return showBirthDate;
@@ -131,11 +132,11 @@ public class Account implements Serializable {
 
         Account account = (Account) o;
 
+        if (id != account.id) return false;
         if (facebookId != account.facebookId) return false;
         if (limitPerDay != account.limitPerDay) return false;
         if (showBirthDate != account.showBirthDate) return false;
         if (useDefaultColors != account.useDefaultColors) return false;
-        if (userId != account.userId) return false;
         if (birthDate != null ? !birthDate.equals(account.birthDate) : account.birthDate != null) return false;
         if (profileDescription != null ? !profileDescription.equals(account.profileDescription) : account.profileDescription != null)
             return false;
@@ -146,7 +147,7 @@ public class Account implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = userId;
+        int result = id;
         result = 31 * result + (profileDescription != null ? profileDescription.hashCode() : 0);
         result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
         result = 31 * result + limitPerDay;

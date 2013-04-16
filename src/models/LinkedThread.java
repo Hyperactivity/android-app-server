@@ -3,63 +3,37 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:10
  */
-@javax.persistence.IdClass(models.LinkedThreadsPK.class)
 @Entity
-public class LinkedThread implements Serializable {
-    private int userId;
-
-    @javax.persistence.Column(name = "accountId")
-    @Id
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    private int privateCategoryParentId;
-
-    @javax.persistence.Column(name = "parentPrivateCategoryId")
-    @Basic
-    public int getPrivateCategoryParentId() {
-        return privateCategoryParentId;
-    }
-
-    public void setPrivateCategoryParentId(int privateCategoryParentId) {
-        this.privateCategoryParentId = privateCategoryParentId;
-    }
-
-    private int linkedThreadId;
+public class LinkedThread {
+    private int id;
 
     @javax.persistence.Column(name = "id")
     @Id
-    public int getLinkedThreadId() {
-        return linkedThreadId;
+    public int getId() {
+        return id;
     }
 
-    public void setLinkedThreadId(int linkedThreadId) {
-        this.linkedThreadId = linkedThreadId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    private String linkedThreadName;
+    private String headLine;
 
     @javax.persistence.Column(name = "headLine")
     @Basic
-    public String getLinkedThreadName() {
-        return linkedThreadName;
+    public String getHeadLine() {
+        return headLine;
     }
 
-    public void setLinkedThreadName(String linkedThreadName) {
-        this.linkedThreadName = linkedThreadName;
+    public void setHeadLine(String headLine) {
+        this.headLine = headLine;
     }
 
     @Override
@@ -69,21 +43,16 @@ public class LinkedThread implements Serializable {
 
         LinkedThread that = (LinkedThread) o;
 
-        if (linkedThreadId != that.linkedThreadId) return false;
-        if (privateCategoryParentId != that.privateCategoryParentId) return false;
-        if (userId != that.userId) return false;
-        if (linkedThreadName != null ? !linkedThreadName.equals(that.linkedThreadName) : that.linkedThreadName != null)
-            return false;
+        if (id != that.id) return false;
+        if (headLine != null ? !headLine.equals(that.headLine) : that.headLine != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userId;
-        result = 31 * result + privateCategoryParentId;
-        result = 31 * result + linkedThreadId;
-        result = 31 * result + (linkedThreadName != null ? linkedThreadName.hashCode() : 0);
+        int result = id;
+        result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
         return result;
     }
 }

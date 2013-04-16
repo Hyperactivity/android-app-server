@@ -1,36 +1,43 @@
 package models;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
  * User: OMMatte
- * Date: 2013-03-25
- * Time: 14:42
+ * Date: 2013-04-16
+ * Time: 13:14
  */
 @Entity
-public class Thread implements Serializable {
+public class Thread {
 
+    public Thread(Category parentCategory, Account account, String threadName, String threadText)
+    {
+        setParentCategory(parentCategory);
+        setAccount(account);
+        setHeadLine(threadName);
+        setText(threadText);
+    }
 
-
-
-    private int parentCategoryId;
-
-    public Thread(int parentCategoryId, int userId, String threadName, String threadText)
+    public Thread(int parentCategoryId, int accountId, String threadName, String threadText)
     {
         setParentCategoryId(parentCategoryId);
-        setUserId(userId);
-        setThreadName(threadName);
-        setThreadText(threadText);
+        setAccountId(accountId);
+        setHeadLine(threadName);
+        setText(threadText);
     }
+
 
     @Deprecated
     public Thread() {
+
     }
 
-    @Column(name = "parentCategoryId")
+    private int parentCategoryId;
+
+
+    @javax.persistence.Column(name = "parentCategoryId")
     @Basic
     public int getParentCategoryId() {
         return parentCategoryId;
@@ -40,28 +47,42 @@ public class Thread implements Serializable {
         this.parentCategoryId = parentCategoryId;
     }
 
-    private int userId;
 
-    @Column(name = "accountId")
+
+    private int id;
+
+    @javax.persistence.Column(name = "id")
+    @Id
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private String headLine;
+
+    @javax.persistence.Column(name = "headLine")
     @Basic
-    public int getUserId() {
-        return userId;
+    public String getHeadLine() {
+        return headLine;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setHeadLine(String headLine) {
+        this.headLine = headLine;
     }
 
-    private String threadName;
+    private String text;
 
-    @Column(name = "headLine")
+    @javax.persistence.Column(name = "text")
     @Basic
-    public String getThreadName() {
-        return threadName;
+    public String getText() {
+        return text;
     }
 
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
+    public void setText(String text) {
+        this.text = text;
     }
 
     private List<Reply> replies;
@@ -75,29 +96,44 @@ public class Thread implements Serializable {
         this.replies = replies;
     }
 
-    private int id;
+    private int accountId;
 
-    @Column(name = "id")
-    @Id
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    private String threadText;
-
-    @Column(name = "text")
+    @javax.persistence.Column(name = "accountId")
     @Basic
-    public String getThreadText() {
-        return threadText;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setThreadText(String threadText) {
-        this.threadText = threadText;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
+
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    private Category parentCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "parentCategoryId", referencedColumnName = "id", nullable = false)
+    public Category getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(Category parentCategory) {
+        this.parentCategory = parentCategory;
+    }
+
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -107,21 +143,17 @@ public class Thread implements Serializable {
         Thread thread = (Thread) o;
 
         if (id != thread.id) return false;
-        if (parentCategoryId != thread.parentCategoryId) return false;
-        if (userId != thread.userId) return false;
-        if (threadName != null ? !threadName.equals(thread.threadName) : thread.threadName != null) return false;
-        if (threadText != null ? !threadText.equals(thread.threadText) : thread.threadText != null) return false;
+        if (headLine != null ? !headLine.equals(thread.headLine) : thread.headLine != null) return false;
+        if (text != null ? !text.equals(thread.text) : thread.text != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = parentCategoryId;
-        result = 31 * result + userId;
-        result = 31 * result + id;
-        result = 31 * result + (threadName != null ? threadName.hashCode() : 0);
-        result = 31 * result + (threadText != null ? threadText.hashCode() : 0);
+        int result = id;
+        result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
     }
 }

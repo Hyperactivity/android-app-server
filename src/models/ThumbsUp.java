@@ -2,6 +2,8 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +15,15 @@ import javax.persistence.Id;
 @Entity
 public class ThumbsUp {
     private int replyId;
+
+    public ThumbsUp(int replyId, int accountId) {
+        this.replyId = replyId;
+        this.accountId = accountId;
+    }
+
+    @Deprecated
+    public ThumbsUp() {
+    }
 
     @javax.persistence.Column(name = "replyId")
     @Id
@@ -48,6 +59,7 @@ public class ThumbsUp {
 
         return true;
     }
+
 
     @Override
     public int hashCode() {

@@ -15,6 +15,16 @@ import javax.persistence.Id;
 public class PrivateMessage {
     private int senderAccountId;
 
+    public PrivateMessage(int senderAccountId, int recieverAccountId, String text) {
+        this.senderAccountId = senderAccountId;
+        this.recieverAccountId = recieverAccountId;
+        this.text = text;
+    }
+
+    @Deprecated
+    public PrivateMessage() {
+    }
+
     @javax.persistence.Column(name = "senderAccountId")
     @Id
     public int getSenderAccountId() {

@@ -20,15 +20,6 @@ public class Thread {
         setText(threadText);
     }
 
-    public Thread(int parentCategoryId, int accountId, String threadName, String threadText)
-    {
-        setParentCategoryId(parentCategoryId);
-        setAccountId(accountId);
-        setHeadLine(threadName);
-        setText(threadText);
-    }
-
-
     @Deprecated
     public Thread() {
 
@@ -37,7 +28,7 @@ public class Thread {
     private int parentCategoryId;
 
 
-    @javax.persistence.Column(name = "parentCategoryId")
+    @Column(name = "parentCategoryId", insertable=false, updatable=false)
     @Basic
     public int getParentCategoryId() {
         return parentCategoryId;
@@ -51,7 +42,7 @@ public class Thread {
 
     private int id;
 
-    @javax.persistence.Column(name = "id")
+    @Column(name = "id")
     @Id
     public int getId() {
         return id;
@@ -63,7 +54,7 @@ public class Thread {
 
     private String headLine;
 
-    @javax.persistence.Column(name = "headLine")
+    @Column(name = "headLine")
     @Basic
     public String getHeadLine() {
         return headLine;
@@ -75,7 +66,7 @@ public class Thread {
 
     private String text;
 
-    @javax.persistence.Column(name = "text")
+    @Column(name = "text")
     @Basic
     public String getText() {
         return text;
@@ -94,18 +85,6 @@ public class Thread {
 
     public void setReplies(List<Reply> replies) {
         this.replies = replies;
-    }
-
-    private int accountId;
-
-    @javax.persistence.Column(name = "accountId")
-    @Basic
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
     }
 
     private Account account;
@@ -131,8 +110,6 @@ public class Thread {
     public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
-
-
 
 
     @Override

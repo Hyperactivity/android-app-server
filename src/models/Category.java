@@ -12,6 +12,17 @@ import javax.persistence.*;
 public class Category {
     private int id;
 
+    public Category(int id, String headLine, int colorCode, Category parentCategory) {
+        this.id = id;
+        this.headLine = headLine;
+        this.colorCode = colorCode;
+        this.parentCategory = parentCategory;
+    }
+
+    @Deprecated
+    public Category() {
+    }
+
     @javax.persistence.Column(name = "id")
     @Id
     public int getId() {
@@ -57,7 +68,6 @@ public class Category {
     public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
-
 
 
     @Override

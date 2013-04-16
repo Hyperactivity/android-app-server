@@ -13,7 +13,6 @@ import sun.misc.BASE64Encoder;
 
 import javax.persistence.EntityManager;
 import java.io.*;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import java.util.Map;
 public abstract class SharedHandler implements RequestHandler{
     public EntityManager em;
 
-    public int userId;
+    public int accountId;
     public String method;
     public JSONObject responseParams;
     public JSONRPC2Response response;
@@ -85,15 +84,15 @@ public abstract class SharedHandler implements RequestHandler{
             validateResponse();
             return response;
         }catch (JSONRPC2Error e){
-            return new JSONRPC2Response(e, userId);
+            return new JSONRPC2Response(e, accountId);
         }catch (Exception e){
-            return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR.appendMessage(" || Exception: " + e.toString()), userId);
+            return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR.appendMessage(" || Exception: " + e.toString()), accountId);
         }
 
     }
 
     private static void validateResponse() {
-        //TODO: check that value and userId is present in the response. And that value is in "result"
+        //TODO: check that value and accountId is present in the response. And that value is in "result"
     }
 
     private void initializeData(JSONRPC2Request jsonrpc2Request) throws Exception {
@@ -102,11 +101,11 @@ public abstract class SharedHandler implements RequestHandler{
         method = jsonrpc2Request.getMethod();
 
         try{
-            userId = Integer.parseInt(jsonrpc2Request.getID().toString());
+            accountId = Integer.parseInt(jsonrpc2Request.getID().toString());
         }catch(NumberFormatException e){
             throwJSONRPC2Error(JSONRPC2Error.INVALID_REQUEST, Constants.Errors.BAD_ID);
         }
-        response = new JSONRPC2Response(responseParams, userId);
+        response = new JSONRPC2Response(responseParams, accountId);
     }
 
     protected abstract void process(Map<String, Object> jsonrpc2Params) throws Exception;
@@ -195,76 +194,76 @@ public abstract class SharedHandler implements RequestHandler{
         em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
     }
 
-    enum ReplyComparator implements Comparator<Reply> {
-
-        TIME_SORT {
-            public int compare(Reply r1, Reply r2) {
-                return r1.getTime().compareTo(r2.getTime());
-            }},
-
-        VOTE_SORT {
-            public int compare(Reply r1, Reply r2) {
-                return r1().compareTo(r2.getFullName());
-            }};
-
-        public static Comparator<Reply> decending(final Comparator<Reply> other) {
-            return new Comparator<Reply>() {
-                public int compare(Reply r1, Reply r2) {
-                    return -1 * other.compare(r1, r2);
-                }
-            };
-        }
-
-        public static Comparator<Reply> getComparator(final ReplyComparator... multipleOptions) {
-            return new Comparator<Reply>() {
-                public int compare(Reply r1, Reply r2) {
-                    for (ReplyComparator option : multipleOptions) {
-                        int result = option.compare(r1, r2);
-                        if (result != 0) {
-                            return result;
-                        }
-                    }
-                    return 0;
-                }
-            };
-        }
-    }
-
-
-
-    protected class DescendingComparator implements Comparator<Reply> {
-
-        @Override
-        public int compare(Reply reply1, Reply reply2) {
-            String p1Name;
-            String p2Name;
-            if(reply1.getTeam() != 0){
-                p1Score = engine.getPlayerManager().getTeamScore(reply1.getTeam());
-                p1Name = Config.Colors.MAINCOLORSNAME[reply1.getTeam()-1];
-            } else{
-                p1Score = reply1.getScore();
-                p1Name = reply1.getName();
-            }
-            if(reply2.getTeam() != 0){
-                p2Score = engine.getPlayerManager().getTeamScore(reply2.getTeam());
-                p2Name = Config.Colors.MAINCOLORSNAME[reply2.getTeam()-1];
-            } else{
-                p2Score = reply2.getScore();
-                p2Name = reply2.getName();
-            }
-
-            if (p1Score < p2Score) {
-                return 1;
-            } else if (p1Score > p2Score){
-                return -1;
-            }
-            if(p1Name.compareTo(p2Name) < 0){
-                return -1;
-            }
-            return 1;
-        }
-
-    }
+//    enum ReplyComparator implements Comparator<Reply> {
+//
+//        TIME_SORT {
+//            public int compare(Reply r1, Reply r2) {
+//                return r1.getTime().compareTo(r2.getTime());
+//            }},
+//
+//        VOTE_SORT {
+//            public int compare(Reply r1, Reply r2) {
+//                return r1().compareTo(r2.getFullName());
+//            }};
+//
+//        public static Comparator<Reply> decending(final Comparator<Reply> other) {
+//            return new Comparator<Reply>() {
+//                public int compare(Reply r1, Reply r2) {
+//                    return -1 * other.compare(r1, r2);
+//                }
+//            };
+//        }
+//
+//        public static Comparator<Reply> getComparator(final ReplyComparator... multipleOptions) {
+//            return new Comparator<Reply>() {
+//                public int compare(Reply r1, Reply r2) {
+//                    for (ReplyComparator option : multipleOptions) {
+//                        int result = option.compare(r1, r2);
+//                        if (result != 0) {
+//                            return result;
+//                        }
+//                    }
+//                    return 0;
+//                }
+//            };
+//        }
+//    }
+//
+//
+//
+//    protected class DescendingComparator implements Comparator<Reply> {
+//
+//        @Override
+//        public int compare(Reply reply1, Reply reply2) {
+//            String p1Name;
+//            String p2Name;
+//            if(reply1.getTeam() != 0){
+//                p1Score = engine.getPlayerManager().getTeamScore(reply1.getTeam());
+//                p1Name = Config.Colors.MAINCOLORSNAME[reply1.getTeam()-1];
+//            } else{
+//                p1Score = reply1.getScore();
+//                p1Name = reply1.getName();
+//            }
+//            if(reply2.getTeam() != 0){
+//                p2Score = engine.getPlayerManager().getTeamScore(reply2.getTeam());
+//                p2Name = Config.Colors.MAINCOLORSNAME[reply2.getTeam()-1];
+//            } else{
+//                p2Score = reply2.getScore();
+//                p2Name = reply2.getName();
+//            }
+//
+//            if (p1Score < p2Score) {
+//                return 1;
+//            } else if (p1Score > p2Score){
+//                return -1;
+//            }
+//            if(p1Name.compareTo(p2Name) < 0){
+//                return -1;
+//            }
+//            return 1;
+//        }
+//
+//    }
 
 }
 

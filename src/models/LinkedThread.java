@@ -1,8 +1,6 @@
 package models;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +11,17 @@ import javax.persistence.Id;
 @Entity
 public class LinkedThread {
     private int id;
+
+    public LinkedThread(int id, String headLine, Category parentPrivateCategory, Account account) {
+        this.id = id;
+        this.headLine = headLine;
+        this.parentPrivateCategory = parentPrivateCategory;
+        this.account = account;
+    }
+
+    @Deprecated
+    public LinkedThread() {
+    }
 
     @javax.persistence.Column(name = "id")
     @Id
@@ -34,6 +43,30 @@ public class LinkedThread {
 
     public void setHeadLine(String headLine) {
         this.headLine = headLine;
+    }
+
+    private Category parentPrivateCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
+    public Category getParentPrivateCategory() {
+        return parentPrivateCategory;
+    }
+
+    public void setParentPrivateCategory(Category parentPrivateCategory) {
+        this.parentPrivateCategory = parentPrivateCategory;
+    }
+
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override

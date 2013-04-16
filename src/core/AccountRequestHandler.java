@@ -56,7 +56,7 @@ public class AccountRequestHandler extends SharedHandler {
         Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.Name.SHOW_BIRTH_DATE);
         //TODO: handle Avatar
 
-        Account profile = em.find(Account.class, userId);
+        Account profile = em.find(Account.class, accountId);
         if(description != null){
             profile.setProfileDescription(description);
         }
@@ -90,7 +90,7 @@ public class AccountRequestHandler extends SharedHandler {
         Map<String, Object> loginParams = getParams(jsonrpc2Params, new NullableExtendedParam(Constants.Param.Name.TOKEN, true));
         //TODO: Should not accept token to be null. Also should use token to check the users credentials
 
-        int facebookId = userId;
+        int facebookId = accountId;
         String query = "SELECT u FROM Account u WHERE u.facebookId = :" + Constants.Query.FACEBOOK_ID;
         Account account;
         try{

@@ -15,6 +15,16 @@ import javax.persistence.Id;
 public class CustomCategoryColor {
     private int accountId;
 
+    public CustomCategoryColor(int accountId, int categoryId, int colorCode) {
+        this.accountId = accountId;
+        this.categoryId = categoryId;
+        this.colorCode = colorCode;
+    }
+
+    @Deprecated
+    public CustomCategoryColor() {
+    }
+
     @javax.persistence.Column(name = "accountId")
     @Id
     public int getAccountId() {

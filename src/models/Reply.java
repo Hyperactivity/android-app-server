@@ -19,15 +19,6 @@ public class Reply {
         setTime(currentTime);
     }
 
-    public Reply(int parentThreadId, int accountId, String text, Timestamp currentTime) {
-        setParentThreadId(parentThreadId);
-        setAccountId(accountId);
-        setText(text);
-        setTime(currentTime);
-    }
-
-
-
     @Deprecated
     public Reply() {
     }
@@ -67,32 +58,6 @@ public class Reply {
     public void setText(String text) {
         this.text = text;
     }
-
-    private int accountId;
-
-    @javax.persistence.Column(name = "accountId")
-    @Basic
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
-    }
-
-    private int parentThreadId;
-
-    @javax.persistence.Column(name = "threadId")
-    @Basic
-    public int getParentThreadId() {
-        return parentThreadId;
-    }
-
-    public void setParentThreadId(int parentThreadId) {
-        this.parentThreadId = parentThreadId;
-    }
-
-
 
     private Thread parentThread;
 

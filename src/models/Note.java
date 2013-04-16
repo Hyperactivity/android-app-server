@@ -1,8 +1,6 @@
 package models;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +11,18 @@ import javax.persistence.Id;
 @Entity
 public class Note {
     private int id;
+
+    public Note(int id, String headLine, String text, Account account, Category parentPrivateCategory) {
+        this.id = id;
+        this.headLine = headLine;
+        this.text = text;
+        this.account = account;
+        this.parentPrivateCategory = parentPrivateCategory;
+    }
+
+    @Deprecated
+    public Note() {
+    }
 
     @javax.persistence.Column(name = "id")
     @Id
@@ -46,6 +56,31 @@ public class Note {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+
+    private Category parentPrivateCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
+    public Category getParentPrivateCategory() {
+        return parentPrivateCategory;
+    }
+
+    public void setParentPrivateCategory(Category parentPrivateCategory) {
+        this.parentPrivateCategory = parentPrivateCategory;
     }
 
     @Override

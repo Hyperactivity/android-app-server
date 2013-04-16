@@ -12,6 +12,16 @@ import javax.persistence.*;
 public class PrivateCategory {
     private int id;
 
+    public PrivateCategory(int id, int colorCode, Category parentPrivateCategory, Account account) {
+        this.id = id;
+        this.colorCode = colorCode;
+        this.parentPrivateCategory = parentPrivateCategory;
+        this.account = account;
+    }
+
+    public PrivateCategory() {
+    }
+
     @javax.persistence.Column(name = "id")
     @Id
     public int getId() {
@@ -45,6 +55,19 @@ public class PrivateCategory {
     public void setParentPrivateCategory(Category parentPrivateCategory) {
         this.parentPrivateCategory = parentPrivateCategory;
     }
+
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
 
     @Override
     public boolean equals(Object o) {

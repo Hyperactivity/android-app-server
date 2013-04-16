@@ -90,7 +90,9 @@ public class ForumRequestHandler extends SharedHandler {
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
         Date currentDate = new Date();
 
-        Reply reply = new Reply(parentThread.getId(), userId, text, new Timestamp(currentDate.getTime()));
+        Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, new Timestamp(currentDate.getTime()));
+
+//        Reply reply = new Reply(parentThread.getId(), accountId, text, new Timestamp(currentDate.getTime()));
 
         persistObjects(reply);
         refreshObjects(parentThread);
@@ -147,8 +149,8 @@ public class ForumRequestHandler extends SharedHandler {
 
 
         models.Thread thread = new models.Thread(
-                (Integer)       createReplyParams.get(Constants.Param.Name.CATEGORY_ID),
-                (Integer)       userId,
+                                em.find(Category.class, createReplyParams.get(Constants.Param.Name.CATEGORY_ID)),
+                                 em.find(Account.class, accountId),
                 (String)        createReplyParams.get(Constants.Param.Name.HEADLINE),
                 (String)        createReplyParams.get(Constants.Param.Name.TEXT)
                 );

@@ -25,11 +25,12 @@ public class Account implements Serializable {
         this.showBirthDate = showBirthDate;
     }
 
-    private int id;
-
     @Deprecated
     public Account() {
     }
+
+    private int id;
+
 
     @javax.persistence.Column(name = "id")
     @Id
@@ -41,7 +42,9 @@ public class Account implements Serializable {
         this.id = id;
     }
 
+
     private String profileDescription;
+
 
     @javax.persistence.Column(name = "profileDescription")
     @Basic

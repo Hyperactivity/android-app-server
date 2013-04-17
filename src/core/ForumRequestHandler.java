@@ -8,9 +8,7 @@ import models.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -93,39 +91,31 @@ public class ForumRequestHandler extends SharedHandler {
 
         Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, new Timestamp(currentDate.getTime()));
 
+        //TODO: Fix so that this works
 //        Reply reply = new Reply(parentThread.getId(), accountId, text, new Timestamp(currentDate.getTime()));
 
         persistObjects(reply);
         refreshObjects(parentThread);
 
         if(sortType == null || sortType == 0){
-
+            // Sort using standard sorting
+        Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
             // Sort
 //            parentThread.getReplies();
 
         }else if(sortType == 1){
-            //Sort after date
-
-        }else if(sortType == 2){
             //Sort after time
+            Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
+        }else if(sortType == 2){
+            //Sort after date, and secondly time
+            Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator( ReplyComparator.VOTE_SORT, ReplyComparator.TIME_SORT));
 
         }else{
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, "sortType is not allowed!" + sortType);
         }
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+//        responseParams.put(Constants.Param.)
 
-
-
-
-//        Create Reply
-//        Request
-//        method	create_reply
-//        id	Account.id
-//        params-name	thread_id	text
-//        params-value	Thread.id	String
-//        Response
-//        value	success
-//        result-name	parent_thread
-//        result-value	Thread
     }
 
 

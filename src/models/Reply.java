@@ -1,7 +1,10 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +13,7 @@ import java.sql.Timestamp;
  * Time: 13:14
  */
 @Entity
-public class Reply {
+public class Reply implements Serializable {
 
     public Reply(Thread parentThread, Account account, String text, Timestamp currentTime) {
         setParentThread(parentThread);
@@ -84,6 +87,8 @@ public class Reply {
     }
 
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,5 +109,16 @@ public class Reply {
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
+    }
+
+    private List<ThumbsUp> thumbsUp;
+
+    @OneToMany(mappedBy = "reply")
+    public List<ThumbsUp> getThumbsUp() {
+        return thumbsUp;
+    }
+
+    public void setThumbsUp(List<ThumbsUp> thumbsUp) {
+        this.thumbsUp = thumbsUp;
     }
 }

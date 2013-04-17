@@ -47,6 +47,30 @@ public class ThumbsUp {
         this.accountId = accountId;
     }
 
+    private Reply reply;
+
+    @ManyToOne
+    @JoinColumn(name = "replyId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Reply getReply() {
+        return reply;
+    }
+
+    public void setReply(Reply reply) {
+        this.reply = reply;
+    }
+
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

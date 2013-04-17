@@ -75,6 +75,7 @@ public class ForumRequestHandler extends SharedHandler {
     }
 
     private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
+
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
                                                 new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false ),
                                                 new NullableExtendedParam(Constants.Param.Name.TEXT, false),
@@ -169,12 +170,6 @@ public class ForumRequestHandler extends SharedHandler {
 //        result-value	Thread
 
 
-        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
-                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false ),
-                new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
-
-
-
         Map<String, Object> getForumParams = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID, Constants.Param.Name.SORT_TYPE);
 
         String type = (String) getForumParams.get(Constants.Param.Name.TYPE);
@@ -191,7 +186,7 @@ public class ForumRequestHandler extends SharedHandler {
         responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) categories));
     }
 
-    private void getCategoryContent(Map<String, Object> jsonrpc2Params) {
+    private void getCategoryContent(Map<String, Object> jsonrpc2Params) throws Exception {
 //        Get Category Content
 //                Request
 //        method	get_category_content
@@ -200,7 +195,20 @@ public class ForumRequestHandler extends SharedHandler {
 //        params-value	Category.id
 //                Response
 //        value	success
-//        result-name	categories	threads
-//        result-value	Category[]	Thread[]
+//        result-name	threads
+//        result-value	Thread[]
+
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params, new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));
+        String categoryId = (String) createReplyParams.get(Constants.Param.Name.CATEGORY_ID);
+
+        //Category category = new Category(createReplyParams.get);
+        Category category = (Category) em.find(Category.class, categoryId);
+        //Category catego = new Category(123, "abc", 456, null);
+        List<models.Thread> threadList = category.getThreads();
+
+
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) threadList));
+
     }
 }

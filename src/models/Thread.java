@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * Time: 13:14
  */
 @Entity
-public class Thread {
+public class Thread implements Serializable {
 
     public Thread(Category parentCategory, Account account, String threadName, String threadText)
     {

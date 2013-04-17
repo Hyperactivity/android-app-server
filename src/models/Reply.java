@@ -65,14 +65,17 @@ public class Reply implements Serializable {
     private Thread parentThread;
 
     @ManyToOne
-         @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false)
-         public Thread getParentThread() {
+        @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+        public Thread getParentThread() {
         return parentThread;
     }
 
+    @Deprecated
     public void setParentThread(Thread parentThread) {
         this.parentThread = parentThread;
     }
+
+
 
     private Account account;
 

@@ -14,9 +14,13 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.*;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -286,6 +290,20 @@ public abstract class SharedHandler implements RequestHandler{
                 }
             };
         }
+    }
+
+    /**
+     * Gets all the columns by the given entity class.
+     * @param classType The class (entity) to load the columns from.
+     * @return  A list of objects by the given class.
+     */
+    public  <T>  List<T>  getAllColumns(java.lang.Class<T> classType ) {
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(classType);
+        Root<T> variableRoot = query.from(classType);
+        query.select(variableRoot);
+
+        return em.createQuery(query).getResultList();
     }
 }
 

@@ -180,7 +180,7 @@ public class ForumRequestHandler extends SharedHandler {
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
                 new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));
 
-        String categoryId = (String) createReplyParams.get(Constants.Param.Name.CATEGORY_ID);
+        int categoryId = (Integer) createReplyParams.get(Constants.Param.Name.CATEGORY_ID);
 
         Category category = em.find(Category.class, categoryId);
         List<models.Thread> threadList = category.getThreads();

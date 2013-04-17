@@ -98,7 +98,7 @@ public class ForumRequestHandler extends SharedHandler {
         refreshObjects(parentThread);
 
         if(sortType == null || sortType == 0){
-            // Sort using standard sorting
+            // Sort using standard sorting (aka time)
         Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
             // Sort
 //            parentThread.getReplies();
@@ -114,7 +114,7 @@ public class ForumRequestHandler extends SharedHandler {
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, "sortType is not allowed!" + sortType);
         }
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-//        responseParams.put(Constants.Param.)
+//        responseParams.put(Constants.Param)
 
     }
 
@@ -185,6 +185,7 @@ public class ForumRequestHandler extends SharedHandler {
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) categories));
     }
+
 
     private void getCategoryContent(Map<String, Object> jsonrpc2Params) throws Exception {
 //        Get Category Content

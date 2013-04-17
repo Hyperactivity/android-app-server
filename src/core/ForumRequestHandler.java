@@ -74,48 +74,29 @@ public class ForumRequestHandler extends SharedHandler {
         responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) categories));
     }
 
+    /**
+     * Creates a reply by the given threadId.
+     * Returns success or error.
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
     private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
-                                                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false ),
-                                                new NullableExtendedParam(Constants.Param.Name.TEXT, false),
-                                                new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
+                Constants.Param.Name.THREAD_ID,
+                Constants.Param.Name.TEXT);
 
         int parentThreadId = (Integer)createReplyParams.get(Constants.Param.Name.THREAD_ID);
         String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
-        Integer sortType = (Integer) createReplyParams.get(Constants.Param.Name.SORT_TYPE);
-
 
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
         Date currentDate = new Date();
 
         Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, new Timestamp(currentDate.getTime()));
 
-        //TODO: Fix so that this works
-//        Reply reply = new Reply(parentThread.getId(), accountId, text, new Timestamp(currentDate.getTime()));
-
         persistObjects(reply);
-        refreshObjects(parentThread);
 
-        if(sortType == null || sortType == 0){
-            // Sort using standard sorting (aka time)
-        Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
-            // Sort
-//            parentThread.getReplies();
-
-        }else if(sortType == 1){
-            //Sort after time
-            Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
-        }else if(sortType == 2){
-            //Sort after date, and secondly time
-            Collections.sort(parentThread.getReplies(), ReplyComparator.getComparator( ReplyComparator.VOTE_SORT, ReplyComparator.TIME_SORT));
-
-        }else{
-            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, "sortType is not allowed!" + sortType);
-        }
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-//        responseParams.put(Constants.Param)
-
     }
 
 
@@ -145,20 +126,40 @@ public class ForumRequestHandler extends SharedHandler {
         }
     }
 
+    /**
+     * Returns a list of replies given a threadId.
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
     private void getThread(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> getForumParams = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID, Constants.Param.Name.TYPE, Constants.Param.Name.SORT_TYPE);
+        Map<String, Object> getForumParams = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
 
         String threadId = (String) getForumParams.get(Constants.Param.Name.THREAD_ID);
-        String type = (String) getForumParams.get(Constants.Param.Name.TYPE);
-        String sortType = (String) getForumParams.get(Constants.Param.Name.SORT_TYPE);
+        Integer sortType = (Integer) getForumParams.get(Constants.Param.Name.SORT_TYPE);
 
         models.Thread thread = em.find(models.Thread.class, threadId);
-
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) thread.getReplies()));
+        List replies = thread.getReplies();
 
 
+        if(sortType == null || sortType == 0){
+            // Sort using standard sorting (aka time)
+            Collections.sort(replies, ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
+
+        }else if(sortType == 1){
+            //Sort after time
+            Collections.sort(replies, ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
+
+        }else if(sortType == 2){
+            //Sort after date, and secondly time
+            Collections.sort(replies, ReplyComparator.getComparator( ReplyComparator.VOTE_SORT, ReplyComparator.TIME_SORT));
+
+        }
+
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+            responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) replies));
     }
 
     private void getCategory(Map<String, Object> jsonrpc2Params) throws Exception {

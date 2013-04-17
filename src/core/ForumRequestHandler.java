@@ -76,7 +76,7 @@ public class ForumRequestHandler extends SharedHandler {
 
     /**
      * Creates a reply by the given threadId.
-     * Returns success or error.
+     * Returns the created reply if successful.
      * @param jsonrpc2Params
      * @throws Exception
      */
@@ -97,6 +97,7 @@ public class ForumRequestHandler extends SharedHandler {
         persistObjects(reply);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
     }
 
 
@@ -162,6 +163,11 @@ public class ForumRequestHandler extends SharedHandler {
             responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) replies));
     }
 
+    /**
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
     private void getCategory(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params, new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));

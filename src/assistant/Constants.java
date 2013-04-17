@@ -52,6 +52,7 @@ public abstract class Constants {
             public static final String HEADLINE = "headline";
             public static final String CATEGORY_ID = "category_id";
             public static final String CATEGORY = "category";
+            public static final String REPLY = "reply";
         }
         public abstract class Status{
             public static final String STATUS = "status";

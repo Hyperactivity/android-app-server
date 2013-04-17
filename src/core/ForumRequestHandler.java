@@ -150,8 +150,12 @@ public class ForumRequestHandler extends SharedHandler {
         Integer sortType = (Integer) getForumParams.get(Constants.Param.Name.SORT_TYPE);
 
         models.Thread thread = em.find(models.Thread.class, threadId);
-        List replies = thread.getReplies();
+        if(thread == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
+            return;
+        }
 
+        List replies = thread.getReplies();
 
         if(sortType == null || sortType == 0){
             // Sort using standard sorting (aka time)
@@ -189,7 +193,7 @@ public class ForumRequestHandler extends SharedHandler {
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
             return;
         }
-        
+
         List<models.Thread> threadList = category.getThreads();
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);

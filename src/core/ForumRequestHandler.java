@@ -3,6 +3,7 @@ package core;
 import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
+import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.*;
 
@@ -182,9 +183,14 @@ public class ForumRequestHandler extends SharedHandler {
 
         int categoryId = (Integer) createReplyParams.get(Constants.Param.Name.CATEGORY_ID);
 
-        Category category = em.find(Category.class, categoryId);
-        List<models.Thread> threadList = category.getThreads();
 
+        Category category = em.find(Category.class, categoryId);
+        if(category == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+            return;
+        }
+        
+        List<models.Thread> threadList = category.getThreads();
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) threadList));

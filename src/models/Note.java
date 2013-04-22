@@ -60,7 +60,7 @@ public class Note {
 
     private Account account;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     public Account getAccount() {
         return account;
@@ -73,7 +73,7 @@ public class Note {
 
     private Category parentPrivateCategory;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
     public Category getParentPrivateCategory() {
         return parentPrivateCategory;

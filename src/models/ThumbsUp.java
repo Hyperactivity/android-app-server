@@ -1,9 +1,6 @@
 package models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,7 +46,7 @@ public class ThumbsUp {
 
     private Reply reply;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "replyId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Reply getReply() {
         return reply;
@@ -61,7 +58,7 @@ public class ThumbsUp {
 
     private Account account;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Account getAccount() {
         return account;

@@ -34,9 +34,6 @@ public class ThreadHandler extends SharedHandler {
         else if(method.equals(Constants.Method.CREATE_THREAD)){
             createThread(jsonrpc2Params);
         }
-        else if(method.equals(Constants.Method.CREATE_REPLY)){
-            createReply(jsonrpc2Params);
-        }
         else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }

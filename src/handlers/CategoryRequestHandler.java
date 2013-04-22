@@ -74,35 +74,6 @@ public class CategoryRequestHandler extends SharedHandler {
     }
 
     /**
-     * Creates a reply by the given threadId.
-     * Returns the created reply if successful.
-     * @param jsonrpc2Params
-     * @throws Exception
-     */
-    private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
-
-        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
-                Constants.Param.Name.THREAD_ID,
-                Constants.Param.Name.TEXT);
-
-        int parentThreadId = (Integer)createReplyParams.get(Constants.Param.Name.THREAD_ID);
-        String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
-
-        models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
-        Date currentDate = new Date();
-
-        Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, new Timestamp(currentDate.getTime()));
-
-        persistObjects(reply);
-
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
-    }
-
-
-
-
-    /**
      * Returns a list of threads by the given categoryId.
      * @param jsonrpc2Params
      * @throws Exception

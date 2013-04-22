@@ -194,9 +194,9 @@ public class ForumRequestHandler extends SharedHandler {
             return;
         }
 
-        List<models.Thread> threadList = category.getThreads();
+//        List<models.Thread> threadList = category.getThreads();
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) threadList));
+//        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) threadList));
     }
 }

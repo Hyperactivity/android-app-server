@@ -25,8 +25,8 @@ public class AccountRequestHandler extends SharedHandler {
     public String[] handledRequests() {
         return new String[]{
                 Constants.Method.LOGIN,
-                Constants.Method.GET_PROFILE,
-                Constants.Method.UPDATE_PROFILE,
+                Constants.Method.GET_ACCOUNT,
+                Constants.Method.UPDATE_ACCOUNT,
         };
     }
 
@@ -35,51 +35,51 @@ public class AccountRequestHandler extends SharedHandler {
         if(method.equals(Constants.Method.LOGIN)){
             login(jsonrpc2Params);
         }
-        else if(method.equals(Constants.Method.GET_PROFILE)){
-            getProfile(jsonrpc2Params);
+        else if(method.equals(Constants.Method.GET_ACCOUNT)){
+            getAccount(jsonrpc2Params);
         }
-        else if(method.equals(Constants.Method.UPDATE_PROFILE)){
-            updateProfile(jsonrpc2Params);
+        else if(method.equals(Constants.Method.UPDATE_ACCOUNT)){
+            updateAccount(jsonrpc2Params);
         }
         else{
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
     }
 
-    private void updateProfile(Map<String, Object> jsonrpc2Params) throws Exception {
-        Map<String, Object> updateProfileParams = getParams(jsonrpc2Params,
+    private void updateAccount(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> updateAccountParams = getParams(jsonrpc2Params,
                 new NullableExtendedParam(Constants.Param.Name.DESCRIPTION, true),
                 new NullableExtendedParam(Constants.Param.Name.SHOW_BIRTH_DATE, true),
                 new NullableExtendedParam(Constants.Param.Name.AVATAR, true));
 
-        String description = (String) updateProfileParams.get(Constants.Param.Name.DESCRIPTION);
-        Boolean showBirthDate = (Boolean) updateProfileParams.get(Constants.Param.Name.SHOW_BIRTH_DATE);
+        String description = (String) updateAccountParams.get(Constants.Param.Name.DESCRIPTION);
+        Boolean showBirthDate = (Boolean) updateAccountParams.get(Constants.Param.Name.SHOW_BIRTH_DATE);
         //TODO: handle Avatar
 
-        Account profile = em.find(Account.class, accountId);
+        Account account = em.find(Account.class, accountId);
         if(description != null){
-            profile.setProfileDescription(description);
+            account.setAccountDescription(description);
         }
         if(showBirthDate != null){
-            profile.setShowBirthDate(showBirthDate);
+            account.setShowBirthDate(showBirthDate);
         }
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.PROFILE, profile);
+        responseParams.put(Constants.Param.Name.ACCOUNT, account);
     }
 
-    private void getProfile(Map<String, Object> jsonrpc2Params) throws Exception{
-        Map<String, Object> getProfileParams = getParams(jsonrpc2Params, Constants.Param.Name.ACCOUNT_ID);
+    private void getAccount(Map<String, Object> jsonrpc2Params) throws Exception{
+        Map<String, Object> getAccountParams = getParams(jsonrpc2Params, Constants.Param.Name.ACCOUNT_ID);
 
-        int profileId = (Integer) getProfileParams.get(Constants.Param.Name.ACCOUNT_ID);
-        Account profile = em.find(Account.class, profileId);
-        if(profile != null){
-            // Profile exist, send it back to the client
+        int accountId = (Integer) getAccountParams.get(Constants.Param.Name.ACCOUNT_ID);
+        Account account = em.find(Account.class, accountId);
+        if(account != null){
+            // Account exist, send it back to the client
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-            responseParams.put(Constants.Param.Name.PROFILE, profile);
+            responseParams.put(Constants.Param.Name.ACCOUNT, account);
         }else{
-            // Profile does not exist, send back "Profile not found"
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.PROFILE_NOT_FOUND);
+            // Account does not exist, send back "Account not found"
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.ACCOUNT_NOT_FOUND);
         }
     }
 

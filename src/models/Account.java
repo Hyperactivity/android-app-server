@@ -48,11 +48,11 @@ public class Account implements Serializable {
 
     @javax.persistence.Column(name = "profileDescription")
     @Basic
-    public String getProfileDescription() {
+    public String getAccountDescription() {
         return profileDescription;
     }
 
-    public void setProfileDescription(String profileDescription) {
+    public void setAccountDescription(String profileDescription) {
         this.profileDescription = profileDescription;
     }
 

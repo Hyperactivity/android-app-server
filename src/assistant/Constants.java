@@ -25,8 +25,8 @@ public abstract class Constants {
 
     public abstract class Method{
         public static final String LOGIN = "login";
-        public static final String GET_PROFILE = "get_profile";
-        public static final String UPDATE_PROFILE = "update_profile";
+        public static final String GET_ACCOUNT = "get_account";
+        public static final String UPDATE_ACCOUNT = "update_account";
         public static final String GET_FORUM_CONTENT = "get_forum_content";
         public static final String GET_CATEGORY_CONTENT = "get_category_content";
         public static final String GET_THREAD_CONTENT = "get_thread_content";
@@ -37,9 +37,8 @@ public abstract class Constants {
     public abstract class Param{
         public abstract class Name{
             public static final String TOKEN = "token";
-            public static final String ACCOUNT = "account";
             public static final String ACCOUNT_ID = "account_id";
-            public static final String PROFILE = "profile";
+            public static final String ACCOUNT = "account";
             public static final String DESCRIPTION = "description";
             public static final String SHOW_BIRTH_DATE = "show_birth_date";
             public static final String AVATAR = "avatar";
@@ -59,7 +58,7 @@ public abstract class Constants {
         public abstract class Status{
             public static final String STATUS = "status";
             public static final String FIRST_LOGIN = "first_login";
-            public static final String PROFILE_NOT_FOUND = "profile_not_found";
+            public static final String ACCOUNT_NOT_FOUND = "account_not_found";
             public static final String SUCCESS = "success";
 
             public static final String CATEGORY_NOT_FOUND = "category_not_found";

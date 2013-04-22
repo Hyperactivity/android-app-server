@@ -25,7 +25,7 @@ public class ClientDebugger {
     /**
      * Remember to change the boolean depending on if you are testing in development or live
      */
-    private static final boolean isDevelopment = true;
+    private static final boolean isDevelopment = false;
     public static void main(String[] args) throws IOException {
         new ClientDebugger();
 

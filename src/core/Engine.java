@@ -12,6 +12,8 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
+import handlers.AccountRequestHandler;
+import handlers.CategoryRequestHandler;
 import org.hibernate.ejb.HibernatePersistence;
 
 import javax.persistence.EntityManagerFactory;
@@ -51,7 +53,7 @@ public class Engine{
     private void initiateDispatchers() {
         dispatcher = new Dispatcher();
         dispatcher.register(new AccountRequestHandler());
-        dispatcher.register(new ForumRequestHandler());
+        dispatcher.register(new CategoryRequestHandler());
     }
 
     /**

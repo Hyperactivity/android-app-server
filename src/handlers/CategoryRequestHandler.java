@@ -1,4 +1,4 @@
-package core;
+package handlers;
 
 import assistant.Constants;
 import assistant.SharedHandler;
@@ -16,9 +16,9 @@ import java.util.*;
  * Date: 2013-03-13
  * Time: 11:57
  */
-public class ForumRequestHandler extends SharedHandler {
+public class CategoryRequestHandler extends SharedHandler {
 
-    public ForumRequestHandler() {
+    public CategoryRequestHandler() {
         super();
     }
 

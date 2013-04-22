@@ -1,4 +1,4 @@
-package core;
+package handlers;
 
 import assistant.Constants;
 import assistant.SharedHandler;

@@ -42,7 +42,7 @@ public class AccountRequestHandler extends SharedHandler {
             updateProfile(jsonrpc2Params);
         }
         else{
-        throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
+            throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
     }
 

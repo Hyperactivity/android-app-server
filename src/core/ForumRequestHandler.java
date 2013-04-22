@@ -25,9 +25,9 @@ public class ForumRequestHandler extends SharedHandler {
     @Override
     public String[] handledRequests() {
         return new String[]{
-            Constants.Method.GET_FORUM,
-            Constants.Method.GET_CATEGORY,
-            Constants.Method.GET_THREAD,
+            Constants.Method.GET_FORUM_CONTENT,
+            Constants.Method.GET_CATEGORY_CONTENT,
+            Constants.Method.GET_THREAD_CONTENT,
             Constants.Method.CREATE_THREAD,
             Constants.Method.CREATE_REPLY,
         };
@@ -35,13 +35,13 @@ public class ForumRequestHandler extends SharedHandler {
 
     @Override
     public void process(Map<String, Object> jsonrpc2Params) throws Exception {
-        if(method.equals(Constants.Method.GET_FORUM)){
+        if(method.equals(Constants.Method.GET_FORUM_CONTENT)){
             getForumContent(jsonrpc2Params);
         }
-        else if(method.equals(Constants.Method.GET_CATEGORY)){
+        else if(method.equals(Constants.Method.GET_CATEGORY_CONTENT)){
             getCategoryContent(jsonrpc2Params);
         }
-        else if(method.equals(Constants.Method.GET_THREAD)){
+        else if(method.equals(Constants.Method.GET_THREAD_CONTENT)){
             getThreadContent(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.CREATE_THREAD)){
@@ -49,8 +49,9 @@ public class ForumRequestHandler extends SharedHandler {
         }
         else if(method.equals(Constants.Method.CREATE_REPLY)){
             createReply(jsonrpc2Params);
+        }else {
+            throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
-        throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
     }
 
     /**

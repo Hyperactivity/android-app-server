@@ -36,7 +36,7 @@ public class ClientDebugger {
      */
     public ClientDebugger() {
 //        testStandardJson(123, "login", new Pair("token", "abcd"));
-        testStandardJson(123456, "get_category", new Pair("category_id", 1));
+        testStandardJson(123456, "get_category_content", new Pair("category_id", 1));
     }
 
 

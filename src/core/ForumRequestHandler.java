@@ -3,7 +3,6 @@ package core;
 import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
-import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.*;
 
@@ -37,13 +36,13 @@ public class ForumRequestHandler extends SharedHandler {
     @Override
     public void process(Map<String, Object> jsonrpc2Params) throws Exception {
         if(method.equals(Constants.Method.GET_FORUM)){
-            getForum(jsonrpc2Params);
+            getForumContent(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.GET_CATEGORY)){
-            getCategory(jsonrpc2Params);
+            getCategoryContent(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.GET_THREAD)){
-            getThread(jsonrpc2Params);
+            getThreadContent(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.CREATE_THREAD)){
             createThread(jsonrpc2Params);
@@ -59,7 +58,7 @@ public class ForumRequestHandler extends SharedHandler {
      * @param jsonrpc2Params
      * @throws Exception
      */
-    private void getForum(Map<String, Object> jsonrpc2Params) throws Exception {
+    private void getForumContent(Map<String, Object> jsonrpc2Params) throws Exception {
         Map<String, Object> getForumParams = getParams(jsonrpc2Params,
                 Constants.Param.Name.TYPE);
 
@@ -140,7 +139,7 @@ public class ForumRequestHandler extends SharedHandler {
      * @param jsonrpc2Params
      * @throws Exception
      */
-    private void getThread(Map<String, Object> jsonrpc2Params) throws Exception {
+    private void getThreadContent(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> getForumParams = getParams(jsonrpc2Params,
                 new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
@@ -180,7 +179,7 @@ public class ForumRequestHandler extends SharedHandler {
      * @param jsonrpc2Params
      * @throws Exception
      */
-    private void getCategory(Map<String, Object> jsonrpc2Params) throws Exception {
+    private void getCategoryContent(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
                 new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));

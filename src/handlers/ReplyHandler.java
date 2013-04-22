@@ -59,5 +59,47 @@ public class ReplyHandler extends SharedHandler {
         responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
     }
 
+    /**
+     * Modify a reply by the given the replyId and returns the resulting object.
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void modifyReply(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+                Constants.Param.Name.REPLY_ID,
+                Constants.Param.Name.TEXT);
+
+        models.Reply reply = em.find(models.Reply.class, (Integer) createReplyParams.get(Constants.Param.Name.REPLY_ID));
+
+        reply.setText((String) createReplyParams.get(Constants.Param.Name.HEADLINE));
+        reply.setTime((new Date).getTime());
+
+        persistObjects(reply);
+
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
+    }
+
+    /**
+     * Delete a reply by the given the replyId.
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void deleteReply(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+                Constants.Param.Name.REPLY_ID);
+
+        try {
+        models.Reply reply = em.remove(em.find(models.Reply.class, (Integer));
+        } catch (Exception e) {
+
+        }
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+    }
+
 }
 

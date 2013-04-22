@@ -72,7 +72,7 @@ public class Category implements Serializable {
 
     private List<Category> childCategories;
 
-    @OneToMany(mappedBy="parentCategory")
+    @OneToMany(mappedBy="parentCategory", fetch=FetchType.LAZY)
     public List<Category> getChildCategories() {
         return childCategories;
     }
@@ -83,7 +83,7 @@ public class Category implements Serializable {
 
     private List<Thread> threads;
 
-    @OneToMany(mappedBy = "parentCategory")
+    @OneToMany(mappedBy = "parentCategory", fetch=FetchType.LAZY)
     public List<Thread> getThreads() {
         return threads;
     }

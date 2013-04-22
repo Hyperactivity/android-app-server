@@ -64,7 +64,7 @@ public class Reply implements Serializable {
 
     private Thread parentThread;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
         public Thread getParentThread() {
         return parentThread;
@@ -79,7 +79,7 @@ public class Reply implements Serializable {
 
     private Account account;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     public Account getAccount() {
         return account;

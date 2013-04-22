@@ -27,9 +27,9 @@ public abstract class Constants {
         public static final String LOGIN = "login";
         public static final String GET_PROFILE = "get_profile";
         public static final String UPDATE_PROFILE = "update_profile";
-        public static final String GET_FORUM = "get_forum";
-        public static final String GET_CATEGORY = "get_category";
-        public static final String GET_THREAD = "get_thread";
+        public static final String GET_FORUM = "get_forum_content";
+        public static final String GET_CATEGORY = "get_category_content";
+        public static final String GET_THREAD = "get_thread_content";
         public static final String CREATE_THREAD = "create_thread";
         public static final String CREATE_REPLY = "create_reply";
     }

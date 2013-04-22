@@ -41,15 +41,7 @@ public class CategoryRequestHandler extends SharedHandler {
         else if(method.equals(Constants.Method.GET_CATEGORY_CONTENT)){
             getCategoryContent(jsonrpc2Params);
         }
-        else if(method.equals(Constants.Method.GET_THREAD_CONTENT)){
-            getThreadContent(jsonrpc2Params);
-        }
-        else if(method.equals(Constants.Method.CREATE_THREAD)){
-            createThread(jsonrpc2Params);
-        }
-        else if(method.equals(Constants.Method.CREATE_REPLY)){
-            createReply(jsonrpc2Params);
-        }else {
+        else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
     }
@@ -108,72 +100,7 @@ public class CategoryRequestHandler extends SharedHandler {
     }
 
 
-    /**
-     * Creates a Thread by the given categoryId.
-     * Returns the created Thread.
-     * @param jsonrpc2Params
-     * @throws Exception
-     */
-    private void createThread(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> createThreadParams = getParams(jsonrpc2Params,
-                Constants.Param.Name.CATEGORY_ID,
-                Constants.Param.Name.HEADLINE,
-                Constants.Param.Name.TEXT);
-
-
-        models.Thread thread = new models.Thread(
-                                em.find(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
-                                em.find(Account.class, accountId),
-                (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
-                (String)        createThreadParams.get(Constants.Param.Name.TEXT)
-                );
-
-        persistObjects(thread);
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORY, serialize(thread));
-
-    }
-
-    /**
-     * Returns a list of replies given a threadId.
-     * @param jsonrpc2Params
-     * @throws Exception
-     */
-    private void getThreadContent(Map<String, Object> jsonrpc2Params) throws Exception {
-
-        Map<String, Object> getForumParams = getParams(jsonrpc2Params,
-                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
-                new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
-
-        String threadId = (String) getForumParams.get(Constants.Param.Name.THREAD_ID);
-        Integer sortType = (Integer) getForumParams.get(Constants.Param.Name.SORT_TYPE);
-
-        models.Thread thread = em.find(models.Thread.class, threadId);
-        if(thread == null){
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
-            return;
-        }
-
-        List replies = thread.getReplies();
-
-        if(sortType == null || sortType == 0){
-            // Sort using standard sorting (aka time)
-            Collections.sort(replies, ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
-
-        }else if(sortType == 1){
-            //Sort after time
-            Collections.sort(replies, ReplyComparator.getComparator(ReplyComparator.TIME_SORT));
-
-        }else if(sortType == 2){
-            //Sort after date, and secondly time
-            Collections.sort(replies, ReplyComparator.getComparator( ReplyComparator.VOTE_SORT, ReplyComparator.TIME_SORT));
-
-        }
-
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-            responseParams.put(Constants.Param.Name.REPLIES, serialize((Serializable) replies));
-    }
 
     /**
      * Returns a list of threads by the given categoryId.

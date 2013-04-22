@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * Time: 11:05
  */
 @Entity
-public class Category {
+public class Category implements Serializable {
     private int id;
 
     public Category(int id, String headLine, int colorCode, Category parentCategory) {
@@ -79,6 +80,17 @@ public class Category {
 
     public void setChildCategories(List<Category> childCategories) {
         this.childCategories = childCategories;
+    }
+
+    private List<Thread> threads;
+
+    @OneToMany(mappedBy = "parentCategory")
+    public List<Thread> getThreads() {
+        return threads;
+    }
+
+    public void setThreads(List<Thread> replies) {
+        this.threads = replies;
     }
 
     @Override

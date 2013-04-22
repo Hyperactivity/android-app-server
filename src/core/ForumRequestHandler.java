@@ -172,7 +172,7 @@ public class ForumRequestHandler extends SharedHandler {
         }
 
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-            responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) replies));
+            responseParams.put(Constants.Param.Name.REPLIES, serialize((Serializable) replies));
     }
 
     /**
@@ -194,9 +194,9 @@ public class ForumRequestHandler extends SharedHandler {
             return;
         }
 
-//        List<models.Thread> threadList = category.getThreads();
+        List<models.Thread> threadList = category.getThreads();
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-//        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) threadList));
+        responseParams.put(Constants.Param.Name.THREADS, serialize((Serializable) threadList));
     }
 }

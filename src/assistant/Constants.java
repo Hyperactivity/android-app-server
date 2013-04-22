@@ -53,6 +53,8 @@ public abstract class Constants {
             public static final String CATEGORY_ID = "category_id";
             public static final String CATEGORY = "category";
             public static final String REPLY = "reply";
+            public static final String THREADS = "threads";
+            public static final String REPLIES = "replies";
         }
         public abstract class Status{
             public static final String STATUS = "status";

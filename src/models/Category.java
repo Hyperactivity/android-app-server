@@ -14,8 +14,7 @@ import java.util.List;
 public class Category implements Serializable {
     private int id;
 
-    public Category(int id, String headLine, int colorCode, Category parentCategory) {
-        this.id = id;
+    public Category(String headLine, int colorCode, Category parentCategory) {
         this.headLine = headLine;
         this.colorCode = colorCode;
         this.parentCategory = parentCategory;

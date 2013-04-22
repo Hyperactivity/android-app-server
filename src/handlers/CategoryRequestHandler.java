@@ -25,21 +25,26 @@ public class CategoryRequestHandler extends SharedHandler {
     @Override
     public String[] handledRequests() {
         return new String[]{
-            Constants.Method.GET_FORUM_CONTENT,
-            Constants.Method.GET_CATEGORY_CONTENT,
-            Constants.Method.GET_THREAD_CONTENT,
-            Constants.Method.CREATE_THREAD,
-            Constants.Method.CREATE_REPLY,
+                Constants.Method.GET_FORUM_CONTENT,
+                Constants.Method.GET_CATEGORY_CONTENT,
+                Constants.Method.GET_THREAD_CONTENT,
+                Constants.Method.CREATE_THREAD,
+                Constants.Method.CREATE_REPLY,
         };
     }
 
     @Override
     public void process(Map<String, Object> jsonrpc2Params) throws Exception {
-        if(method.equals(Constants.Method.GET_FORUM_CONTENT)){
+        if (method.equals(Constants.Method.GET_FORUM_CONTENT)) {
             getForumContent(jsonrpc2Params);
-        }
-        else if(method.equals(Constants.Method.GET_CATEGORY_CONTENT)){
+        } else if (method.equals(Constants.Method.GET_CATEGORY_CONTENT)) {
             getCategoryContent(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.CREATE_CATEGORY)) {
+            createCategory(jsonrpc2Params);
+        }else if (method.equals(Constants.Method.MODIFY_CATEGORY)) {
+            modifyCategory(jsonrpc2Params);
+        }  else if (method.equals(Constants.Method.DELETE_CATEGORY)) {
+            deleteCategory(jsonrpc2Params);
         }
         else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
@@ -48,24 +53,24 @@ public class CategoryRequestHandler extends SharedHandler {
 
     /**
      * Returns the categories by the given forum type.
+     *
      * @param jsonrpc2Params
      * @throws Exception
      */
     private void getForumContent(Map<String, Object> jsonrpc2Params) throws Exception {
-        Map<String, Object> getForumParams = getParams(jsonrpc2Params,
+        Map<String, Object> params = getParams(jsonrpc2Params,
                 Constants.Param.Name.TYPE);
 
-        String type = (String) getForumParams.get(Constants.Param.Name.TYPE);
+        String type = (String) params.get(Constants.Param.Name.TYPE);
         List<Category> categories = null;
 
-        if(type.equals(Constants.Param.Value.PUBLIC)){
+        if (type.equals(Constants.Param.Value.PUBLIC)) {
             categories = getAllColumns(Category.class);
-        }
-        else if(type.equals(Constants.Param.Value.PRIVATE)){
+        } else if (type.equals(Constants.Param.Value.PRIVATE)) {
 
             categories = getAllColumns(Category.class);
 
-        }else{
+        } else {
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
         }
 
@@ -75,19 +80,20 @@ public class CategoryRequestHandler extends SharedHandler {
 
     /**
      * Returns a list of threads by the given categoryId.
+     *
      * @param jsonrpc2Params
      * @throws Exception
      */
     private void getCategoryContent(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+        Map<String, Object> params = getParams(jsonrpc2Params,
                 new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));
 
-        int categoryId = (Integer) createReplyParams.get(Constants.Param.Name.CATEGORY_ID);
+        int categoryId = (Integer) params.get(Constants.Param.Name.CATEGORY_ID);
 
 
         Category category = em.find(Category.class, categoryId);
-        if(category == null){
+        if (category == null) {
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
             return;
         }
@@ -97,4 +103,82 @@ public class CategoryRequestHandler extends SharedHandler {
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.THREADS, serialize((Serializable) threadList));
     }
+
+    /**
+     * Creates a new category with id and headline and returns the object.
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void createCategory(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false));
+
+        Category category = new Category(
+                (String) params.get(Constants.Param.Name.HEADLINE),
+                0,
+                em.find(Category.class, (Integer) params.get(Constants.Param.Name.CATEGORY_ID))
+        );
+
+        persistObjects(category);
+
+        if (category == null) {
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+            return;
+        }
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
+    }
+
+
+    /**
+     * Modify an existing category's headline by id and return the new version of the object.
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void modifyCategory(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false));
+
+
+        Category category = em.find(Category.class, (Integer) params.get(Constants.Param.Name.CATEGORY_ID));
+
+        category.setHeadLine((String) params.get(Constants.Param.Name.HEADLINE));
+        persistObjects(category);
+
+        if (category == null) {
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+            return;
+        }
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
+    }
+
+    /**
+     * Delete a category.
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void deleteCategory(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));
+
+        try {
+            em.remove(em.find(Category.class, (Integer) params.get(Constants.Param.Name.CATEGORY_ID)));
+
+        } catch (Exception e) {
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+            return;
+        }
+
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+    }
+
 }

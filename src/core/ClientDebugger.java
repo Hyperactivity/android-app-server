@@ -8,8 +8,11 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionOptions;
 import javafx.util.Pair;
+import sun.misc.BASE64Decoder;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
@@ -25,7 +28,7 @@ public class ClientDebugger {
     /**
      * Remember to change the boolean depending on if you are testing in development or live
      */
-    private static final boolean isDevelopment = false;
+    private static final boolean isDevelopment = true;
     public static void main(String[] args) throws IOException {
         new ClientDebugger();
 
@@ -36,7 +39,7 @@ public class ClientDebugger {
      */
     public ClientDebugger() {
 //        testStandardJson(123, "login", new Pair("token", "abcd"));
-        testStandardJson(123456, "get_category_content", new Pair("category_id", 1));
+        testStandardJson(123456, "create_reply", new Pair("thread_id", 123), new Pair("text", "test"));
     }
 
 
@@ -134,6 +137,18 @@ public class ClientDebugger {
         }
         errorResponse = new JSONRPC2Response(new JSONRPC2Error(-32099, errorType), null);
         return errorResponse;
+    }
+
+    private static final <T>  T deSerialize(java.lang.Class<T> classType, String serializedObject) throws IOException,
+            ClassNotFoundException {
+        BASE64Decoder base64Decoder = new BASE64Decoder();
+        byte [] data = base64Decoder.decodeBuffer(serializedObject);
+        ObjectInputStream ois = new ObjectInputStream(
+                new ByteArrayInputStream( data ) );
+        Object o = ois.readObject();
+        ois.close();
+
+        return (T)o;
     }
 
 }

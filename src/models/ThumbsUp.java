@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,9 @@ import javax.persistence.*;
  */
 @javax.persistence.IdClass(models.ThumbsUpPK.class)
 @Entity
-public class ThumbsUp {
+public class ThumbsUp implements Serializable {
+    static final long serialVersionUID = 10L;
+
     private int replyId;
 
     public ThumbsUp(int replyId, int accountId) {

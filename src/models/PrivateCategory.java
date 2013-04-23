@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +10,9 @@ import javax.persistence.*;
  * Time: 13:10
  */
 @Entity
-public class PrivateCategory {
+public class PrivateCategory implements Serializable {
+    static final long serialVersionUID = 6L;
+
     private int id;
 
     public PrivateCategory(int id, int colorCode, Category parentPrivateCategory, Account account) {

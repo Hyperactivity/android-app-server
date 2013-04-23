@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +10,9 @@ import javax.persistence.*;
  * Time: 13:10
  */
 @Entity
-public class Note {
+public class Note implements Serializable {
+    static final long serialVersionUID = 5L;
+
     private int id;
 
     public Note(int id, String headLine, String text, Account account, Category parentPrivateCategory) {

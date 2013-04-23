@@ -12,6 +12,8 @@ import java.util.List;
  */
 @Entity
 public class Thread implements Serializable {
+    static final long serialVersionUID = 9L;
+
 
     public Thread(Category parentCategory, Account account, String threadName, String threadText)
     {

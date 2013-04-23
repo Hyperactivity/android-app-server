@@ -7,6 +7,7 @@ import models.Account;
 import models.Reply;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -20,7 +21,10 @@ import java.util.Map;
 public class ReplyHandler extends SharedHandler {
     @Override
     public String[] handledRequests() {
-        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new String[]{
+                Constants.Method.CREATE_REPLY
+        };
+
     }
 
     @Override
@@ -56,7 +60,9 @@ public class ReplyHandler extends SharedHandler {
         persistObjects(reply);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
+        ArrayList<Reply> test = new ArrayList<Reply>();
+        test.add(reply);
+        responseParams.put(Constants.Param.Name.REPLY, serialize(test));
     }
 
 }

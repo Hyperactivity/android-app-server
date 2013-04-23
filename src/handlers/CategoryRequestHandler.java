@@ -29,7 +29,6 @@ public class CategoryRequestHandler extends SharedHandler {
             Constants.Method.GET_CATEGORY_CONTENT,
             Constants.Method.GET_THREAD_CONTENT,
             Constants.Method.CREATE_THREAD,
-            Constants.Method.CREATE_REPLY,
         };
     }
 

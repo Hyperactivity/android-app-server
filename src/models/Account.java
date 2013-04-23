@@ -14,6 +14,7 @@ import java.sql.Date;
  */
 @Entity
 public class Account implements Serializable {
+    static final long serialVersionUID = 1L;
 
     public Account(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
         this.username = username;

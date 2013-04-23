@@ -14,6 +14,7 @@ import java.util.List;
  */
 @Entity
 public class Reply implements Serializable {
+    static final long serialVersionUID = 8L;
 
     public Reply(Thread parentThread, Account account, String text, Timestamp currentTime) {
         setParentThread(parentThread);
@@ -65,12 +66,11 @@ public class Reply implements Serializable {
     private Thread parentThread;
 
     @ManyToOne(fetch=FetchType.LAZY)
-        @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+        @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false)
         public Thread getParentThread() {
         return parentThread;
     }
 
-    @Deprecated
     public void setParentThread(Thread parentThread) {
         this.parentThread = parentThread;
     }
@@ -88,8 +88,6 @@ public class Reply implements Serializable {
     public void setAccount(Account account) {
         this.account = account;
     }
-
-
 
 
     @Override

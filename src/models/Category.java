@@ -12,6 +12,7 @@ import java.util.List;
  */
 @Entity
 public class Category implements Serializable {
+    static final long serialVersionUID = 2L;
     private int id;
 
     public Category(int id, String headLine, int colorCode, Category parentCategory) {

@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +10,9 @@ import javax.persistence.*;
  * Time: 13:10
  */
 @Entity
-public class LinkedThread {
+public class LinkedThread implements Serializable {
+    static final long serialVersionUID = 4L;
+
     private int id;
 
     public LinkedThread(int id, String headLine, Category parentPrivateCategory, Account account) {

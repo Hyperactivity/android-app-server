@@ -3,6 +3,7 @@ package models;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,9 @@ import javax.persistence.Id;
  */
 @javax.persistence.IdClass(models.PrivateMessagePK.class)
 @Entity
-public class PrivateMessage {
+public class PrivateMessage implements Serializable {
+    static final long serialVersionUID = 7L;
+
     private int senderAccountId;
 
     public PrivateMessage(int senderAccountId, int recieverAccountId, String text) {

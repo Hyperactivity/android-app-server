@@ -58,7 +58,7 @@ public class AccountRequestHandler extends SharedHandler {
 
         Account account = em.find(Account.class, accountId);
         if(description != null){
-            account.setAccountDescription(description);
+            account.setProfileDescription(description);
         }
         if(showBirthDate != null){
             account.setShowBirthDate(showBirthDate);

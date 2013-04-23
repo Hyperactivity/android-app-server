@@ -32,6 +32,11 @@ public abstract class Constants {
         public static final String GET_THREAD_CONTENT = "get_thread_content";
         public static final String CREATE_THREAD = "create_thread";
         public static final String CREATE_REPLY = "create_reply";
+
+        public static final String CREATE_CATEGORY = "create_category";
+        public static final String MODIFY_CATEGORY = "modify_category";
+        public static final String DELETE_CATEGORY = "delete_category";
+
     }
 
     public abstract class Param{
@@ -54,6 +59,7 @@ public abstract class Constants {
             public static final String REPLY = "reply";
             public static final String THREADS = "threads";
             public static final String REPLIES = "replies";
+            public static final String REPLY_ID = "thread_id";
         }
         public abstract class Status{
             public static final String STATUS = "status";

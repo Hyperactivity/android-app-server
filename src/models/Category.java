@@ -15,8 +15,7 @@ public class Category implements Serializable {
     static final long serialVersionUID = 2L;
     private int id;
 
-    public Category(int id, String headLine, int colorCode, Category parentCategory) {
-        this.id = id;
+    public Category(String headLine, int colorCode, Category parentCategory) {
         this.headLine = headLine;
         this.colorCode = colorCode;
         this.parentCategory = parentCategory;

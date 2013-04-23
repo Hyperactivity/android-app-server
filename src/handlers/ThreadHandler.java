@@ -40,33 +40,6 @@ public class ThreadHandler extends SharedHandler {
     }
 
     /**
-     * Creates a Thread by the given categoryId.
-     * Returns the created Thread.
-     * @param jsonrpc2Params
-     * @throws Exception
-     */
-    private void createThread(Map<String, Object> jsonrpc2Params) throws Exception {
-
-        Map<String, Object> createThreadParams = getParams(jsonrpc2Params,
-                Constants.Param.Name.CATEGORY_ID,
-                Constants.Param.Name.HEADLINE,
-                Constants.Param.Name.TEXT);
-
-
-        models.Thread thread = new models.Thread(
-                em.find(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
-                em.find(Account.class, accountId),
-                (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
-                (String)        createThreadParams.get(Constants.Param.Name.TEXT)
-        );
-
-        persistObjects(thread);
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORY, serialize(thread));
-
-    }
-
-    /**
      * Returns a list of replies given a threadId.
      * @param jsonrpc2Params
      * @throws Exception
@@ -104,5 +77,73 @@ public class ThreadHandler extends SharedHandler {
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.REPLIES, serialize((Serializable) replies));
+    }
+
+    /**
+     * Creates a Thread by the given categoryId.
+     * Returns the created Thread.
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void createThread(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> createThreadParams = getParams(jsonrpc2Params,
+                Constants.Param.Name.CATEGORY_ID,
+                Constants.Param.Name.HEADLINE,
+                Constants.Param.Name.TEXT);
+
+
+        models.Thread thread = new models.Thread(
+                em.find(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
+                em.find(Account.class, accountId),
+                (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
+                (String)        createThreadParams.get(Constants.Param.Name.TEXT)
+        );
+
+        persistObjects(thread);
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.CATEGORY, serialize(thread));
+    }
+
+    /**
+     * Modfies a Threads headline and text by the given threadId .
+     * Returns the created Thread.
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void modifyThread(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                Constants.Param.Name.THREAD_ID,
+                Constants.Param.Name.HEADLINE,
+                Constants.Param.Name.TEXT);
+
+        models.Thread thread = em.find(Thread.class, params.get(Constants.Param.Name.THREAD_ID))
+
+        thread.setHeadLine((String) params.get(Constants.Param.Name.HEADLINE));
+        thread.setText((String) params.get(Constants.Param.Name.TEXT));
+
+        persistObjects(thread);
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.CATEGORY, serialize(thread));
+    }
+
+
+    /**
+     * Deletes a thread by the given threadId.
+     * Returns the created Thread.
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void deleteThread(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> params = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID);
+        try {
+            em.remove(em.find(Thread.class, params.get(Constants.Param.Name.THREAD_ID) );
+        } catch (Exception e) {
+                 return;
+        }
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+
     }
 }

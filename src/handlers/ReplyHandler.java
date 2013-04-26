@@ -3,6 +3,7 @@ package handlers;
 import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
+import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Reply;
@@ -114,16 +115,19 @@ public class ReplyHandler extends SharedHandler {
      * @throws Exception
      */
     private void deleteReply(Map<String, Object> jsonrpc2Params) throws Exception {
-//
-//        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
-//                Constants.Param.Name.REPLY_ID);
-//
-//        try {
-//        models.Reply reply = em.remove(em.find(models.Reply.class, (Integer));
-//        } catch (Exception e) {
-//
-//        }
-//        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                Constants.Param.Name.REPLY_ID);
+
+
+       Reply reply =  em.find(Reply.class, params.get(Constants.Param.Name.REPLY_ID));
+
+        if(reply == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+        removeObjects(reply);
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 
     private void thumbUp(Map<String,Object> jsonrpc2Params) {

@@ -222,6 +222,19 @@ public abstract class SharedHandler implements RequestHandler{
     }
 
     /**
+     * Removes objects from the database and commits them.
+     * In simple terms: Takes the objects, removes them, and tries to remove them into the database.
+     * @param objects   The objects to be persisted
+     */
+    protected void removeObjects(Object... objects){
+        em.getTransaction().begin();
+        for(Object o: objects){
+            em.remove(o);
+        }
+        em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
+    }
+
+    /**
      * Kind of the opposite to persisting. Will update the given objects according to latest updates in the database.
      * @param objects   The objects that will be updated.
      */

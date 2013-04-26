@@ -111,7 +111,7 @@ public class ThreadHandler extends SharedHandler {
     }
 
     /**
-     * Modfies a Threads headline and text by the given threadId .
+     * Modifies a Threads headline and text by the given threadId .
      * Returns the created Thread.
      * @param jsonrpc2Params
      * @throws Exception
@@ -119,11 +119,28 @@ public class ThreadHandler extends SharedHandler {
     private void modifyThread(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> params = getParams(jsonrpc2Params,
-                Constants.Param.Name.THREAD_ID,
-                Constants.Param.Name.HEADLINE,
-                Constants.Param.Name.TEXT);
+                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false),
+                new NullableExtendedParam(Constants.Param.Name.TEXT, false));
 
-//        models.Thread thread = em.find(Thread.class, params.get(Constants.Param.Name.THREAD_ID));
+        models.Thread thread = em.find(models.Thread.class, params.get(Constants.Param.Name.THREAD_ID));
+        String headline = (String) params.get(Constants.Param.Name.HEADLINE);
+        String text = (String) params.get(Constants.Param.Name.TEXT);
+
+        if(thread == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
+            return;
+        }
+
+        if(headline != null){
+            thread.setHeadLine(headline);
+        }
+
+        if(text != null){
+            thread.setText(headline);
+        }
+
+        persistObjects(thread);
 
 //        thread.setHeadLine((String) params.get(Constants.Param.Name.HEADLINE));
 //        thread.setText((String) params.get(Constants.Param.Name.TEXT));

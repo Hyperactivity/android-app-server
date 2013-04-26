@@ -231,7 +231,7 @@ public class CategoryRequestHandler extends SharedHandler {
         if(category == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
         }else{
-            em.remove(category);
+            removeObjects(category);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         }
     }

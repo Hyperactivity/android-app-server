@@ -6,9 +6,12 @@ import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Category;
+import models.Reply;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -92,12 +95,14 @@ public class ThreadHandler extends SharedHandler {
                 Constants.Param.Name.HEADLINE,
                 Constants.Param.Name.TEXT);
 
+        Date currentDate = new Date();
 
         models.Thread thread = new models.Thread(
                 em.find(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
                 em.find(Account.class, accountId),
                 (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
-                (String)        createThreadParams.get(Constants.Param.Name.TEXT)
+                (String)        createThreadParams.get(Constants.Param.Name.TEXT),
+                new Timestamp(currentDate.getTime())
         );
 
         persistObjects(thread);

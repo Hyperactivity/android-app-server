@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -15,12 +16,13 @@ public class Thread implements Serializable {
     static final long serialVersionUID = 9L;
 
 
-    public Thread(Category parentCategory, Account account, String threadName, String threadText)
+    public Thread(Category parentCategory, Account account, String threadName, String threadText, Timestamp currentTime)
     {
         setParentCategory(parentCategory);
         setAccount(account);
         setHeadLine(threadName);
         setText(threadText);
+        setTime(currentTime);
     }
 
     @Deprecated
@@ -115,6 +117,30 @@ public class Thread implements Serializable {
     }
 
 
+    private int accountId;
+
+    @Column(name = "accountId")
+    @Basic
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    private Timestamp time;
+
+    @Column(name = "time")
+    @Basic
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,18 +148,24 @@ public class Thread implements Serializable {
 
         Thread thread = (Thread) o;
 
+        if (accountId != thread.accountId) return false;
         if (id != thread.id) return false;
+        if (parentCategoryId != thread.parentCategoryId) return false;
         if (headLine != null ? !headLine.equals(thread.headLine) : thread.headLine != null) return false;
         if (text != null ? !text.equals(thread.text) : thread.text != null) return false;
+        if (time != null ? !time.equals(thread.time) : thread.time != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = parentCategoryId;
+        result = 31 * result + accountId;
+        result = 31 * result + id;
         result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
         return result;
     }
 }

@@ -6,7 +6,6 @@ import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Category;
-import models.Reply;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -69,7 +68,7 @@ public class ThreadHandler extends SharedHandler {
 
         models.Thread thread = em.find(models.Thread.class, threadId);
         if(thread == null){
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
         }
 
@@ -106,14 +105,13 @@ public class ThreadHandler extends SharedHandler {
                 Constants.Param.Name.HEADLINE,
                 Constants.Param.Name.TEXT);
 
-        Date currentDate = new Date();
 
         models.Thread thread = new models.Thread(
                 em.find(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
                 em.find(Account.class, accountId),
                 (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
                 (String)        createThreadParams.get(Constants.Param.Name.TEXT),
-                new Timestamp(currentDate.getTime())
+                getCurrentTime()
         );
 
         persistObjects(thread);
@@ -139,7 +137,7 @@ public class ThreadHandler extends SharedHandler {
         String text = (String) params.get(Constants.Param.Name.TEXT);
 
         if(thread == null){
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
         }
 
@@ -169,7 +167,7 @@ public class ThreadHandler extends SharedHandler {
         models.Thread thread = em.find(models.Thread.class, params.get(Constants.Param.Name.THREAD_ID));
 
         if(thread == null){
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
         }
         removeObjects(thread);

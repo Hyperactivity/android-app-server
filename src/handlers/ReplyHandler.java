@@ -2,9 +2,11 @@ package handlers;
 
 import assistant.Constants;
 import assistant.SharedHandler;
+import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Reply;
+import models.ThumbsUp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -35,15 +37,16 @@ public class ReplyHandler extends SharedHandler {
         if (method.equals(Constants.Method.CREATE_REPLY)) {
             createReply(jsonrpc2Params);
         } else if (method.equals(Constants.Method.MODIFY_REPLY)) {
-                createReply(jsonrpc2Params);
+            modifyReply(jsonrpc2Params);
         } else if (method.equals(Constants.Method.DELETE_REPLY)) {
-            createReply(jsonrpc2Params);
+            deleteReply(jsonrpc2Params);
         } else if (method.equals(Constants.Method.THUMB_UP)) {
-            createReply(jsonrpc2Params);
+            thumbUp(jsonrpc2Params);
         } else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
     }
+
 
     /**
      * Creates a reply by the given threadId.
@@ -54,12 +57,12 @@ public class ReplyHandler extends SharedHandler {
      */
     private void createReply(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+        Map<String, Object> params = getParams(jsonrpc2Params,
                 Constants.Param.Name.THREAD_ID,
                 Constants.Param.Name.TEXT);
 
-        int parentThreadId = (Integer) createReplyParams.get(Constants.Param.Name.THREAD_ID);
-        String text = (String) createReplyParams.get(Constants.Param.Name.TEXT);
+        int parentThreadId = (Integer) params.get(Constants.Param.Name.THREAD_ID);
+        String text = (String) params.get(Constants.Param.Name.TEXT);
 
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
         Date currentDate = new Date();
@@ -82,19 +85,26 @@ public class ReplyHandler extends SharedHandler {
      */
     private void modifyReply(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
-                Constants.Param.Name.REPLY_ID,
-                Constants.Param.Name.TEXT);
-//
-//        models.Reply reply = em.find(models.Reply.class, (Integer) createReplyParams.get(Constants.Param.Name.REPLY_ID));
-//
-//        reply.setText((String) createReplyParams.get(Constants.Param.Name.HEADLINE));
-//        reply.setTime((new Date).getTime());
-//
-//        persistObjects(reply);
-//
-//        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-//        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.REPLY_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.TEXT, true));
+
+        int replyId = (Integer)params.get(Constants.Param.Name.REPLY_ID);
+        String text = (String) params.get(Constants.Param.Name.TEXT);
+        Reply reply = em.find(Reply.class, (Integer) params.get(Constants.Param.Name.REPLY_ID));
+
+        if(reply == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+        if(text != null){
+            reply.setText(text);
+        }
+        reply.setTime(getCurrentTime());
+        persistObjects(reply);
+
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
     }
 
     /**
@@ -115,6 +125,10 @@ public class ReplyHandler extends SharedHandler {
 //        }
 //        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
+
+    private void thumbUp(Map<String,Object> jsonrpc2Params) {
+    }
+
 
 }
 

@@ -73,8 +73,7 @@ public abstract class Constants {
             public static final String ACCOUNT_NOT_FOUND = "account_not_found";
             public static final String SUCCESS = "success";
 
-            public static final String CATEGORY_NOT_FOUND = "category_not_found";
-            public static final String THREAD_NOT_FOUND = "thread_not_found";
+            public static final String OBJECT_NOT_FOUND = "object_not_found";
         }
 
         public abstract class Value {

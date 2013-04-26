@@ -18,10 +18,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.*;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -317,6 +315,10 @@ public abstract class SharedHandler implements RequestHandler{
         query.select(variableRoot);
 
         return em.createQuery(query).getResultList();
+    }
+
+    protected Timestamp getCurrentTime(){
+        return new Timestamp(new Date().getTime());
     }
 }
 

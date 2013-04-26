@@ -93,7 +93,7 @@ public class CategoryRequestHandler extends SharedHandler {
 
         Category category = em.find(Category.class, categoryId);
         if (category == null) {
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
         }
 
@@ -171,7 +171,7 @@ public class CategoryRequestHandler extends SharedHandler {
         if(type.equals(Constants.Param.Value.PUBLIC)){
             Category category = em.find(Category.class, params.get(categoryId));
             if(category == null){
-                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
                 return;
             }
             if(headLine != null){
@@ -187,7 +187,7 @@ public class CategoryRequestHandler extends SharedHandler {
         }else if(type.equals(Constants.Param.Value.PRIVATE)){
             PrivateCategory category = em.find(PrivateCategory.class, params.get(categoryId));
             if(category == null){
-                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
                 return;
             }
             if(headLine != null){
@@ -229,7 +229,7 @@ public class CategoryRequestHandler extends SharedHandler {
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
         }
         if(category == null){
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
         }else{
             removeObjects(category);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);

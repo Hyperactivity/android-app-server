@@ -24,7 +24,12 @@ import java.util.Map;
 public class ThreadHandler extends SharedHandler {
     @Override
     public String[] handledRequests() {
-        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new String[]{
+                Constants.Method.GET_THREAD_CONTENT,
+                Constants.Method.CREATE_THREAD,
+                Constants.Method.MODIFY_THREAD,
+                Constants.Method.DELETE_THREAD,
+        };
     }
 
     @Override
@@ -35,6 +40,12 @@ public class ThreadHandler extends SharedHandler {
             getThreadContent(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.CREATE_THREAD)){
+            createThread(jsonrpc2Params);
+        }
+        if(method.equals(Constants.Method.MODIFY_THREAD)){
+            getThreadContent(jsonrpc2Params);
+        }
+        else if(method.equals(Constants.Method.DELETE_THREAD)){
             createThread(jsonrpc2Params);
         }
         else {

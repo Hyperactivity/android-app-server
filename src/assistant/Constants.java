@@ -37,6 +37,8 @@ public abstract class Constants {
         public static final String MODIFY_CATEGORY = "modify_category";
         public static final String DELETE_CATEGORY = "delete_category";
 
+        public static final String MODIFY_THREAD = "modify_thread";
+        public static final String DELETE_THREAD = "delete_thread";
     }
 
     public abstract class Param{

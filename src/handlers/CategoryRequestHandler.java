@@ -7,7 +7,6 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -157,21 +156,53 @@ public class CategoryRequestHandler extends SharedHandler {
     private void modifyCategory(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.TYPE, false),
                 new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false),
-                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false));
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, true),
+                new NullableExtendedParam(Constants.Param.Name.COLOR_CODE, true));
+
+        String type = (String) params.get(Constants.Param.Name.TYPE);
+        int categoryId = (Integer) params.get(Constants.Param.Name.CATEGORY_ID);
+        String headLine = (String) params.get(Constants.Param.Name.HEADLINE);
+        Integer colorCode = (Integer) params.get(Constants.Param.Name.COLOR_CODE);
 
 
-        Category category = em.find(Category.class, (Integer) params.get(Constants.Param.Name.CATEGORY_ID));
+        //TODO: Private and public categories should extend each other somehow so we do not need duplicate code.
+        if(type.equals(Constants.Param.Value.PUBLIC)){
+            Category category = em.find(Category.class, params.get(categoryId));
+            if(category == null){
+                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+                return;
+            }
+            if(headLine != null){
+                category.setHeadLine(headLine);
+            }
+            if(colorCode != null){
+                category.setColorCode(colorCode);
+            }
+            persistObjects(category);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+            responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
 
-        category.setHeadLine((String) params.get(Constants.Param.Name.HEADLINE));
-        persistObjects(category);
+        }else if(type.equals(Constants.Param.Value.PRIVATE)){
+            PrivateCategory category = em.find(PrivateCategory.class, params.get(categoryId));
+            if(category == null){
+                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+                return;
+            }
+            if(headLine != null){
+                category.setHeadLine(headLine);
+            }
+            if(colorCode != null){
+                category.setColorCode(colorCode);
+            }
+            persistObjects(category);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+            responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
 
-        if (category == null) {
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
-            return;
+        }else{
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
         }
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
     }
 
     /**

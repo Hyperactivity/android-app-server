@@ -15,8 +15,8 @@ public class PrivateCategory implements Serializable {
 
     private int id;
 
-    public PrivateCategory(String headline, int colorCode, Category parentPrivateCategory, Account account) {
-        this.headline = headline;
+    public PrivateCategory(String headLine, int colorCode, Category parentPrivateCategory, Account account) {
+        this.headLine = headLine;
         this.colorCode = colorCode;
         this.parentPrivateCategory = parentPrivateCategory;
         this.account = account;
@@ -71,16 +71,16 @@ public class PrivateCategory implements Serializable {
         this.account = account;
     }
 
-    private String headline;
+    private String headLine;
 
-    @Column(name = "headline")
+    @Column(name = "headLine")
     @Basic
-    public String getHeadline() {
-        return headline;
+    public String getHeadLine() {
+        return headLine;
     }
 
-    public void setHeadline(String headline) {
-        this.headline = headline;
+    public void setHeadLine(String headLine) {
+        this.headLine = headLine;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PrivateCategory implements Serializable {
 
         if (colorCode != that.colorCode) return false;
         if (id != that.id) return false;
-        if (headline != null ? !headline.equals(that.headline) : that.headline != null) return false;
+        if (headLine != null ? !headLine.equals(that.headLine) : that.headLine != null) return false;
 
         return true;
     }
@@ -101,7 +101,7 @@ public class PrivateCategory implements Serializable {
     public int hashCode() {
         int result = id;
         result = 31 * result + colorCode;
-        result = 31 * result + (headline != null ? headline.hashCode() : 0);
+        result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
         return result;
     }
 }

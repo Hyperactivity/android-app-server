@@ -81,7 +81,7 @@ public class Thread implements Serializable {
 
     private List<Reply> replies;
 
-    @OneToMany(mappedBy = "parentThread", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "parentThread", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
     public List<Reply> getReplies() {
         return replies;
     }

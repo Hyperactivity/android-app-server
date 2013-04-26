@@ -214,17 +214,25 @@ public class CategoryRequestHandler extends SharedHandler {
     private void deleteCategory(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> params = getParams(jsonrpc2Params,
-                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));
+                Constants.Param.Name.TYPE,
+                Constants.Param.Name.CATEGORY_ID);
 
-        try {
-            em.remove(em.find(Category.class, (Integer) params.get(Constants.Param.Name.CATEGORY_ID)));
+        String type = (String) params.get(Constants.Param.Name.TYPE);
+        int categoryId = (Integer) params.get(Constants.Param.Name.CATEGORY_ID);
+        Object category = null;
 
-        } catch (Exception e) {
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
-            return;
+        if(type.equals(Constants.Param.Value.PUBLIC)){
+            category = em.find(Category.class, categoryId);
+        } else if(type.equals(Constants.Param.Value.PRIVATE)){
+            category = em.find(PrivateCategory.class, categoryId);
+        }else{
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
         }
-
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        if(category == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
+        }else{
+            em.remove(category);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        }
     }
-
 }

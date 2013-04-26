@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -81,6 +82,28 @@ public class PrivateCategory implements Serializable {
 
     public void setHeadLine(String headLine) {
         this.headLine = headLine;
+    }
+
+    private List<Note> notes;
+
+    @OneToMany(mappedBy = "parentPrivateCategory", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> replies) {
+        this.notes = replies;
+    }
+
+    private List<LinkedThread> linkedThreads;
+
+    @OneToMany(mappedBy = "parentPrivateCategory", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    public List<LinkedThread> getLinkedThreads() {
+        return linkedThreads;
+    }
+
+    public void setLinkedThreads(List<LinkedThread> linkedThreads) {
+        this.linkedThreads = linkedThreads;
     }
 
     @Override

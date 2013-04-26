@@ -113,21 +113,36 @@ public class CategoryRequestHandler extends SharedHandler {
     private void createCategory(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> params = getParams(jsonrpc2Params,
-                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false),
-                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false));
+                new NullableExtendedParam(Constants.Param.Name.TYPE, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, false),
+                new NullableExtendedParam(Constants.Param.Name.COLOR_CODE, true));
 
-        Category category = new Category(
-                (String) params.get(Constants.Param.Name.HEADLINE),
-                0,
-                em.find(Category.class, (Integer) params.get(Constants.Param.Name.CATEGORY_ID))
-        );
+        String type = (String) params.get(Constants.Param.Name.TYPE);
+        Integer colorCode = (Integer)params.get(Constants.Param.Name.COLOR_CODE);
+        Object category = null;
 
+        if(colorCode == null){
+            colorCode = Constants.Database.DEFAULT_COLOR_CODE;
+        }
+
+        if(type.equals(Constants.Param.Value.PUBLIC)){
+            category = new Category(
+                    (String) params.get(Constants.Param.Name.HEADLINE),
+                    colorCode,
+                    null);
+
+        }else if(type.equals(Constants.Param.Value.PRIVATE)){
+            category = new PrivateCategory(
+                    (String) params.get(Constants.Param.Name.HEADLINE),
+                    colorCode,
+                    null,
+                    em.find(Account.class, accountId));
+
+        }else{
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
+        }
         persistObjects(category);
 
-        if (category == null) {
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.CATEGORY_NOT_FOUND);
-            return;
-        }
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
     }

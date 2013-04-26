@@ -15,8 +15,8 @@ public class PrivateCategory implements Serializable {
 
     private int id;
 
-    public PrivateCategory(int id, int colorCode, Category parentPrivateCategory, Account account) {
-        this.id = id;
+    public PrivateCategory(String headline, int colorCode, Category parentPrivateCategory, Account account) {
+        this.headline = headline;
         this.colorCode = colorCode;
         this.parentPrivateCategory = parentPrivateCategory;
         this.account = account;
@@ -25,7 +25,7 @@ public class PrivateCategory implements Serializable {
     public PrivateCategory() {
     }
 
-    @javax.persistence.Column(name = "id")
+    @Column(name = "id")
     @Id
     public int getId() {
         return id;
@@ -37,7 +37,7 @@ public class PrivateCategory implements Serializable {
 
     private int colorCode;
 
-    @javax.persistence.Column(name = "colorCode")
+    @Column(name = "colorCode")
     @Basic
     public int getColorCode() {
         return colorCode;
@@ -71,6 +71,17 @@ public class PrivateCategory implements Serializable {
         this.account = account;
     }
 
+    private String headline;
+
+    @Column(name = "headline")
+    @Basic
+    public String getHeadline() {
+        return headline;
+    }
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -81,6 +92,7 @@ public class PrivateCategory implements Serializable {
 
         if (colorCode != that.colorCode) return false;
         if (id != that.id) return false;
+        if (headline != null ? !headline.equals(that.headline) : that.headline != null) return false;
 
         return true;
     }
@@ -89,6 +101,7 @@ public class PrivateCategory implements Serializable {
     public int hashCode() {
         int result = id;
         result = 31 * result + colorCode;
+        result = 31 * result + (headline != null ? headline.hashCode() : 0);
         return result;
     }
 }

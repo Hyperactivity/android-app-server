@@ -60,6 +60,7 @@ public abstract class Constants {
             public static final String THREADS = "threads";
             public static final String REPLIES = "replies";
             public static final String REPLY_ID = "thread_id";
+            public static final String COLOR_CODE = "color_code";
         }
         public abstract class Status{
             public static final String STATUS = "status";
@@ -96,6 +97,7 @@ public abstract class Constants {
         public static final int NO_LIMIT_PER_DAY = 0;
         public static final boolean DEFAULT_SHOW_BIRTH_DATE = false;
         public static final boolean DEFAULT_USE_DEFAULT_COLORS = true;
+        public static final int DEFAULT_COLOR_CODE = 0;
     }
 
     public class Errors {

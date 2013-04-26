@@ -141,13 +141,7 @@ public class ThreadHandler extends SharedHandler {
         }
 
         persistObjects(thread);
-
-//        thread.setHeadLine((String) params.get(Constants.Param.Name.HEADLINE));
-//        thread.setText((String) params.get(Constants.Param.Name.TEXT));
-//
-//        persistObjects(thread);
-//        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-//        responseParams.put(Constants.Param.Name.CATEGORY, serialize(thread));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 
 
@@ -159,13 +153,15 @@ public class ThreadHandler extends SharedHandler {
      */
     private void deleteThread(Map<String, Object> jsonrpc2Params) throws Exception {
 
-//        Map<String, Object> params = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID);
-//        try {
-//            em.remove(em.find(Thread.class, params.get(Constants.Param.Name.THREAD_ID) );
-//        } catch (Exception e) {
-//                 return;
-//        }
-//        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        Map<String, Object> params = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID);
 
+        models.Thread thread = em.find(models.Thread.class, params.get(Constants.Param.Name.THREAD_ID));
+
+        if(thread == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.THREAD_NOT_FOUND);
+            return;
+        }
+        removeObjects(thread);
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 }

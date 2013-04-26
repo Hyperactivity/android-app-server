@@ -39,6 +39,9 @@ public abstract class Constants {
 
         public static final String MODIFY_THREAD = "modify_thread";
         public static final String DELETE_THREAD = "delete_thread";
+        public static final String DELETE_REPLY = "delete_reply";
+        public static final String MODIFY_REPLY = "modify_reply";
+        public static final String THUMB_UP = "thumb_up";
     }
 
     public abstract class Param{
@@ -61,7 +64,7 @@ public abstract class Constants {
             public static final String REPLY = "reply";
             public static final String THREADS = "threads";
             public static final String REPLIES = "replies";
-            public static final String REPLY_ID = "thread_id";
+            public static final String REPLY_ID = "reply_id";
             public static final String COLOR_CODE = "color_code";
         }
         public abstract class Status{
@@ -80,10 +83,6 @@ public abstract class Constants {
         }
     }
 
-    public abstract class Json {
-
-    }
-
     public abstract class Http {
         public static final int PORT = 12345;
         public static final String CONTENT_LENGTH = "Content-length";
@@ -92,7 +91,6 @@ public abstract class Constants {
     public class Query {
 
         public static final String FACEBOOK_ID = "facebook_id";
-        public static final String PARENT_CATEGORY_ID = "parent_category_id";
     }
 
     public class Database{

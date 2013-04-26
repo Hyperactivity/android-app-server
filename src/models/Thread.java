@@ -14,10 +14,17 @@ import java.util.List;
 @Entity
 public class Thread implements Serializable {
     static final long serialVersionUID = 9L;
+    private int parentCategoryId;
+    private int id;
+    private String headLine;
+    private String text;
+    private List<Reply> replies;
+    private Account account;
+    private Category parentCategory;
+    private int accountId;
+    private Timestamp time;
 
-
-    public Thread(Category parentCategory, Account account, String threadName, String threadText, Timestamp currentTime)
-    {
+    public Thread(Category parentCategory, Account account, String threadName, String threadText, Timestamp currentTime) {
         setParentCategory(parentCategory);
         setAccount(account);
         setHeadLine(threadName);
@@ -30,10 +37,7 @@ public class Thread implements Serializable {
 
     }
 
-    private int parentCategoryId;
-
-
-    @Column(name = "parentCategoryId", insertable=false, updatable=false)
+    @Column(name = "parentCategoryId", insertable = false, updatable = false)
     @Basic
     public int getParentCategoryId() {
         return parentCategoryId;
@@ -42,10 +46,6 @@ public class Thread implements Serializable {
     public void setParentCategoryId(int parentCategoryId) {
         this.parentCategoryId = parentCategoryId;
     }
-
-
-
-    private int id;
 
     @Column(name = "id")
     @Id
@@ -57,8 +57,6 @@ public class Thread implements Serializable {
         this.id = id;
     }
 
-    private String headLine;
-
     @Column(name = "headLine")
     @Basic
     public String getHeadLine() {
@@ -68,8 +66,6 @@ public class Thread implements Serializable {
     public void setHeadLine(String headLine) {
         this.headLine = headLine;
     }
-
-    private String text;
 
     @Column(name = "text")
     @Basic
@@ -81,9 +77,7 @@ public class Thread implements Serializable {
         this.text = text;
     }
 
-    private List<Reply> replies;
-
-    @OneToMany(mappedBy = "parentThread", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parentThread", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     public List<Reply> getReplies() {
         return replies;
     }
@@ -92,9 +86,7 @@ public class Thread implements Serializable {
         this.replies = replies;
     }
 
-    private Account account;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     public Account getAccount() {
         return account;
@@ -103,8 +95,6 @@ public class Thread implements Serializable {
     public void setAccount(Account account) {
         this.account = account;
     }
-
-    private Category parentCategory;
 
     @ManyToOne
     @JoinColumn(name = "parentCategoryId", referencedColumnName = "id", nullable = false)
@@ -116,10 +106,7 @@ public class Thread implements Serializable {
         this.parentCategory = parentCategory;
     }
 
-
-    private int accountId;
-
-    @Column(name = "accountId")
+    @Column(name = "accountId", updatable = false, insertable = false)
     @Basic
     public int getAccountId() {
         return accountId;
@@ -128,8 +115,6 @@ public class Thread implements Serializable {
     public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
-
-    private Timestamp time;
 
     @Column(name = "time")
     @Basic

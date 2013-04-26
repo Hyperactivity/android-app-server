@@ -13,8 +13,13 @@ import java.util.List;
 @Entity
 public class PrivateCategory implements Serializable {
     static final long serialVersionUID = 6L;
-
     private int id;
+    private int colorCode;
+    private Category parentPrivateCategory;
+    private Account account;
+    private String headLine;
+    private List<Note> notes;
+    private List<LinkedThread> linkedThreads;
 
     public PrivateCategory(String headLine, int colorCode, Category parentPrivateCategory, Account account) {
         this.headLine = headLine;
@@ -36,8 +41,6 @@ public class PrivateCategory implements Serializable {
         this.id = id;
     }
 
-    private int colorCode;
-
     @Column(name = "colorCode")
     @Basic
     public int getColorCode() {
@@ -48,9 +51,7 @@ public class PrivateCategory implements Serializable {
         this.colorCode = colorCode;
     }
 
-    private Category parentPrivateCategory;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
     public Category getParentPrivateCategory() {
         return parentPrivateCategory;
@@ -60,9 +61,7 @@ public class PrivateCategory implements Serializable {
         this.parentPrivateCategory = parentPrivateCategory;
     }
 
-    private Account account;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     public Account getAccount() {
         return account;
@@ -71,8 +70,6 @@ public class PrivateCategory implements Serializable {
     public void setAccount(Account account) {
         this.account = account;
     }
-
-    private String headLine;
 
     @Column(name = "headLine")
     @Basic
@@ -84,9 +81,7 @@ public class PrivateCategory implements Serializable {
         this.headLine = headLine;
     }
 
-    private List<Note> notes;
-
-    @OneToMany(mappedBy = "parentPrivateCategory", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parentPrivateCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     public List<Note> getNotes() {
         return notes;
     }
@@ -95,9 +90,7 @@ public class PrivateCategory implements Serializable {
         this.notes = replies;
     }
 
-    private List<LinkedThread> linkedThreads;
-
-    @OneToMany(mappedBy = "parentPrivateCategory", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parentPrivateCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     public List<LinkedThread> getLinkedThreads() {
         return linkedThreads;
     }

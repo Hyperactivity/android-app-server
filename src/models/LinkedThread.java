@@ -12,8 +12,10 @@ import java.io.Serializable;
 @Entity
 public class LinkedThread implements Serializable {
     static final long serialVersionUID = 4L;
-
     private int id;
+    private String headLine;
+    private Category parentPrivateCategory;
+    private Account account;
 
     public LinkedThread(int id, String headLine, Category parentPrivateCategory, Account account) {
         this.id = id;
@@ -36,8 +38,6 @@ public class LinkedThread implements Serializable {
         this.id = id;
     }
 
-    private String headLine;
-
     @javax.persistence.Column(name = "headLine")
     @Basic
     public String getHeadLine() {
@@ -48,9 +48,7 @@ public class LinkedThread implements Serializable {
         this.headLine = headLine;
     }
 
-    private Category parentPrivateCategory;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
     public Category getParentPrivateCategory() {
         return parentPrivateCategory;
@@ -60,9 +58,7 @@ public class LinkedThread implements Serializable {
         this.parentPrivateCategory = parentPrivateCategory;
     }
 
-    private Account account;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     public Account getAccount() {
         return account;

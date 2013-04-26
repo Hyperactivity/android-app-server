@@ -114,7 +114,7 @@ public class Reply implements Serializable {
 
     private List<ThumbsUp> thumbsUp;
 
-    @OneToMany(mappedBy = "reply")
+    @OneToMany(mappedBy = "reply", cascade = CascadeType.REMOVE)
     public List<ThumbsUp> getThumbsUp() {
         return thumbsUp;
     }

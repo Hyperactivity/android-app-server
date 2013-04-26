@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class CustomCategoryColorPK implements Serializable {
     private int accountId;
+    private int categoryId;
 
     @Id
     @Column(name = "accountId")
@@ -22,8 +23,6 @@ public class CustomCategoryColorPK implements Serializable {
     public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
-
-    private int categoryId;
 
     @Id
     @Column(name = "categoryId")

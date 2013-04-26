@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class ThumbsUpPK implements Serializable {
     private int replyId;
+    private int accountId;
 
     @Id
     @Column(name = "replyId")
@@ -22,8 +23,6 @@ public class ThumbsUpPK implements Serializable {
     public void setReplyId(int replyId) {
         this.replyId = replyId;
     }
-
-    private int accountId;
 
     @Id
     @Column(name = "accountId")

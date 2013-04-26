@@ -22,7 +22,10 @@ public class ReplyHandler extends SharedHandler {
     @Override
     public String[] handledRequests() {
         return new String[]{
-                Constants.Method.CREATE_REPLY
+                Constants.Method.CREATE_REPLY,
+                Constants.Method.MODIFY_REPLY,
+                Constants.Method.DELETE_REPLY,
+                Constants.Method.THUMB_UP,
         };
 
     }
@@ -30,6 +33,12 @@ public class ReplyHandler extends SharedHandler {
     @Override
     protected void process(Map<String, Object> jsonrpc2Params) throws Exception {
         if (method.equals(Constants.Method.CREATE_REPLY)) {
+            createReply(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.MODIFY_REPLY)) {
+                createReply(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.DELETE_REPLY)) {
+            createReply(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.THUMB_UP)) {
             createReply(jsonrpc2Params);
         } else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
@@ -73,9 +82,9 @@ public class ReplyHandler extends SharedHandler {
      */
     private void modifyReply(Map<String, Object> jsonrpc2Params) throws Exception {
 
-//        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
-//                Constants.Param.Name.REPLY_ID,
-//                Constants.Param.Name.TEXT);
+        Map<String, Object> createReplyParams = getParams(jsonrpc2Params,
+                Constants.Param.Name.REPLY_ID,
+                Constants.Param.Name.TEXT);
 //
 //        models.Reply reply = em.find(models.Reply.class, (Integer) createReplyParams.get(Constants.Param.Name.REPLY_ID));
 //

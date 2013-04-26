@@ -15,8 +15,9 @@ import java.io.Serializable;
 @Entity
 public class PrivateMessage implements Serializable {
     static final long serialVersionUID = 7L;
-
     private int senderAccountId;
+    private int recieverAccountId;
+    private String text;
 
     public PrivateMessage(int senderAccountId, int recieverAccountId, String text) {
         this.senderAccountId = senderAccountId;
@@ -38,8 +39,6 @@ public class PrivateMessage implements Serializable {
         this.senderAccountId = senderAccountId;
     }
 
-    private int recieverAccountId;
-
     @javax.persistence.Column(name = "recieverAccountId")
     @Id
     public int getRecieverAccountId() {
@@ -49,8 +48,6 @@ public class PrivateMessage implements Serializable {
     public void setRecieverAccountId(int recieverAccountId) {
         this.recieverAccountId = recieverAccountId;
     }
-
-    private String text;
 
     @javax.persistence.Column(name = "text")
     @Basic

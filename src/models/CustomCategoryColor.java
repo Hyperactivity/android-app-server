@@ -16,6 +16,8 @@ import java.io.Serializable;
 public class CustomCategoryColor implements Serializable {
     static final long serialVersionUID = 3L;
     private int accountId;
+    private int categoryId;
+    private int colorCode;
 
     public CustomCategoryColor(int accountId, int categoryId, int colorCode) {
         this.accountId = accountId;
@@ -37,8 +39,6 @@ public class CustomCategoryColor implements Serializable {
         this.accountId = accountId;
     }
 
-    private int categoryId;
-
     @javax.persistence.Column(name = "categoryId")
     @Id
     public int getCategoryId() {
@@ -48,8 +48,6 @@ public class CustomCategoryColor implements Serializable {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
-
-    private int colorCode;
 
     @javax.persistence.Column(name = "colorCode")
     @Basic

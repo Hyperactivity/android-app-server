@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class PrivateMessagePK implements Serializable {
     private int senderAccountId;
+    private int recieverAccountId;
 
     @Id
     @Column(name = "senderAccountId")
@@ -22,8 +23,6 @@ public class PrivateMessagePK implements Serializable {
     public void setSenderAccountId(int senderAccountId) {
         this.senderAccountId = senderAccountId;
     }
-
-    private int recieverAccountId;
 
     @Id
     @Column(name = "recieverAccountId")

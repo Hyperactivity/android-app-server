@@ -13,8 +13,10 @@ import java.io.Serializable;
 @Entity
 public class ThumbsUp implements Serializable {
     static final long serialVersionUID = 10L;
-
     private int replyId;
+    private int accountId;
+    private Reply reply;
+    private Account account;
 
     public ThumbsUp(int replyId, int accountId) {
         this.replyId = replyId;
@@ -35,8 +37,6 @@ public class ThumbsUp implements Serializable {
         this.replyId = replyId;
     }
 
-    private int accountId;
-
     @javax.persistence.Column(name = "accountId")
     @Id
     public int getAccountId() {
@@ -47,9 +47,7 @@ public class ThumbsUp implements Serializable {
         this.accountId = accountId;
     }
 
-    private Reply reply;
-
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "replyId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Reply getReply() {
         return reply;
@@ -59,9 +57,7 @@ public class ThumbsUp implements Serializable {
         this.reply = reply;
     }
 
-    private Account account;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Account getAccount() {
         return account;
@@ -83,7 +79,6 @@ public class ThumbsUp implements Serializable {
 
         return true;
     }
-
 
     @Override
     public int hashCode() {

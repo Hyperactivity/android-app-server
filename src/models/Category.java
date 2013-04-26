@@ -14,6 +14,11 @@ import java.util.List;
 public class Category implements Serializable {
     static final long serialVersionUID = 2L;
     private int id;
+    private String headLine;
+    private int colorCode;
+    private Category parentCategory;
+    private List<Category> childCategories;
+    private List<Thread> threads;
 
     public Category(String headLine, int colorCode, Category parentCategory) {
         this.headLine = headLine;
@@ -35,8 +40,6 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    private String headLine;
-
     @javax.persistence.Column(name = "headLine")
     @Basic
     public String getHeadLine() {
@@ -46,8 +49,6 @@ public class Category implements Serializable {
     public void setHeadLine(String headLine) {
         this.headLine = headLine;
     }
-
-    private int colorCode;
 
     @javax.persistence.Column(name = "colorCode")
     @Basic
@@ -59,10 +60,8 @@ public class Category implements Serializable {
         this.colorCode = colorCode;
     }
 
-    private Category parentCategory;
-
-    @ManyToOne(optional=true, fetch=FetchType.LAZY)
-    @JoinColumn(name="parentCategoryId")
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "parentCategoryId")
     public Category getParentCategory() {
         return parentCategory;
     }
@@ -71,9 +70,7 @@ public class Category implements Serializable {
         this.parentCategory = parentCategory;
     }
 
-    private List<Category> childCategories;
-
-    @OneToMany(mappedBy="parentCategory", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     public List<Category> getChildCategories() {
         return childCategories;
     }
@@ -82,9 +79,7 @@ public class Category implements Serializable {
         this.childCategories = childCategories;
     }
 
-    private List<Thread> threads;
-
-    @OneToMany(mappedBy = "parentCategory", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     public List<Thread> getThreads() {
         return threads;
     }

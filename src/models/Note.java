@@ -12,8 +12,11 @@ import java.io.Serializable;
 @Entity
 public class Note implements Serializable {
     static final long serialVersionUID = 5L;
-
     private int id;
+    private String headLine;
+    private String text;
+    private Account account;
+    private Category parentPrivateCategory;
 
     public Note(int id, String headLine, String text, Account account, Category parentPrivateCategory) {
         this.id = id;
@@ -37,8 +40,6 @@ public class Note implements Serializable {
         this.id = id;
     }
 
-    private String headLine;
-
     @javax.persistence.Column(name = "headLine")
     @Basic
     public String getHeadLine() {
@@ -48,8 +49,6 @@ public class Note implements Serializable {
     public void setHeadLine(String headLine) {
         this.headLine = headLine;
     }
-
-    private String text;
 
     @javax.persistence.Column(name = "text")
     @Basic
@@ -61,9 +60,7 @@ public class Note implements Serializable {
         this.text = text;
     }
 
-    private Account account;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     public Account getAccount() {
         return account;
@@ -73,10 +70,7 @@ public class Note implements Serializable {
         this.account = account;
     }
 
-
-    private Category parentPrivateCategory;
-
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
     public Category getParentPrivateCategory() {
         return parentPrivateCategory;

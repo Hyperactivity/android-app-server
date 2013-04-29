@@ -137,7 +137,7 @@ public class PrivateMessage implements Externalizable {
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(senderAccount);
         out.writeObject(recieverAccount);
-        out.writeUTF(text);
+        out.writeObject(text);
         out.writeObject(time);
     }
 

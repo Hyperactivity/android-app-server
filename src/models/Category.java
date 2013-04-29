@@ -35,6 +35,7 @@ public class Category implements Externalizable {
 
     @javax.persistence.Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -130,7 +131,7 @@ public class Category implements Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(id);
-        out.writeUTF(headLine);
+        out.writeObject(headLine);
         out.writeInt(colorCode);
         out.writeObject(parentCategory);
     }

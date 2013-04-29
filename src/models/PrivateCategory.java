@@ -33,6 +33,7 @@ public class PrivateCategory implements Externalizable {
 
     @Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -141,7 +142,7 @@ public class PrivateCategory implements Externalizable {
         out.writeInt(colorCode);
         out.writeObject(parentPrivateCategory);
         out.writeObject(account);
-        out.writeUTF(headLine);
+        out.writeObject(headLine);
     }
 
     /**

@@ -36,6 +36,7 @@ public class Reply implements Externalizable {
 
     @javax.persistence.Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -135,7 +136,7 @@ public class Reply implements Externalizable {
         out.writeObject(account);
         out.writeInt(id);
         out.writeObject(time);
-        out.writeUTF(text);
+        out.writeObject(text);
         out.writeObject(new ArrayList<ThumbsUp>(thumbsUp));
     }
 

@@ -1,9 +1,8 @@
 package models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.hibernate.id.IncrementGenerator;
+
+import javax.persistence.*;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -44,6 +43,7 @@ public class Account implements Externalizable {
 
     @Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -172,12 +172,12 @@ public class Account implements Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(id);
-        out.writeUTF(profileDescription);
+        out.writeObject(profileDescription);
         out.writeObject(birthDate);
         out.writeInt(limitPerDay);
         out.writeBoolean(useDefaultColors);
         out.writeInt(facebookId);
-        out.writeUTF(username);
+        out.writeObject(username);
         out.writeBoolean(showBirthDate);
     }
 

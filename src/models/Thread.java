@@ -52,6 +52,7 @@ public class Thread implements Externalizable {
 
     @Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -174,8 +175,8 @@ public class Thread implements Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(id);
-        out.writeUTF(headLine);
-        out.writeUTF(text);
+        out.writeObject(headLine);
+        out.writeObject(text);
         out.writeObject(account);
         out.writeObject(parentCategory);
         out.writeObject(time);

@@ -32,6 +32,7 @@ public class Note implements Externalizable {
 
     @javax.persistence.Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -119,8 +120,8 @@ public class Note implements Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(id);
-        out.writeUTF(headLine);
-        out.writeUTF(text);
+        out.writeObject(headLine);
+        out.writeObject(text);
         out.writeObject(account);
         out.writeObject(parentPrivateCategory);
     }

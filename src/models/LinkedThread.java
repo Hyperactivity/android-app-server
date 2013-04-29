@@ -30,6 +30,7 @@ public class LinkedThread implements Externalizable {
 
     @javax.persistence.Column(name = "id")
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -105,7 +106,7 @@ public class LinkedThread implements Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(id);
-        out.writeUTF(headLine);
+        out.writeObject(headLine);
         out.writeObject(parentPrivateCategory);
         out.writeObject(account);
     }

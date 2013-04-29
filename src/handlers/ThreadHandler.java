@@ -115,7 +115,7 @@ public class ThreadHandler extends SharedHandler {
 
         persistObjects(thread);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORY, Serializer.serialize(thread));
+        responseParams.put(Constants.Param.Name.THREAD, Serializer.serialize(thread));
     }
 
     /**

@@ -99,7 +99,7 @@ public class CategoryRequestHandler extends SharedHandler {
             return;
         }
 
-        Collection<Thread> threadList = category.getThreads();
+        Collection<Thread> threadList = new LinkedList<Thread>(category.getThreads());
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.THREADS, Serializer.serialize((Serializable) threadList));

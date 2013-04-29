@@ -278,7 +278,7 @@ public abstract class SharedHandler implements RequestHandler{
         Root<T> variableRoot = query.from(classType);
         query.select(variableRoot);
 
-        return em.createQuery(query).getResultList();
+        return new LinkedList<T>(em.createQuery(query).getResultList());
     }
 
     protected Timestamp getCurrentTime(){

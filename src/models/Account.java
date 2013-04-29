@@ -1,9 +1,13 @@
 package models;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.sql.Date;
 
 /**
@@ -13,8 +17,16 @@ import java.sql.Date;
  * Time: 13:10
  */
 @Entity
-public class Account implements Serializable {
+public class Account implements Externalizable {
     static final long serialVersionUID = 1L;
+    private int id;
+    private String profileDescription;
+    private Date birthDate;
+    private int limitPerDay;
+    private boolean useDefaultColors;
+    private int facebookId;
+    private String username;
+    private boolean showBirthDate;
 
     public Account(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
         this.username = username;
@@ -30,10 +42,7 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    private int id;
-
-
-    @javax.persistence.Column(name = "id")
+    @Column(name = "id")
     @Id
     public int getId() {
         return id;
@@ -43,11 +52,7 @@ public class Account implements Serializable {
         this.id = id;
     }
 
-
-    private String profileDescription;
-
-
-    @javax.persistence.Column(name = "profileDescription")
+    @Column(name = "profileDescription")
     @Basic
     public String getProfileDescription() {
         return profileDescription;
@@ -57,9 +62,7 @@ public class Account implements Serializable {
         this.profileDescription = profileDescription;
     }
 
-    private Date birthDate;
-
-    @javax.persistence.Column(name = "birthDate")
+    @Column(name = "birthDate")
     @Basic
     public Date getBirthDate() {
         return birthDate;
@@ -69,9 +72,7 @@ public class Account implements Serializable {
         this.birthDate = birthDate;
     }
 
-    private int limitPerDay;
-
-    @javax.persistence.Column(name = "limitPerDay")
+    @Column(name = "limitPerDay")
     @Basic
     public int getLimitPerDay() {
         return limitPerDay;
@@ -81,9 +82,7 @@ public class Account implements Serializable {
         this.limitPerDay = limitPerDay;
     }
 
-    private boolean useDefaultColors;
-
-    @javax.persistence.Column(name = "useDefaultColors")
+    @Column(name = "useDefaultColors")
     @Basic
     public boolean isUseDefaultColors() {
         return useDefaultColors;
@@ -93,9 +92,7 @@ public class Account implements Serializable {
         this.useDefaultColors = useDefaultColors;
     }
 
-    private int facebookId;
-
-    @javax.persistence.Column(name = "facebookId")
+    @Column(name = "facebookId")
     @Basic
     public int getFacebookId() {
         return facebookId;
@@ -105,9 +102,7 @@ public class Account implements Serializable {
         this.facebookId = facebookId;
     }
 
-    private String username;
-
-    @javax.persistence.Column(name = "username")
+    @Column(name = "username")
     @Basic
     public String getUsername() {
         return username;
@@ -117,9 +112,7 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    private boolean showBirthDate;
-
-    @javax.persistence.Column(name = "showBirthDate")
+    @Column(name = "showBirthDate")
     @Basic
     public boolean isShowBirthDate() {
         return showBirthDate;
@@ -160,5 +153,48 @@ public class Account implements Serializable {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (showBirthDate ? 1 : 0);
         return result;
+    }
+
+    /**
+     * The object implements the writeExternal method to save its contents
+     * by calling the methods of DataOutput for its primitive values or
+     * calling the writeObject method of ObjectOutput for objects, strings,
+     * and arrays.
+     *
+     * @param out the stream to write the object to
+     * @throws java.io.IOException Includes any I/O exceptions that may occur
+     * @serialData Overriding methods should use this tag to describe
+     * the data layout of this Externalizable object.
+     * List the sequence of element types and, if possible,
+     * relate the element to a public/protected field and/or
+     * method of this Externalizable class.
+     */
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeInt(id);
+        out.writeUTF(profileDescription);
+        out.writeObject(birthDate);
+        out.writeInt(limitPerDay);
+        out.writeBoolean(useDefaultColors);
+        out.writeInt(facebookId);
+        out.writeUTF(username);
+        out.writeBoolean(showBirthDate);
+    }
+
+    /**
+     * The object implements the readExternal method to restore its
+     * contents by calling the methods of DataInput for primitive
+     * types and readObject for objects, strings and arrays.  The
+     * readExternal method must read the values in the same sequence
+     * and with the same types as were written by writeExternal.
+     *
+     * @param in the stream to read data from in order to restore the object
+     * @throws java.io.IOException    if I/O errors occur
+     * @throws ClassNotFoundException If the class for an object being
+     *                                restored cannot be found.
+     */
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

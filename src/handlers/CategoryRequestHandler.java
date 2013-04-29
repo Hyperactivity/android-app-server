@@ -1,10 +1,13 @@
 package handlers;
 
 import assistant.Constants;
+import assistant.Serializer;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.*;
+import models.Thread;
+import org.hibernate.collection.internal.PersistentSet;
 
 import java.io.Serializable;
 import java.util.*;
@@ -72,9 +75,8 @@ public class CategoryRequestHandler extends SharedHandler {
         } else {
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
         }
-
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORIES, serialize((Serializable) categories));
+        responseParams.put(Constants.Param.Name.CATEGORIES, Serializer.serialize((Serializable) categories));
     }
 
     /**
@@ -97,10 +99,10 @@ public class CategoryRequestHandler extends SharedHandler {
             return;
         }
 
-        List<models.Thread> threadList = category.getThreads();
+        Collection<Thread> threadList = category.getThreads();
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.THREADS, serialize((Serializable) threadList));
+        responseParams.put(Constants.Param.Name.THREADS, Serializer.serialize((Serializable) threadList));
     }
 
     /**
@@ -143,7 +145,7 @@ public class CategoryRequestHandler extends SharedHandler {
         persistObjects(category);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
+        responseParams.put(Constants.Param.Name.CATEGORY, Serializer.serialize((Serializable) category));
     }
 
 
@@ -182,7 +184,7 @@ public class CategoryRequestHandler extends SharedHandler {
             }
             persistObjects(category);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-            responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
+            responseParams.put(Constants.Param.Name.CATEGORY, Serializer.serialize((Serializable) category));
 
         }else if(type.equals(Constants.Param.Value.PRIVATE)){
             PrivateCategory category = em.find(PrivateCategory.class, params.get(categoryId));
@@ -198,7 +200,7 @@ public class CategoryRequestHandler extends SharedHandler {
             }
             persistObjects(category);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-            responseParams.put(Constants.Param.Name.CATEGORY, serialize((Serializable) category));
+            responseParams.put(Constants.Param.Name.CATEGORY, Serializer.serialize((Serializable) category));
 
         }else{
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);

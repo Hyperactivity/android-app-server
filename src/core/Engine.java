@@ -15,6 +15,7 @@ import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
 import handlers.AccountRequestHandler;
 import handlers.CategoryRequestHandler;
 import handlers.ReplyHandler;
+import handlers.ThreadHandler;
 import org.hibernate.ejb.HibernatePersistence;
 
 import javax.persistence.EntityManagerFactory;
@@ -56,6 +57,7 @@ public class Engine{
         dispatcher.register(new AccountRequestHandler());
         dispatcher.register(new CategoryRequestHandler());
         dispatcher.register(new ReplyHandler());
+        dispatcher.register(new ThreadHandler());
     }
 
     /**

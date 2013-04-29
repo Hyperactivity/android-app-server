@@ -1,16 +1,13 @@
 package handlers;
 
 import assistant.Constants;
+import assistant.Serializer;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
-import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Reply;
-import models.ThumbsUp;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -68,14 +65,17 @@ public class ReplyHandler extends SharedHandler {
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
         Date currentDate = new Date();
 
-        Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, new Timestamp(currentDate.getTime()));
+        Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, getCurrentTime());
 
         persistObjects(reply);
+//        reply.getParentThread().setReplies(null);
+//        reply.getParentThread().setParentCategory(null);
+//        reply.getParentThread().setAccount(null);
+//        reply.setParentThread(null);
+//        reply.setThumbsUp(null);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        ArrayList<Reply> test = new ArrayList<Reply>();
-        test.add(reply);
-        responseParams.put(Constants.Param.Name.REPLY, serialize(test));
+        responseParams.put(Constants.Param.Name.REPLY, Serializer.serialize(reply));
     }
 
     /**
@@ -105,7 +105,7 @@ public class ReplyHandler extends SharedHandler {
         persistObjects(reply);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
+        responseParams.put(Constants.Param.Name.REPLY, Serializer.serialize(reply));
     }
 
     /**
@@ -131,6 +131,9 @@ public class ReplyHandler extends SharedHandler {
     }
 
     private void thumbUp(Map<String,Object> jsonrpc2Params) {
+//        Map<String, Object> params = getParams(jsonrpc2Params,
+//                Constants.Param.Name.REPLY_ID);
+
     }
 
 

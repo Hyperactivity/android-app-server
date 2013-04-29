@@ -1,18 +1,17 @@
 package handlers;
 
 import assistant.Constants;
+import assistant.Serializer;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Category;
+import org.hibernate.Query;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,7 +40,7 @@ public class ThreadHandler extends SharedHandler {
         else if(method.equals(Constants.Method.CREATE_THREAD)){
             createThread(jsonrpc2Params);
         }
-        if(method.equals(Constants.Method.MODIFY_THREAD)){
+        else if(method.equals(Constants.Method.MODIFY_THREAD)){
             getThreadContent(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.DELETE_THREAD)){
@@ -63,7 +62,7 @@ public class ThreadHandler extends SharedHandler {
                 new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
                 new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
 
-        String threadId = (String) getForumParams.get(Constants.Param.Name.THREAD_ID);
+        int threadId = (Integer) getForumParams.get(Constants.Param.Name.THREAD_ID);
         Integer sortType = (Integer) getForumParams.get(Constants.Param.Name.SORT_TYPE);
 
         models.Thread thread = em.find(models.Thread.class, threadId);
@@ -72,7 +71,7 @@ public class ThreadHandler extends SharedHandler {
             return;
         }
 
-        List replies = thread.getReplies();
+        List replies = new ArrayList(thread.getReplies());
 
         if(sortType == null || sortType == 0){
             // Sort using standard sorting (aka time)
@@ -89,7 +88,7 @@ public class ThreadHandler extends SharedHandler {
         }
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLIES, serialize((Serializable) replies));
+        responseParams.put(Constants.Param.Name.REPLIES, Serializer.serialize((Serializable) replies));
     }
 
     /**
@@ -116,7 +115,7 @@ public class ThreadHandler extends SharedHandler {
 
         persistObjects(thread);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.CATEGORY, serialize(thread));
+        responseParams.put(Constants.Param.Name.CATEGORY, Serializer.serialize(thread));
     }
 
     /**

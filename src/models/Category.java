@@ -1,8 +1,11 @@
 package models;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,14 +14,14 @@ import java.util.List;
  * Time: 11:05
  */
 @Entity
-public class Category implements Serializable {
+public class Category implements Externalizable {
     static final long serialVersionUID = 2L;
     private int id;
     private String headLine;
     private int colorCode;
     private Category parentCategory;
-    private List<Category> childCategories;
-    private List<Thread> threads;
+    private Collection<Category> childCategories;
+    private Collection<Thread> threads;
 
     public Category(String headLine, int colorCode, Category parentCategory) {
         this.headLine = headLine;
@@ -60,7 +63,7 @@ public class Category implements Serializable {
         this.colorCode = colorCode;
     }
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "parentCategoryId")
     public Category getParentCategory() {
         return parentCategory;
@@ -70,22 +73,22 @@ public class Category implements Serializable {
         this.parentCategory = parentCategory;
     }
 
-    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    public List<Category> getChildCategories() {
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.REMOVE)
+    public Collection<Category> getChildCategories() {
         return childCategories;
     }
 
-    public void setChildCategories(List<Category> childCategories) {
+    public void setChildCategories(Collection<Category> childCategories) {
         this.childCategories = childCategories;
     }
 
-    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    public List<Thread> getThreads() {
+    @OneToMany(mappedBy = "parentCategory")
+    public Collection<Thread> getThreads() {
         return threads;
     }
 
-    public void setThreads(List<Thread> replies) {
-        this.threads = replies;
+    public void setThreads(Collection<Thread> threads) {
+        this.threads = threads;
     }
 
     @Override
@@ -108,5 +111,43 @@ public class Category implements Serializable {
         result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
         result = 31 * result + colorCode;
         return result;
+    }
+
+    /**
+     * The object implements the writeExternal method to save its contents
+     * by calling the methods of DataOutput for its primitive values or
+     * calling the writeObject method of ObjectOutput for objects, strings,
+     * and arrays.
+     *
+     * @param out the stream to write the object to
+     * @throws java.io.IOException Includes any I/O exceptions that may occur
+     * @serialData Overriding methods should use this tag to describe
+     * the data layout of this Externalizable object.
+     * List the sequence of element types and, if possible,
+     * relate the element to a public/protected field and/or
+     * method of this Externalizable class.
+     */
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeInt(id);
+        out.writeUTF(headLine);
+        out.writeInt(colorCode);
+        out.writeObject(parentCategory);
+    }
+
+    /**
+     * The object implements the readExternal method to restore its
+     * contents by calling the methods of DataInput for primitive
+     * types and readObject for objects, strings and arrays.  The
+     * readExternal method must read the values in the same sequence
+     * and with the same types as were written by writeExternal.
+     *
+     * @param in the stream to read data from in order to restore the object
+     * @throws java.io.IOException    if I/O errors occur
+     * @throws ClassNotFoundException If the class for an object being
+     *                                restored cannot be found.
+     */
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     }
 }

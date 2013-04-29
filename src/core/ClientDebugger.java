@@ -1,6 +1,7 @@
 package core;
 
 import assistant.Constants;
+import assistant.Serializer;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
@@ -8,11 +9,9 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionOptions;
 import javafx.util.Pair;
-import sun.misc.BASE64Decoder;
+import net.minidev.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
@@ -98,6 +97,16 @@ public class ClientDebugger {
         }
 
         printResponse(response);
+
+        String test = (String) ((JSONObject)response.getResult()).get("reply");
+//        serialized_objects.Reply test2;
+//        try {
+//            test2 = Serializer.deSerialize(serialized_objects.Reply.class, test);
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
     }
 
     /**
@@ -139,16 +148,16 @@ public class ClientDebugger {
         return errorResponse;
     }
 
-    private static final <T>  T deSerialize(java.lang.Class<T> classType, String serializedObject) throws IOException,
-            ClassNotFoundException {
-        BASE64Decoder base64Decoder = new BASE64Decoder();
-        byte [] data = base64Decoder.decodeBuffer(serializedObject);
-        ObjectInputStream ois = new ObjectInputStream(
-                new ByteArrayInputStream( data ) );
-        Object o = ois.readObject();
-        ois.close();
-
-        return (T)o;
-    }
+//    private static final <T>  T deSerialize(java.lang.Class<T> classType, String serializedObject) throws IOException,
+//            ClassNotFoundException {
+//        BASE64Decoder base64Decoder = new BASE64Decoder();
+//        byte [] data = base64Decoder.decodeBuffer(serializedObject);
+//        ObjectInputStream ois = new ObjectInputStream(
+//                new ByteArrayInputStream( data ) );
+//        Object o = ois.readObject();
+//        ois.close();
+//
+//        return (T)o;
+//    }
 
 }

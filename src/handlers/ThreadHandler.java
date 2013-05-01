@@ -1,16 +1,17 @@
 package handlers;
 
 import assistant.Constants;
-import assistant.Serializer;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.hibernate.converter.*;
+import com.thoughtworks.xstream.hibernate.mapper.HibernateMapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 import models.Account;
 import models.Category;
-import org.hibernate.Query;
+import models.Reply;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -41,10 +42,10 @@ public class ThreadHandler extends SharedHandler {
             createThread(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.MODIFY_THREAD)){
-            getThreadContent(jsonrpc2Params);
+            modifyThread(jsonrpc2Params);
         }
         else if(method.equals(Constants.Method.DELETE_THREAD)){
-            createThread(jsonrpc2Params);
+            deleteThread(jsonrpc2Params);
         }
         else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
@@ -66,6 +67,7 @@ public class ThreadHandler extends SharedHandler {
         Integer sortType = (Integer) getForumParams.get(Constants.Param.Name.SORT_TYPE);
 
         models.Thread thread = em.find(models.Thread.class, threadId);
+//        Hibernate.initialize(thread);
         if(thread == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
@@ -88,7 +90,7 @@ public class ThreadHandler extends SharedHandler {
         }
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLIES, Serializer.serialize((Serializable) replies));
+        responseParams.put(Constants.Param.Name.REPLIES, serialize(replies));
     }
 
     /**
@@ -106,16 +108,18 @@ public class ThreadHandler extends SharedHandler {
 
 
         models.Thread thread = new models.Thread(
-                em.find(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
-                em.find(Account.class, accountId),
+                em.getReference(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
+                em.getReference(Account.class, accountId),
                 (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
                 (String)        createThreadParams.get(Constants.Param.Name.TEXT),
                 getCurrentTime()
         );
 
-        persistObjects(thread);
+
+        mergeObjects(thread);
+        refreshObjects(thread);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.THREAD, Serializer.serialize(thread));
+        responseParams.put(Constants.Param.Name.THREAD, serialize(thread));
     }
 
     /**
@@ -150,6 +154,7 @@ public class ThreadHandler extends SharedHandler {
 
         persistObjects(thread);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        responseParams.put(Constants.Param.Name.THREAD, serialize(thread));
     }
 
 

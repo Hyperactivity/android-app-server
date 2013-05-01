@@ -12,6 +12,10 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.Dispatcher;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.hibernate.converter.*;
+import com.thoughtworks.xstream.hibernate.mapper.HibernateMapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 import handlers.AccountRequestHandler;
 import handlers.CategoryRequestHandler;
 import handlers.ReplyHandler;
@@ -29,9 +33,10 @@ import java.util.Map;
 public class Engine{
 //TODO: Try to remove jfxrt.jar (javaFX) since it is 15 mb big. For some reason it was not loaded automatically with openJDK or Oracle
 
-    private HttpServer httpServer;
-    private Dispatcher dispatcher;
-    public static final EntityManagerFactory entityManagerFactory = initiateEntityManager();
+    private final HttpServer httpServer                             = initiateServer();
+    private final Dispatcher dispatcher                             = initiateDispatchers();
+    public static final XStream X_STREAM                           = initiateXStream();
+    public static final EntityManagerFactory ENTITY_MANAGER_FACTORY = initiateEntityManager();
 
 
     public static void main(String[] args) throws IOException {
@@ -44,22 +49,37 @@ public class Engine{
     }
 
     private Engine() throws IOException, ClassNotFoundException {
-        initiateDispatchers();
-        initiateServer();
     }
 
     /**
      * Initialize dispatchers for handling requests and notifications from clients.
      * Multiple request and notification handlers give a better overview.
      */
-    private void initiateDispatchers() {
-        dispatcher = new Dispatcher();
+    private Dispatcher initiateDispatchers() {
+        Dispatcher dispatcher = new Dispatcher();
         dispatcher.register(new AccountRequestHandler());
         dispatcher.register(new CategoryRequestHandler());
         dispatcher.register(new ReplyHandler());
         dispatcher.register(new ThreadHandler());
+        return dispatcher;
     }
-
+    /**
+     * Initialize dispatchers for handling requests and notifications from clients.
+     * Multiple request and notification handlers give a better overview.
+     */
+    private static XStream initiateXStream() {
+        final XStream xstream = new XStream() {
+            protected MapperWrapper wrapMapper(final MapperWrapper next) {
+                return new HibernateMapper(next);
+            }
+        };
+        xstream.registerConverter(new HibernateProxyConverter());
+        xstream.registerConverter(new HibernatePersistentCollectionConverter(xstream.getMapper()));
+        xstream.registerConverter(new HibernatePersistentMapConverter(xstream.getMapper()));
+        xstream.registerConverter(new HibernatePersistentSortedMapConverter(xstream.getMapper()));
+        xstream.registerConverter(new HibernatePersistentSortedSetConverter(xstream.getMapper()));
+        return xstream;
+    }
     /**
      *
      * @return
@@ -80,7 +100,8 @@ public class Engine{
      /**
      * Create the server and start listening for http requests.
      */
-    private void initiateServer() {
+    private HttpServer initiateServer() {
+        HttpServer httpServer = null;
         try {
             System.out.println();
             System.out.println("Running OS: " + System.getProperty(Constants.General.OS_PROPERTY));
@@ -105,6 +126,7 @@ public class Engine{
         httpServer.start();
         System.out.println("Server is listening");
         System.out.println();
+        return httpServer;
     }
 
     private class HTTPRequestHandler implements HttpHandler {

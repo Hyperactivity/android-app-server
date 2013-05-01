@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -14,14 +15,14 @@ import java.util.Collection;
  * Time: 11:05
  */
 @Entity
-public class Category implements Externalizable {
+public class Category {
     static final long serialVersionUID = 2L;
     private int id;
     private String headLine;
     private int colorCode;
     private Category parentCategory;
-    private Collection<Category> childCategories;
-    private Collection<Thread> threads;
+    private transient Collection<Category> childCategories;
+    private transient Collection<Thread> threads;
 
     public Category(String headLine, int colorCode, Category parentCategory) {
         this.headLine = headLine;
@@ -128,27 +129,27 @@ public class Category implements Externalizable {
      * relate the element to a public/protected field and/or
      * method of this Externalizable class.
      */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(id);
-        out.writeObject(headLine);
-        out.writeInt(colorCode);
-        out.writeObject(parentCategory);
-    }
-
-    /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws java.io.IOException    if I/O errors occur
-     * @throws ClassNotFoundException If the class for an object being
-     *                                restored cannot be found.
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    }
+//    @Override
+//    public void writeExternal(ObjectOutput out) throws IOException {
+//        out.writeInt(id);
+//        out.writeObject(headLine);
+//        out.writeInt(colorCode);
+//        out.writeObject(parentCategory);
+//    }
+//
+//    /**
+//     * The object implements the readExternal method to restore its
+//     * contents by calling the methods of DataInput for primitive
+//     * types and readObject for objects, strings and arrays.  The
+//     * readExternal method must read the values in the same sequence
+//     * and with the same types as were written by writeExternal.
+//     *
+//     * @param in the stream to read data from in order to restore the object
+//     * @throws java.io.IOException    if I/O errors occur
+//     * @throws ClassNotFoundException If the class for an object being
+//     *                                restored cannot be found.
+//     */
+//    @Override
+//    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+//    }
 }

@@ -9,14 +9,11 @@ import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import core.Engine;
 import models.Reply;
 import net.minidev.json.JSONObject;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.io.*;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -83,7 +80,7 @@ public abstract class SharedHandler implements RequestHandler{
     }
 
     private void initializeData(JSONRPC2Request jsonrpc2Request) throws Exception {
-        em = Engine.entityManagerFactory.createEntityManager();
+        em = Engine.ENTITY_MANAGER_FACTORY.createEntityManager();
         responseParams = new JSONObject();
         method = jsonrpc2Request.getMethod();
 
@@ -179,6 +176,14 @@ public abstract class SharedHandler implements RequestHandler{
         em.getTransaction().begin();
         for(Object o: objects){
             em.persist(o);
+        }
+        em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
+    }
+
+    protected void mergeObjects(Object... objects){
+        em.getTransaction().begin();
+        for(Object o: objects){
+            o = em.merge(o);
         }
         em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
     }
@@ -283,6 +288,10 @@ public abstract class SharedHandler implements RequestHandler{
 
     protected Timestamp getCurrentTime(){
         return new Timestamp(new Date().getTime());
+    }
+
+    protected String serialize(Object object){
+        return Engine.X_STREAM.toXML(object);
     }
 }
 

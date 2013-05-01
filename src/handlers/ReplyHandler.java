@@ -1,7 +1,6 @@
 package handlers;
 
 import assistant.Constants;
-import assistant.Serializer;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
@@ -68,14 +67,9 @@ public class ReplyHandler extends SharedHandler {
         Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, getCurrentTime());
 
         persistObjects(reply);
-//        reply.getParentThread().setReplies(null);
-//        reply.getParentThread().setParentCategory(null);
-//        reply.getParentThread().setAccount(null);
-//        reply.setParentThread(null);
-//        reply.setThumbsUp(null);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLY, Serializer.serialize(reply));
+        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
     }
 
     /**
@@ -105,7 +99,7 @@ public class ReplyHandler extends SharedHandler {
         persistObjects(reply);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.REPLY, Serializer.serialize(reply));
+        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
     }
 
     /**

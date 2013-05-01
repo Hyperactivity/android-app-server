@@ -16,7 +16,7 @@ import java.sql.Date;
  * Time: 13:10
  */
 @Entity
-public class Account implements Externalizable {
+public class Account{
     static final long serialVersionUID = 1L;
     private int id;
     private String profileDescription;
@@ -169,32 +169,32 @@ public class Account implements Externalizable {
      * relate the element to a public/protected field and/or
      * method of this Externalizable class.
      */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(id);
-        out.writeObject(profileDescription);
-        out.writeObject(birthDate);
-        out.writeInt(limitPerDay);
-        out.writeBoolean(useDefaultColors);
-        out.writeInt(facebookId);
-        out.writeObject(username);
-        out.writeBoolean(showBirthDate);
-    }
-
-    /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws java.io.IOException    if I/O errors occur
-     * @throws ClassNotFoundException If the class for an object being
-     *                                restored cannot be found.
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+//    @Override
+//    public void writeExternal(ObjectOutput out) throws IOException {
+//        out.writeInt(id);
+//        out.writeObject(profileDescription);
+//        out.writeObject(birthDate);
+//        out.writeInt(limitPerDay);
+//        out.writeBoolean(useDefaultColors);
+//        out.writeInt(facebookId);
+//        out.writeObject(username);
+//        out.writeBoolean(showBirthDate);
+//    }
+//
+//    /**
+//     * The object implements the readExternal method to restore its
+//     * contents by calling the methods of DataInput for primitive
+//     * types and readObject for objects, strings and arrays.  The
+//     * readExternal method must read the values in the same sequence
+//     * and with the same types as were written by writeExternal.
+//     *
+//     * @param in the stream to read data from in order to restore the object
+//     * @throws java.io.IOException    if I/O errors occur
+//     * @throws ClassNotFoundException If the class for an object being
+//     *                                restored cannot be found.
+//     */
+//    @Override
+//    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+//        //To change body of implemented methods use File | Settings | File Templates.
+//    }
 }

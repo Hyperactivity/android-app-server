@@ -1,7 +1,6 @@
 package core;
 
 import assistant.Constants;
-import assistant.Serializer;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;

@@ -1,10 +1,10 @@
 package handlers;
 
 import assistant.Constants;
-import assistant.Serializer;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
+import core.Engine;
 import models.Account;
 
 import javax.persistence.NoResultException;
@@ -66,7 +66,7 @@ public class AccountRequestHandler extends SharedHandler {
         }
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.ACCOUNT, account);
+        responseParams.put(Constants.Param.Name.ACCOUNT, serialize(account));
     }
 
     private void getAccount(Map<String, Object> jsonrpc2Params) throws Exception{
@@ -77,7 +77,7 @@ public class AccountRequestHandler extends SharedHandler {
         if(account != null){
             // Account exist, send it back to the client
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-            responseParams.put(Constants.Param.Name.ACCOUNT, Serializer.serialize(account));
+            responseParams.put(Constants.Param.Name.ACCOUNT, serialize(account));
         }else{
             // Account does not exist, send back "Account not found"
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.ACCOUNT_NOT_FOUND);
@@ -104,6 +104,6 @@ public class AccountRequestHandler extends SharedHandler {
             persistObjects(account);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.FIRST_LOGIN);
         }
-        responseParams.put(Constants.Param.Name.ACCOUNT, Serializer.serialize(account));
+        responseParams.put(Constants.Param.Name.ACCOUNT, serialize(account));
     }
 }

@@ -11,10 +11,10 @@ import java.io.*;
  */
 @javax.persistence.IdClass(models.ThumbsUpPK.class)
 @Entity
-public class ThumbsUp implements Externalizable {
+public class ThumbsUp {
     static final long serialVersionUID = 10L;
-    private int replyId;
-    private int accountId;
+    private transient int replyId;
+    private transient int accountId;
     private Reply reply;
     private Account account;
 
@@ -101,26 +101,26 @@ public class ThumbsUp implements Externalizable {
      * relate the element to a public/protected field and/or
      * method of this Externalizable class.
      */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(reply);
-        out.writeObject(account);
-    }
-
-    /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws java.io.IOException    if I/O errors occur
-     * @throws ClassNotFoundException If the class for an object being
-     *                                restored cannot be found.
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+//    @Override
+//    public void writeExternal(ObjectOutput out) throws IOException {
+//        out.writeObject(reply);
+//        out.writeObject(account);
+//    }
+//
+//    /**
+//     * The object implements the readExternal method to restore its
+//     * contents by calling the methods of DataInput for primitive
+//     * types and readObject for objects, strings and arrays.  The
+//     * readExternal method must read the values in the same sequence
+//     * and with the same types as were written by writeExternal.
+//     *
+//     * @param in the stream to read data from in order to restore the object
+//     * @throws java.io.IOException    if I/O errors occur
+//     * @throws ClassNotFoundException If the class for an object being
+//     *                                restored cannot be found.
+//     */
+//    @Override
+//    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+//        //To change body of implemented methods use File | Settings | File Templates.
+//    }
 }

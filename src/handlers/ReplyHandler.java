@@ -6,7 +6,10 @@ import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
 import models.Reply;
+import models.ThumbsUp;
+import models.ThumbsUpPK;
 
+import javax.persistence.EntityExistsException;
 import java.util.Date;
 import java.util.Map;
 
@@ -132,9 +135,34 @@ public class ReplyHandler extends SharedHandler {
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 
-    private void thumbUp(Map<String,Object> jsonrpc2Params) {
-//        Map<String, Object> params = getParams(jsonrpc2Params,
-//                Constants.Param.Name.REPLY_ID);
+    /**
+     *
+     * @param jsonrpc2Params
+     * @throws Exception
+     */
+    private void thumbUp(Map<String,Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                Constants.Param.Name.REPLY_ID,
+                Constants.Param.Name.THUMBS_UP);
+
+        int replyId = (Integer) params.get(Constants.Param.Name.REPLY_ID);
+        boolean isThumbUp = (Boolean) params.get(Constants.Param.Name.THUMBS_UP);
+
+        if(isThumbUp){
+            ThumbsUp thumbsUpObject = new ThumbsUp(replyId, accountId);
+            try{
+                persistObjects(thumbsUpObject);
+            } catch(EntityExistsException e){}
+
+
+        }else{
+            ThumbsUp thumbsUpObject = em.getReference(ThumbsUp.class, new ThumbsUpPK(replyId, accountId));
+            removeObjects(thumbsUpObject);
+        }
+
+        Reply reply = em.find(Reply.class, replyId);
+        responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 }
 

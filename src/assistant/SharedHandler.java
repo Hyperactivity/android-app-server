@@ -70,10 +70,13 @@ public abstract class SharedHandler implements RequestHandler{
             //This is where the handler gets to
             process(jsonrpc2Request.getNamedParams());
             validateResponse();
+            em.close();
             return response;
         }catch (JSONRPC2Error e){
+            em.close();
             return new JSONRPC2Response(e, accountId);
         }catch (Exception e){
+            em.close();
             return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR.appendMessage(" || Exception: " + e.toString()), accountId);
         }
 

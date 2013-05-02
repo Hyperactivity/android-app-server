@@ -67,6 +67,7 @@ public abstract class Constants {
             public static final String REPLY_ID = "reply_id";
             public static final String COLOR_CODE = "color_code";
             public static final String THREAD = "thread";
+            public static final String THUMBS_UP = "thumbs_up";
         }
         public abstract class Status{
             public static final String STATUS = "status";

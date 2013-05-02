@@ -14,6 +14,11 @@ public class ThumbsUpPK implements Serializable {
     private int replyId;
     private int accountId;
 
+    public ThumbsUpPK(int replyId, int accountId) {
+        this.replyId = replyId;
+        this.accountId = accountId;
+    }
+
     @Id
     @Column(name = "replyId")
     public int getReplyId() {

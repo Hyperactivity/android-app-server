@@ -1,7 +1,6 @@
 package models;
 
 import javax.persistence.*;
-import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.

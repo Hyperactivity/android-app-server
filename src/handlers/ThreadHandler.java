@@ -4,10 +4,6 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.hibernate.converter.*;
-import com.thoughtworks.xstream.hibernate.mapper.HibernateMapper;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 import models.*;
 import models.Thread;
 
@@ -27,7 +23,10 @@ public class ThreadHandler extends SharedHandler {
                 Constants.Method.CREATE_THREAD,
                 Constants.Method.MODIFY_THREAD,
                 Constants.Method.DELETE_THREAD,
-                Constants.Method.GET_LATEST_THREADS
+                Constants.Method.GET_LATEST_THREADS,
+                Constants.Method.CREATE_LINKED_THREAD,
+                Constants.Method.MODIFY_LINKED_THREAD,
+                Constants.Method.DELETE_LINKED_THREAD
         };
     }
 
@@ -50,9 +49,86 @@ public class ThreadHandler extends SharedHandler {
         else if(method.equals(Constants.Method.GET_LATEST_THREADS)){
             getLatestThreads(jsonrpc2Params);
         }
+        else if(method.equals(Constants.Method.CREATE_LINKED_THREAD)){
+            createLinkedThread(jsonrpc2Params);
+        }
+        else if(method.equals(Constants.Method.MODIFY_LINKED_THREAD)){
+            modifyLinkedThread(jsonrpc2Params);
+        }
+        else if(method.equals(Constants.Method.DELETE_LINKED_THREAD)){
+            deleteLinkedThread(jsonrpc2Params);
+        }
         else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
+    }
+
+    private void deleteLinkedThread(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                Constants.Param.Name.LINKED_THREAD_ID);
+
+        int linkedThreadId = (Integer)params.get(Constants.Param.Name.LINKED_THREAD_ID);
+        LinkedThread linkedThread = em.find(LinkedThread.class, linkedThreadId);
+
+        if(linkedThread == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+        }else{
+            if(linkedThread.getAccount().getId() != accountId){
+                throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+            }
+            removeObjects(linkedThread);
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+        }
+
+    }
+
+    private void modifyLinkedThread(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.LINKED_THREAD_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, true));
+
+        String headline = (String) params.get(Constants.Param.Name.HEADLINE);
+        int linkedThreadId = (Integer)params.get(Constants.Param.Name.LINKED_THREAD_ID);
+
+        LinkedThread linkedThread = em.find(LinkedThread.class, linkedThreadId);
+        if(linkedThread == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+        if(linkedThread.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+        if(headline != null){
+            linkedThread.setHeadLine(headline);
+        }
+        persistObjects(linkedThread);
+        responseParams.put(Constants.Param.Name.LINKED_THREAD, serialize(linkedThread));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+    }
+
+    private void createLinkedThread(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.PRIVATE_CATEGORY_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, true));
+
+        int privateCategoryId = (Integer)params.get(Constants.Param.Name.PRIVATE_CATEGORY_ID);
+        String headline = (String) params.get(Constants.Param.Name.HEADLINE);
+        int threadId = (Integer)params.get(Constants.Param.Name.THREAD_ID);
+
+        Thread thread = em.getReference(Thread.class, threadId);
+        if(thread == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+        if(headline == null){
+            headline = thread.getHeadLine();
+        }
+
+        LinkedThread linkedThread = new LinkedThread(headline, em.getReference(PrivateCategory.class, privateCategoryId), em.getReference(Account.class, accountId), thread);
+        persistObjects(linkedThread);
+        responseParams.put(Constants.Param.Name.LINKED_THREAD, serialize(linkedThread));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 
     /**
@@ -76,7 +152,6 @@ public class ThreadHandler extends SharedHandler {
             returnThreads.add(threads.get(i));
         }
 
-        threads = threads.subList(0, limit);
         responseParams.put(Constants.Param.Name.THREADS, serialize(returnThreads));
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }

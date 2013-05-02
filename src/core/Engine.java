@@ -122,7 +122,6 @@ public class Engine{
             e.printStackTrace();  //TODO Better handling of this exception
         }
 
-
         httpServer.start();
         System.out.println("Server is listening");
         System.out.println();

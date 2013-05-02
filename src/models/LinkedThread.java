@@ -1,7 +1,6 @@
 package models;
 
 import javax.persistence.*;
-import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,21 +12,22 @@ import java.io.*;
 public class LinkedThread{
     private int id;
     private String headLine;
-    private Category parentPrivateCategory;
+    private PrivateCategory parentPrivateCategory;
     private Account account;
+    private Thread thread;
 
-    public LinkedThread(int id, String headLine, Category parentPrivateCategory, Account account) {
-        this.id = id;
-        this.headLine = headLine;
-        this.parentPrivateCategory = parentPrivateCategory;
-        this.account = account;
+    public LinkedThread(String headLine, PrivateCategory parentPrivateCategory, Account account, Thread thread) {
+        setHeadLine(headLine);
+        setParentPrivateCategory(parentPrivateCategory);
+        setAccount(account);
+        setThread(thread);
     }
 
     @Deprecated
     public LinkedThread() {
     }
 
-    @javax.persistence.Column(name = "id")
+    @Column(name = "id")
     @Id
     @GeneratedValue
     public int getId() {
@@ -38,7 +38,7 @@ public class LinkedThread{
         this.id = id;
     }
 
-    @javax.persistence.Column(name = "headLine")
+    @Column(name = "headLine")
     @Basic
     public String getHeadLine() {
         return headLine;
@@ -50,11 +50,11 @@ public class LinkedThread{
 
     @ManyToOne
     @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
-    public Category getParentPrivateCategory() {
+    public PrivateCategory getParentPrivateCategory() {
         return parentPrivateCategory;
     }
 
-    public void setParentPrivateCategory(Category parentPrivateCategory) {
+    public void setParentPrivateCategory(PrivateCategory parentPrivateCategory) {
         this.parentPrivateCategory = parentPrivateCategory;
     }
 
@@ -66,6 +66,16 @@ public class LinkedThread{
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "threadId", referencedColumnName = "id", nullable = false)
+    public Thread getThread() {
+        return thread;
+    }
+
+    public void setThread(Thread thread) {
+        this.thread = thread;
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.*;
 import models.Thread;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**

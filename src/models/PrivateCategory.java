@@ -1,7 +1,7 @@
 package models;
 
 import javax.persistence.*;
-import java.io.*;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 13:10
  */
 @Entity
-public class PrivateCategory implements Externalizable {
+public class PrivateCategory{
     static final long serialVersionUID = 6L;
     private int id;
     private int colorCode;
@@ -120,45 +120,5 @@ public class PrivateCategory implements Externalizable {
         result = 31 * result + colorCode;
         result = 31 * result + (headLine != null ? headLine.hashCode() : 0);
         return result;
-    }
-
-    /**
-     * The object implements the writeExternal method to save its contents
-     * by calling the methods of DataOutput for its primitive values or
-     * calling the writeObject method of ObjectOutput for objects, strings,
-     * and arrays.
-     *
-     * @param out the stream to write the object to
-     * @throws java.io.IOException Includes any I/O exceptions that may occur
-     * @serialData Overriding methods should use this tag to describe
-     * the data layout of this Externalizable object.
-     * List the sequence of element types and, if possible,
-     * relate the element to a public/protected field and/or
-     * method of this Externalizable class.
-     */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(id);
-        out.writeInt(colorCode);
-        out.writeObject(parentPrivateCategory);
-        out.writeObject(account);
-        out.writeObject(headLine);
-    }
-
-    /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws java.io.IOException    if I/O errors occur
-     * @throws ClassNotFoundException If the class for an object being
-     *                                restored cannot be found.
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

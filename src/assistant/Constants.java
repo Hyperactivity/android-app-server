@@ -43,6 +43,9 @@ public abstract class Constants {
         public static final String MODIFY_REPLY = "modify_reply";
         public static final String THUMB_UP = "thumb_up";
         public static final String GET_LATEST_THREADS = "get_latest_threads";
+        public static final String CREATE_LINKED_THREAD = "create_linked_thread";
+        public static final String MODIFY_LINKED_THREAD = "modify_linked_thread";
+        public static final String DELETE_LINKED_THREAD = "delete_linked_thread";
     }
 
     public abstract class Param{
@@ -70,6 +73,9 @@ public abstract class Constants {
             public static final String THREAD = "thread";
             public static final String THUMBS_UP = "thumbs_up";
             public static final String LIMIT = "limit";
+            public static final String PRIVATE_CATEGORY_ID = "private_category_id";
+            public static final String LINKED_THREAD = "linked_thread";
+            public static final String LINKED_THREAD_ID = "linked_thread_id";
         }
         public abstract class Status{
             public static final String STATUS = "status";

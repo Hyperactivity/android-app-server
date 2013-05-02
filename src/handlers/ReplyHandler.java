@@ -88,6 +88,10 @@ public class ReplyHandler extends SharedHandler {
         String text = (String) params.get(Constants.Param.Name.TEXT);
         Reply reply = em.find(Reply.class, (Integer) params.get(Constants.Param.Name.REPLY_ID));
 
+        if(reply.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+
         if(reply == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
@@ -116,6 +120,10 @@ public class ReplyHandler extends SharedHandler {
 
        Reply reply =  em.find(Reply.class, params.get(Constants.Param.Name.REPLY_ID));
 
+        if(reply.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+
         if(reply == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
@@ -127,9 +135,6 @@ public class ReplyHandler extends SharedHandler {
     private void thumbUp(Map<String,Object> jsonrpc2Params) {
 //        Map<String, Object> params = getParams(jsonrpc2Params,
 //                Constants.Param.Name.REPLY_ID);
-
     }
-
-
 }
 

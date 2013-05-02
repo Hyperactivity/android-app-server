@@ -4,6 +4,7 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
+import com.thetransactioncompany.jsonrpc2.JSONRPC2Message;
 import core.Engine;
 import models.Account;
 
@@ -64,6 +65,7 @@ public class AccountRequestHandler extends SharedHandler {
         if(showBirthDate != null){
             account.setShowBirthDate(showBirthDate);
         }
+        persistObjects(account);
 
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.ACCOUNT, serialize(account));

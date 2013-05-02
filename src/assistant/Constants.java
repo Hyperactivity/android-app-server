@@ -107,5 +107,6 @@ public abstract class Constants {
         public static final String PARAM_NOT_FOUND = "A needed param is not found";
         public static final String PARAM_NOT_ALLOWED = "Some given params are not allowed";
         public static final String PARAM_VALUE_NOT_ALLOWED = "The given param value is not allowed";
+        public static final String ACTION_NOT_ALLOWED = "Action is not allowed";
     }
 }

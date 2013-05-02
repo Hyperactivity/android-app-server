@@ -116,8 +116,7 @@ public class ThreadHandler extends SharedHandler {
         );
 
 
-        mergeObjects(thread);
-        refreshObjects(thread);
+        persistObjects(thread);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.THREAD, serialize(thread));
     }
@@ -139,6 +138,10 @@ public class ThreadHandler extends SharedHandler {
         String headline = (String) params.get(Constants.Param.Name.HEADLINE);
         String text = (String) params.get(Constants.Param.Name.TEXT);
 
+        if(thread.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+
         if(thread == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
@@ -149,7 +152,7 @@ public class ThreadHandler extends SharedHandler {
         }
 
         if(text != null){
-            thread.setText(headline);
+            thread.setText(text);
         }
 
         persistObjects(thread);
@@ -169,6 +172,10 @@ public class ThreadHandler extends SharedHandler {
         Map<String, Object> params = getParams(jsonrpc2Params, Constants.Param.Name.THREAD_ID);
 
         models.Thread thread = em.find(models.Thread.class, params.get(Constants.Param.Name.THREAD_ID));
+
+        if(thread.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
 
         if(thread == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);

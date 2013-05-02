@@ -1,19 +1,23 @@
 package assistant;
 
 import assistant.pair.NullableExtendedParam;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
+import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import core.Engine;
 import models.Reply;
 import net.minidev.json.JSONObject;
+import sun.misc.BASE64Encoder;
+import sun.security.krb5.EncryptedData;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -180,14 +184,6 @@ public abstract class SharedHandler implements RequestHandler{
         em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
     }
 
-    protected void mergeObjects(Object... objects){
-        em.getTransaction().begin();
-        for(Object o: objects){
-            o = em.merge(o);
-        }
-        em.getTransaction().commit(); //TODO: Check if it is important to close EntityManager at some point
-    }
-
     /**
      * Removes objects from the database and commits them.
      * In simple terms: Takes the objects, removes them, and tries to remove them into the database.
@@ -290,8 +286,23 @@ public abstract class SharedHandler implements RequestHandler{
         return new Timestamp(new Date().getTime());
     }
 
-    protected String serialize(Object object){
-        return Engine.X_STREAM.toXML(object);
+    protected String serialize(Object object) throws IOException, ClassNotFoundException {
+
+        return serializeObject(Engine.X_STREAM.toXML(object));
+    }
+    /**
+     * Used to serialize an object. Do not forget that the object and its sub-objects must implement serializable.
+     * @param object    Must implement serializable. Also its sub-objects.
+     * @return
+     * @throws IOException
+     */
+    private final String serializeObject(Serializable object) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream( baos );
+        oos.writeObject( object );
+        oos.close();
+        BASE64Encoder base64Encoder =  new BASE64Encoder();
+        return  new String( base64Encoder.encode(baos.toByteArray()));
     }
 }
 

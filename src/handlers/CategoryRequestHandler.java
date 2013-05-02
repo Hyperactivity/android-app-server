@@ -181,7 +181,7 @@ public class CategoryRequestHandler extends SharedHandler {
             }
             persistObjects(category);
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-//            responseParams.put(Constants.Param.Name.CATEGORY, Serializer.serialize(category));
+            responseParams.put(Constants.Param.Name.CATEGORY, serialize(category));
 
         }else if(type.equals(Constants.Param.Value.PRIVATE)){
             PrivateCategory category = em.find(PrivateCategory.class, params.get(categoryId));

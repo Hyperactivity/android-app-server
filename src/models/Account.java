@@ -17,7 +17,6 @@ import java.sql.Date;
  */
 @Entity
 public class Account{
-    static final long serialVersionUID = 1L;
     private int id;
     private String profileDescription;
     private Date birthDate;

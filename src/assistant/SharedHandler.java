@@ -271,6 +271,8 @@ public abstract class SharedHandler implements RequestHandler{
         }
     }
 
+
+
     /**
      * Gets all the columns by the given entity class.
      * @param classType The class (entity) to load the columns from.
@@ -306,6 +308,14 @@ public abstract class SharedHandler implements RequestHandler{
         oos.close();
         BASE64Encoder base64Encoder =  new BASE64Encoder();
         return  new String( base64Encoder.encode(baos.toByteArray()));
+    }
+
+    public static Comparator<models.Thread> timeSort() {
+        return new Comparator<models.Thread>() {
+            public int compare(models.Thread r1, models.Thread r2) {
+                return -1 * r1.getTime().compareTo(r2.getTime());
+            }
+        };
     }
 }
 

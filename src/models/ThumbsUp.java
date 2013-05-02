@@ -12,7 +12,6 @@ import java.io.*;
 @javax.persistence.IdClass(models.ThumbsUpPK.class)
 @Entity
 public class ThumbsUp {
-    static final long serialVersionUID = 10L;
     private transient int replyId;
     private transient int accountId;
     private Reply reply;

@@ -42,6 +42,7 @@ public abstract class Constants {
         public static final String DELETE_REPLY = "delete_reply";
         public static final String MODIFY_REPLY = "modify_reply";
         public static final String THUMB_UP = "thumb_up";
+        public static final String GET_LATEST_THREADS = "get_latest_threads";
     }
 
     public abstract class Param{
@@ -68,6 +69,7 @@ public abstract class Constants {
             public static final String COLOR_CODE = "color_code";
             public static final String THREAD = "thread";
             public static final String THUMBS_UP = "thumbs_up";
+            public static final String LIMIT = "limit";
         }
         public abstract class Status{
             public static final String STATUS = "status";
@@ -99,6 +101,7 @@ public abstract class Constants {
         public static final boolean DEFAULT_SHOW_BIRTH_DATE = false;
         public static final boolean DEFAULT_USE_DEFAULT_COLORS = true;
         public static final int DEFAULT_COLOR_CODE = 0;
+        public static final int DEFAULT_LATEST_THREADS_LIMIT = 10;
     }
 
     public class Errors {

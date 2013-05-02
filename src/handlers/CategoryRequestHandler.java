@@ -86,21 +86,37 @@ public class CategoryRequestHandler extends SharedHandler {
     private void getCategoryContent(Map<String, Object> jsonrpc2Params) throws Exception {
 
         Map<String, Object> params = getParams(jsonrpc2Params,
-                new NullableExtendedParam(Constants.Param.Name.CATEGORY_ID, false));
+                Constants.Param.Name.CATEGORY_ID,
+                Constants.Param.Name.TYPE);
 
         int categoryId = (Integer) params.get(Constants.Param.Name.CATEGORY_ID);
+        String type = (String) params.get(Constants.Param.Name.TYPE);
 
+        if(type.equals(Constants.Param.Value.PUBLIC)){
+            Category category = em.getReference(Category.class, categoryId);
+            if (category == null) {
+                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+                return;
+            }
 
-        Category category = em.find(Category.class, categoryId);
-        if (category == null) {
-            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
-            return;
+            Collection<Thread> threadList = new LinkedList<Thread>(category.getThreads());
+
+            responseParams.put(Constants.Param.Name.THREADS, serialize(threadList));
+        }else if(type.equals(Constants.Param.Value.PRIVATE)){
+            PrivateCategory category = em.getReference(PrivateCategory.class, categoryId);
+            if(category == null){
+                responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+                return;
+            }
+
+            Collection<LinkedThread> threadList = new LinkedList<LinkedThread>(category.getLinkedThreads());
+            Collection<Note> notes = new LinkedList<Note>(category.getNotes());
+            responseParams.put(Constants.Param.Name.THREADS, serialize(threadList));
+            responseParams.put(Constants.Param.Name.THREADS, serialize(notes));
+        }else{
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);
         }
-
-        Collection<Thread> threadList = new LinkedList<Thread>(category.getThreads());
-
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
-        responseParams.put(Constants.Param.Name.THREADS, serialize(threadList));
     }
 
     /**
@@ -234,4 +250,6 @@ public class CategoryRequestHandler extends SharedHandler {
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         }
     }
+
+
 }

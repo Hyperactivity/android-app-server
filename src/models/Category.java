@@ -16,7 +16,6 @@ import java.util.Collection;
  */
 @Entity
 public class Category {
-    static final long serialVersionUID = 2L;
     private int id;
     private String headLine;
     private int colorCode;

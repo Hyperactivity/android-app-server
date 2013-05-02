@@ -16,7 +16,6 @@ import java.util.List;
  */
 @Entity
 public class Thread{
-    static final long serialVersionUID = 9L;
     private int id;
     private String headLine;
     private String text;

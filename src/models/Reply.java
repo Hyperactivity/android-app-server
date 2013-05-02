@@ -15,7 +15,6 @@ import java.util.List;
  */
 @Entity
 public class Reply{
-    static final long serialVersionUID = 8L;
     private Thread parentThread;
     private Account account;
     private Collection<ThumbsUp> thumbsUp;

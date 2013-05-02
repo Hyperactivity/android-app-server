@@ -8,9 +8,8 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.hibernate.converter.*;
 import com.thoughtworks.xstream.hibernate.mapper.HibernateMapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
-import models.Account;
-import models.Category;
-import models.Reply;
+import models.*;
+import models.Thread;
 
 import java.util.*;
 
@@ -28,6 +27,7 @@ public class ThreadHandler extends SharedHandler {
                 Constants.Method.CREATE_THREAD,
                 Constants.Method.MODIFY_THREAD,
                 Constants.Method.DELETE_THREAD,
+                Constants.Method.GET_LATEST_THREADS
         };
     }
 
@@ -47,9 +47,38 @@ public class ThreadHandler extends SharedHandler {
         else if(method.equals(Constants.Method.DELETE_THREAD)){
             deleteThread(jsonrpc2Params);
         }
+        else if(method.equals(Constants.Method.GET_LATEST_THREADS)){
+            getLatestThreads(jsonrpc2Params);
+        }
         else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
+    }
+
+    /**
+     *
+     * @param jsonrpc2Params
+     */
+    private void getLatestThreads(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.LIMIT, true));
+
+        Integer limit = (Integer) params.get(Constants.Param.Name.LIMIT);
+        if(limit == null){
+            limit = Constants.Database.DEFAULT_LATEST_THREADS_LIMIT;
+        }
+
+        List<models.Thread> threads = getAllColumns(models.Thread.class);
+        Collections.sort(threads, timeSort());
+
+        List<models.Thread> returnThreads = new LinkedList<models.Thread>();
+        for(int i= 0; i<limit && i<threads.size(); i++){
+            returnThreads.add(threads.get(i));
+        }
+
+        threads = threads.subList(0, limit);
+        responseParams.put(Constants.Param.Name.THREADS, serialize(returnThreads));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 
     /**
@@ -59,12 +88,12 @@ public class ThreadHandler extends SharedHandler {
      */
     private void getThreadContent(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> getForumParams = getParams(jsonrpc2Params,
+        Map<String, Object> params = getParams(jsonrpc2Params,
                 new NullableExtendedParam(Constants.Param.Name.THREAD_ID, false),
                 new NullableExtendedParam(Constants.Param.Name.SORT_TYPE, true));
 
-        int threadId = (Integer) getForumParams.get(Constants.Param.Name.THREAD_ID);
-        Integer sortType = (Integer) getForumParams.get(Constants.Param.Name.SORT_TYPE);
+        int threadId = (Integer) params.get(Constants.Param.Name.THREAD_ID);
+        Integer sortType = (Integer) params.get(Constants.Param.Name.SORT_TYPE);
 
         models.Thread thread = em.find(models.Thread.class, threadId);
 //        Hibernate.initialize(thread);
@@ -101,17 +130,17 @@ public class ThreadHandler extends SharedHandler {
      */
     private void createThread(Map<String, Object> jsonrpc2Params) throws Exception {
 
-        Map<String, Object> createThreadParams = getParams(jsonrpc2Params,
+        Map<String, Object> params = getParams(jsonrpc2Params,
                 Constants.Param.Name.CATEGORY_ID,
                 Constants.Param.Name.HEADLINE,
                 Constants.Param.Name.TEXT);
 
 
         models.Thread thread = new models.Thread(
-                em.getReference(Category.class, createThreadParams.get(Constants.Param.Name.CATEGORY_ID)),
+                em.getReference(Category.class, params.get(Constants.Param.Name.CATEGORY_ID)),
                 em.getReference(Account.class, accountId),
-                (String)        createThreadParams.get(Constants.Param.Name.HEADLINE),
-                (String)        createThreadParams.get(Constants.Param.Name.TEXT),
+                (String)        params.get(Constants.Param.Name.HEADLINE),
+                (String)        params.get(Constants.Param.Name.TEXT),
                 getCurrentTime()
         );
 

@@ -117,9 +117,14 @@ public class ThreadHandler extends SharedHandler {
         int threadId = (Integer)params.get(Constants.Param.Name.THREAD_ID);
 
         Thread thread = em.getReference(Thread.class, threadId);
-        if(thread == null){
+        PrivateCategory privateCategory = em.find(PrivateCategory.class, privateCategoryId);
+        if(thread == null || privateCategory == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
+        }
+
+        if(privateCategory.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
         }
         if(headline == null){
             headline = thread.getHeadLine();
@@ -277,14 +282,16 @@ public class ThreadHandler extends SharedHandler {
 
         models.Thread thread = em.find(models.Thread.class, params.get(Constants.Param.Name.THREAD_ID));
 
-        if(thread.getAccount().getId() != accountId){
-            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
-        }
-
         if(thread == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
         }
+
+        if(thread.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+
+
         removeObjects(thread);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }

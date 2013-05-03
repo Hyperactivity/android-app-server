@@ -19,8 +19,8 @@ public abstract class Constants {
         public static final String LOCAL_SERVER_IP = "192.168.1.101";
         public static final String EXTERNAL_SERVER_IP = "89.253.85.33";
         public static final String HIBERNATE_PERSISTENCE_CONNECTION_NAME = "hibernate.connection.url";
-        public static final String HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE = "jdbc:mysql://89.253.85.33/Hyperactivity";
-        public static final String HIBERNATE_PERSISTENCE_CONNECTION_VALUE = "jdbc:mysql://127.0.0.1/Hyperactivity";
+        public static final String HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE = "jdbc:mysql://89.253.85.33/Hyperactivity?autoReconnect=true";
+        public static final String HIBERNATE_PERSISTENCE_CONNECTION_VALUE = "jdbc:mysql://127.0.0.1/Hyperactivity?autoReconnect=true";
     }
 
     public abstract class Method{
@@ -46,6 +46,9 @@ public abstract class Constants {
         public static final String CREATE_LINKED_THREAD = "create_linked_thread";
         public static final String MODIFY_LINKED_THREAD = "modify_linked_thread";
         public static final String DELETE_LINKED_THREAD = "delete_linked_thread";
+        public static final String CREATE_NOTE = "create_note";
+        public static final String MODIFY_NOTE = "modify_note";
+        public static final String DELETE_NOTE = "delete_note";
     }
 
     public abstract class Param{
@@ -76,6 +79,8 @@ public abstract class Constants {
             public static final String PRIVATE_CATEGORY_ID = "private_category_id";
             public static final String LINKED_THREAD = "linked_thread";
             public static final String LINKED_THREAD_ID = "linked_thread_id";
+            public static final String NOTE = "note";
+            public static final String NOTE_ID = "note_id";
         }
         public abstract class Status{
             public static final String STATUS = "status";

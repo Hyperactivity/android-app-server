@@ -4,12 +4,10 @@ import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-import models.Account;
-import models.Reply;
-import models.ThumbsUp;
-import models.ThumbsUpPK;
+import models.*;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.Map;
 
@@ -28,8 +26,10 @@ public class ReplyHandler extends SharedHandler {
                 Constants.Method.MODIFY_REPLY,
                 Constants.Method.DELETE_REPLY,
                 Constants.Method.THUMB_UP,
+                Constants.Method.CREATE_NOTE,
+                Constants.Method.MODIFY_NOTE,
+                Constants.Method.DELETE_NOTE
         };
-
     }
 
     @Override
@@ -42,9 +42,89 @@ public class ReplyHandler extends SharedHandler {
             deleteReply(jsonrpc2Params);
         } else if (method.equals(Constants.Method.THUMB_UP)) {
             thumbUp(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.CREATE_NOTE)) {
+            createNote(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.MODIFY_NOTE)) {
+            modifyNote(jsonrpc2Params);
+        } else if (method.equals(Constants.Method.DELETE_NOTE)) {
+            deleteNote(jsonrpc2Params);
         } else {
             throwJSONRPC2Error(JSONRPC2Error.METHOD_NOT_FOUND, Constants.Errors.METHOD_NOT_FOUND, method);
         }
+    }
+
+    private void deleteNote(Map<String, Object> jsonrpc2Params) throws Exception {
+
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                Constants.Param.Name.NOTE_ID);
+
+
+        Note note =  em.find(Note.class, params.get(Constants.Param.Name.NOTE_ID));
+
+        if(note == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+
+        if(note.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+
+        removeObjects(note);
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+    }
+
+    private void modifyNote(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.NOTE_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.TEXT, true),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, true));
+
+        int noteId = (Integer)params.get(Constants.Param.Name.NOTE_ID);
+        String text = (String)params.get(Constants.Param.Name.TEXT);
+        String headline = (String)params.get(Constants.Param.Name.HEADLINE);
+        Note note = em.find(Note.class, noteId);
+        if(note == null){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+        if(note.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+        if(text != null){
+            note.setText(text);
+        }
+        if(headline != null){
+            note.setHeadLine(headline);
+        }
+        persistObjects(note);
+        responseParams.put(Constants.Param.Name.NOTE, serialize(note));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+    }
+
+    private void createNote(Map<String, Object> jsonrpc2Params) throws Exception {
+        Map<String, Object> params = getParams(jsonrpc2Params,
+                new NullableExtendedParam(Constants.Param.Name.PRIVATE_CATEGORY_ID, false),
+                new NullableExtendedParam(Constants.Param.Name.TEXT, false),
+                new NullableExtendedParam(Constants.Param.Name.HEADLINE, true));
+
+        int categoryId = (Integer)params.get(Constants.Param.Name.PRIVATE_CATEGORY_ID);
+        String text = (String)params.get(Constants.Param.Name.TEXT);
+        String headline = (String)params.get(Constants.Param.Name.HEADLINE);
+        PrivateCategory privateCategory;
+        try{
+        privateCategory = em.getReference(PrivateCategory.class, categoryId);
+        }catch(EntityNotFoundException e){
+            responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
+            return;
+        }
+        if(privateCategory.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+        Note note = new Note(text, headline, em.find(Account.class, accountId), privateCategory);
+        persistObjects(note);
+        responseParams.put(Constants.Param.Name.NOTE, serialize(note));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }
 
 
@@ -123,14 +203,16 @@ public class ReplyHandler extends SharedHandler {
 
        Reply reply =  em.find(Reply.class, params.get(Constants.Param.Name.REPLY_ID));
 
-        if(reply.getAccount().getId() != accountId){
-            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
-        }
-
         if(reply == null){
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.OBJECT_NOT_FOUND);
             return;
         }
+
+        if(reply.getAccount().getId() != accountId){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
+        }
+
+
         removeObjects(reply);
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
     }

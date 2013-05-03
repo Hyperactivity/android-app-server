@@ -10,19 +10,17 @@ import javax.persistence.*;
  */
 @Entity
 public class Note {
-    static final long serialVersionUID = 5L;
     private int id;
     private String headLine;
     private String text;
     private Account account;
-    private Category parentPrivateCategory;
+    private PrivateCategory parentPrivateCategory;
 
-    public Note(int id, String headLine, String text, Account account, Category parentPrivateCategory) {
-        this.id = id;
-        this.headLine = headLine;
-        this.text = text;
-        this.account = account;
-        this.parentPrivateCategory = parentPrivateCategory;
+    public Note(String headLine, String text, Account account, PrivateCategory parentPrivateCategory) {
+        setHeadLine(headLine);
+        setText(text);
+        setAccount(account);
+        setParentPrivateCategory(parentPrivateCategory);
     }
 
     @Deprecated
@@ -72,11 +70,11 @@ public class Note {
 
     @ManyToOne
     @JoinColumn(name = "parentPrivateCategoryId", referencedColumnName = "id", nullable = false)
-    public Category getParentPrivateCategory() {
+    public PrivateCategory getParentPrivateCategory() {
         return parentPrivateCategory;
     }
 
-    public void setParentPrivateCategory(Category parentPrivateCategory) {
+    public void setParentPrivateCategory(PrivateCategory parentPrivateCategory) {
         this.parentPrivateCategory = parentPrivateCategory;
     }
 

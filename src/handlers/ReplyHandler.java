@@ -145,14 +145,14 @@ public class ReplyHandler extends SharedHandler {
         String text = (String) params.get(Constants.Param.Name.TEXT);
 
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
-        Date currentDate = new Date();
 
         Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, getCurrentTime());
 
         persistObjects(reply);
 
-        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
         responseParams.put(Constants.Param.Name.REPLY, serialize(reply));
+        responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+
     }
 
     /**

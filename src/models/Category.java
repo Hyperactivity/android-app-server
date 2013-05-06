@@ -22,6 +22,7 @@ public class Category {
     private Category parentCategory;
     private transient Collection<Category> childCategories;
     private transient Collection<Thread> threads;
+    private CustomCategoryColor customCategoryColor;
 
     public Category(String headLine, int colorCode, Category parentCategory) {
         this.headLine = headLine;
@@ -90,6 +91,15 @@ public class Category {
 
     public void setThreads(Collection<Thread> threads) {
         this.threads = threads;
+    }
+
+    @OneToOne(mappedBy = "category")
+    public CustomCategoryColor getCustomCategoryColor() {
+        return customCategoryColor;
+    }
+
+    public void setCustomCategoryColor(CustomCategoryColor customCategoryColor) {
+        this.customCategoryColor = customCategoryColor;
     }
 
     @Override

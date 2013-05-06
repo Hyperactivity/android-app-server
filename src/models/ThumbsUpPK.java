@@ -15,8 +15,12 @@ public class ThumbsUpPK implements Serializable {
     private int accountId;
 
     public ThumbsUpPK(int replyId, int accountId) {
-        this.replyId = replyId;
-        this.accountId = accountId;
+        setReplyId(replyId);
+        setAccountId(accountId);
+    }
+
+    @Deprecated
+    public ThumbsUpPK() {
     }
 
     @Id

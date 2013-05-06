@@ -89,6 +89,7 @@ public class CustomCategoryColor{
         this.account = account;
     }
 
+
     @OneToOne
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false, updatable = false, insertable = false)
     public Category getCategory() {

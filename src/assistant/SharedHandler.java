@@ -1,14 +1,17 @@
 package assistant;
 
 import assistant.pair.NullableExtendedParam;
+import com.restfb.*;
+import com.restfb.types.Application;
+import com.restfb.types.User;
 import com.thetransactioncompany.jsonrpc2.*;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import core.Engine;
+import models.Account;
 import models.Reply;
 import net.minidev.json.JSONObject;
 import sun.misc.BASE64Encoder;
-import sun.security.krb5.EncryptedData;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -37,7 +40,11 @@ public abstract class SharedHandler implements RequestHandler{
     // The manager that handles SQL input and output. Always use this manager.
     public EntityManager em;
     // This id is always retrieved from the request from the client.
-    public int accountId;
+    protected int accountId;
+
+    protected Account clientAccount;
+    // This is the token sent from the client
+    public String facebookToken;
     // The method that the request wants to reach.
     public String method;
     // To be filled with information that the response will be filled with.
@@ -66,21 +73,68 @@ public abstract class SharedHandler implements RequestHandler{
     public final JSONRPC2Response process(JSONRPC2Request jsonrpc2Request, MessageContext messageContext) { //TODO find out what MessageContext is exactly and how we can use it
 
         try{
+            // NOTE: The order is important, do not change unless you know what you are doing
             initializeData(jsonrpc2Request);
-            //This is where the handler gets to
-            process(jsonrpc2Request.getNamedParams());
+            validateUser();
+            Map<String, Object> params = jsonrpc2Request.getNamedParams();
+            process(params);
             validateResponse();
-            em.close();
             return response;
         }catch (JSONRPC2Error e){
-            em.close();
             return new JSONRPC2Response(e, accountId);
         }catch (Exception e){
-            em.close();
             return new JSONRPC2Response(JSONRPC2Error.INTERNAL_ERROR.appendMessage(" || Exception: " + e.toString()), accountId);
+        }finally{
+            em.close();
         }
-
     }
+    private static class UserAndApp {
+        @Facebook
+        User me;
+
+        @Facebook
+        Application app;
+
+        public UserAndApp() {
+        }
+    }
+
+    protected void validateUser(Account clientAccount, String facebookToken) {
+        String accountToken = clientAccount.getFacebookToken();
+        if(accountToken == null || !accountToken.equals(facebookToken)){
+            // We need to try out the new token to see if it really is the user logging in
+            DefaultFacebookClient facebookClient = new DefaultFacebookClient(facebookToken);
+
+            UserAndApp userAndApp = facebookClient.fetchObjects(Arrays.asList("me", "app"), UserAndApp.class);
+
+            assert clientAccount.getFacebookId() == Integer.parseInt(userAndApp.me.getId());
+            assert Constants.General.APP_ID.equals(userAndApp.app.getId());
+
+            // The client is accepted
+            clientAccount.setFacebookToken(facebookToken);
+            persistObjects(clientAccount);
+        }
+        // Stored token with id has been approved earlier. Just continue
+    }
+
+    /**
+     * Used for making sure that the client really is who he says he is.
+     * This is done by checking the facebook token and the id.
+     * @throws Exception
+     */
+    private void validateUser() throws Exception {
+        if(!method.equals(Constants.Method.LOGIN)){
+            // Login takes care of validation by itself
+            clientAccount = em.find(Account.class, accountId);
+            if(clientAccount == null){
+                // Not existing user trying to call methods other then LOGIN is not ok!
+                throwJSONRPC2Error(JSONRPC2Error.INVALID_REQUEST, Constants.Errors.ACTION_NOT_ALLOWED);
+            }else{
+                validateUser(clientAccount, facebookToken);
+            }
+        }
+    }
+
 
     private static void validateResponse() {
         //TODO: check that value and accountId is present in the response. And that value is in "result"
@@ -90,6 +144,12 @@ public abstract class SharedHandler implements RequestHandler{
         em = Engine.ENTITY_MANAGER_FACTORY.createEntityManager();
         responseParams = new JSONObject();
         method = jsonrpc2Request.getMethod();
+        facebookToken = (String) jsonrpc2Request.getNamedParams().get(Constants.Param.Name.TOKEN);
+        if(facebookToken == null){
+            throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.TOKEN_MISSING);
+        }else{
+            jsonrpc2Request.getNamedParams().remove(Constants.Param.Name.TOKEN);
+        }
 
         try{
             accountId = Integer.parseInt(jsonrpc2Request.getID().toString());

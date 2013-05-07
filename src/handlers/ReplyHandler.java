@@ -121,7 +121,7 @@ public class ReplyHandler extends SharedHandler {
         if(privateCategory.getAccount().getId() != accountId){
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.ACTION_NOT_ALLOWED);
         }
-        Note note = new Note(text, headline, em.find(Account.class, accountId), privateCategory);
+        Note note = new Note(text, headline, clientAccount, privateCategory);
         persistObjects(note);
         responseParams.put(Constants.Param.Name.NOTE, serialize(note));
         responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
@@ -146,7 +146,7 @@ public class ReplyHandler extends SharedHandler {
 
         models.Thread parentThread = em.find(models.Thread.class, parentThreadId);
 
-        Reply reply = new Reply(parentThread, em.find(Account.class, accountId), text, getCurrentTime());
+        Reply reply = new Reply(parentThread, clientAccount, text, getCurrentTime());
 
         persistObjects(reply);
 

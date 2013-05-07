@@ -24,9 +24,10 @@
         <property name="hibernate.connection.username" value="root"/>
         <property name="hibernate.connection.password" value="123654789"/>
         <property name="hibernate.archive.autodetection" value="class"/>
-        <property name="hibernate.show_sql" value="true"/>
+        <property name="hibernate.show_sql" value="false"/>
         <property name="hibernate.format_sql" value="true"/>
         <property name="hbm2ddl.auto" value="update"/>
+        <property name="hibernate.connection.url" value="jdbc:mysql://89.253.85.33/Hyperactivity"/>
         <!--<property name="hibernate.connection.url" value="jdbc:mysql://89.253.85.33/Hyperactivity?autoReconnect=true"/>-->
 
 

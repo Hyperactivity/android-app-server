@@ -150,7 +150,7 @@ public class CategoryRequestHandler extends SharedHandler {
                     (String) params.get(Constants.Param.Name.HEADLINE),
                     colorCode,
                     null,
-                    em.find(Account.class, accountId));
+                    clientAccount);
 
         }else{
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);

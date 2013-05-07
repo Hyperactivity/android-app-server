@@ -6,6 +6,7 @@ package core; /**
  */
 
 import assistant.Constants;
+import com.mchange.v2.log.log4j.Log4jMLog;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -21,6 +22,8 @@ import handlers.AccountRequestHandler;
 import handlers.CategoryRequestHandler;
 import handlers.ReplyHandler;
 import handlers.ThreadHandler;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.hibernate.ejb.HibernatePersistence;
 
 import javax.persistence.EntityManagerFactory;
@@ -41,7 +44,6 @@ public class Engine{
 
 
     public static void main(String[] args) throws IOException {
-
         try {
             new Engine();
         } catch (ClassNotFoundException e) {

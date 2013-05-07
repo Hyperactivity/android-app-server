@@ -21,6 +21,7 @@ public abstract class Constants {
         public static final String HIBERNATE_PERSISTENCE_CONNECTION_NAME = "hibernate.connection.url";
         public static final String HIBERNATE_PERSISTENCE_CONNECTION_DEVELOPMENT_VALUE = "jdbc:mysql://89.253.85.33/Hyperactivity?autoReconnect=true";
         public static final String HIBERNATE_PERSISTENCE_CONNECTION_VALUE = "jdbc:mysql://127.0.0.1/Hyperactivity?autoReconnect=true";
+        public static final String APP_ID = "534043489970951";
     }
 
     public abstract class Method{
@@ -123,5 +124,6 @@ public abstract class Constants {
         public static final String PARAM_NOT_ALLOWED = "Some given params are not allowed";
         public static final String PARAM_VALUE_NOT_ALLOWED = "The given param value is not allowed";
         public static final String ACTION_NOT_ALLOWED = "Action is not allowed";
+        public static final String TOKEN_MISSING = "Facebook token is missing";
     }
 }

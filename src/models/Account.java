@@ -21,7 +21,7 @@ public class Account {
     private boolean showBirthDate;
     private transient String facebookToken;
 
-    public Account(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, boolean useDefaultColors, boolean showBirthDate) {
+    public Account(String username, int facebookId, String profileDescription, Date birthDate, int limitPerDay, Boolean useDefaultColors, Boolean showBirthDate, String facebookToken) {
         this.username = username;
         this.facebookId = facebookId;
         this.profileDescription = profileDescription;
@@ -29,6 +29,7 @@ public class Account {
         this.limitPerDay = limitPerDay;
         this.useDefaultColors = useDefaultColors;
         this.showBirthDate = showBirthDate;
+        this.facebookToken = facebookToken;
     }
 
     @Deprecated

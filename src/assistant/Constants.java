@@ -50,6 +50,7 @@ public abstract class Constants {
         public static final String CREATE_NOTE = "create_note";
         public static final String MODIFY_NOTE = "modify_note";
         public static final String DELETE_NOTE = "delete_note";
+        public static final String REGISTER = "register";
     }
 
     public abstract class Param{
@@ -82,14 +83,16 @@ public abstract class Constants {
             public static final String LINKED_THREAD_ID = "linked_thread_id";
             public static final String NOTE = "note";
             public static final String NOTE_ID = "note_id";
+            public static final String USERNAME = "username";
         }
         public abstract class Status{
             public static final String STATUS = "status";
-            public static final String FIRST_LOGIN = "first_login";
+            public static final String REGISTER = "register";
             public static final String ACCOUNT_NOT_FOUND = "account_not_found";
             public static final String SUCCESS = "success";
 
             public static final String OBJECT_NOT_FOUND = "object_not_found";
+            public static final String USERNAME_TAKEN = "username taken";
         }
 
         public abstract class Value {
@@ -106,6 +109,7 @@ public abstract class Constants {
     public class Query {
 
         public static final String FACEBOOK_ID = "facebook_id";
+        public static final String USERNAME = "username";
     }
 
     public class Database{

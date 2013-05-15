@@ -3,6 +3,7 @@ package handlers;
 import assistant.Constants;
 import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
+import com.mchange.util.impl.LongObjectHash;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.*;
 import models.Thread;
@@ -61,13 +62,13 @@ public class CategoryRequestHandler extends SharedHandler {
                 Constants.Param.Name.TYPE);
 
         String type = (String) params.get(Constants.Param.Name.TYPE);
-        List<Category> categories = null;
+        Object categories = null;
 
         if (type.equals(Constants.Param.Value.PUBLIC)) {
             categories = getAllColumns(Category.class);
         } else if (type.equals(Constants.Param.Value.PRIVATE)) {
 
-            categories = getAllColumns(Category.class);
+            categories = getAllColumns(PrivateCategory.class);
 
         } else {
             throwJSONRPC2Error(JSONRPC2Error.INVALID_PARAMS, Constants.Errors.PARAM_VALUE_NOT_ALLOWED, "Type: " + type);

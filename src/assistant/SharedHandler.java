@@ -50,6 +50,9 @@ public abstract class SharedHandler implements RequestHandler{
     // To be filled with information that the response will be filled with.
     public JSONObject responseParams;
 
+    protected UserAndApp userAndApp;
+
+
 
     // Will automatically be filled with the responseParams before being sent to the client.
     private JSONRPC2Response response;
@@ -88,33 +91,32 @@ public abstract class SharedHandler implements RequestHandler{
             em.close();
         }
     }
-    private static class UserAndApp {
+    protected static class UserAndApp {
         @Facebook
-        User me;
+        public User me;
 
         @Facebook
-        Application app;
+        public Application app;
 
         public UserAndApp() {
         }
     }
 
     protected void validateUser(Account clientAccount, String facebookToken) {
-        String accountToken = clientAccount.getFacebookToken();
-        if(accountToken == null || !accountToken.equals(facebookToken)){
-            // We need to try out the new token to see if it really is the user logging in
-            DefaultFacebookClient facebookClient = new DefaultFacebookClient(facebookToken);
-
-            UserAndApp userAndApp = facebookClient.fetchObjects(Arrays.asList("me", "app"), UserAndApp.class);
+        if(!facebookToken.equals(clientAccount.getFacebookToken())){
 
             assert clientAccount.getFacebookId() == Integer.parseInt(userAndApp.me.getId());
-            assert Constants.General.APP_ID.equals(userAndApp.app.getId());
 
             // The client is accepted
             clientAccount.setFacebookToken(facebookToken);
             persistObjects(clientAccount);
         }
-        // Stored token with id has been approved earlier. Just continue
+    }
+
+    protected void generateAndSetUserAndApp(){
+        DefaultFacebookClient facebookClient = new DefaultFacebookClient(facebookToken);
+        userAndApp = facebookClient.fetchObjects(Arrays.asList("me", "app"), UserAndApp.class);
+        assert Constants.General.APP_ID.equals(userAndApp.app.getId());
     }
 
     /**
@@ -123,7 +125,9 @@ public abstract class SharedHandler implements RequestHandler{
      * @throws Exception
      */
     private void validateUser() throws Exception {
-        if(!method.equals(Constants.Method.LOGIN)){
+        generateAndSetUserAndApp();
+
+        if(!method.equals(Constants.Method.LOGIN) && !method.equals(Constants.Method.REGISTER)){
             // Login takes care of validation by itself
             clientAccount = em.find(Account.class, accountId);
             if(clientAccount == null){

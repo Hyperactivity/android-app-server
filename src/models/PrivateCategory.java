@@ -28,6 +28,7 @@ public class PrivateCategory{
         this.account = account;
     }
 
+    @Deprecated
     public PrivateCategory() {
     }
 

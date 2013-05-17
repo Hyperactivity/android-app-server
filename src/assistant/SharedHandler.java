@@ -104,6 +104,7 @@ public abstract class SharedHandler implements RequestHandler{
 
     protected void validateUser(Account clientAccount, String facebookToken) {
         if(!facebookToken.equals(clientAccount.getFacebookToken())){
+            generateAndSetUserAndApp();
 
             assert clientAccount.getFacebookId() == Integer.parseInt(userAndApp.me.getId());
 
@@ -125,7 +126,6 @@ public abstract class SharedHandler implements RequestHandler{
      * @throws Exception
      */
     private void validateUser() throws Exception {
-        generateAndSetUserAndApp();
 
         if(!method.equals(Constants.Method.LOGIN) && !method.equals(Constants.Method.REGISTER)){
             // Login takes care of validation by itself

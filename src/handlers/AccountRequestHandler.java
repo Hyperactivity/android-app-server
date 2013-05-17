@@ -5,8 +5,12 @@ import assistant.SharedHandler;
 import assistant.pair.NullableExtendedParam;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import models.Account;
+import models.Category;
+import models.PrivateCategory;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -137,6 +141,11 @@ public class AccountRequestHandler extends SharedHandler {
             persistObjects(clientAccount);
             responseParams.put(Constants.Param.Name.ACCOUNT, serialize(clientAccount));
             responseParams.put(Constants.Param.Status.STATUS, Constants.Param.Status.SUCCESS);
+            // TODO: Private categories should probably not be generated like this in the future
+            List<Category> categories = getAllColumns(Category.class);
+            for(Category category: categories){
+                persistObjects(new PrivateCategory(category.getHeadLine(),category.getColorCode(), null, clientAccount));
+            }
         }
     }
 }
